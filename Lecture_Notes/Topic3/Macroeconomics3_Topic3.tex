@@ -1,0 +1,2427 @@
+\documentclass[12pt]{article}
+
+% --- Paquetes ---
+\usepackage{pifont} 
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\usepackage[spanish,es-tabla]{babel}   % español
+\usepackage[utf8]{inputenc}            % acentos
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{lastpage}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[table]{xcolor} % para \cellcolor y \rowcolor
+\usepackage{colortbl}      % colores en tablas
+\usepackage{float}         % para usar [H] si quieres fijar la tabla
+\usepackage{array}         % mejor control de columnas
+\usepackage{amssymb}       % para palomita
+\usepackage{graphicx}      % para logo github
+\usepackage{hyperref}
+\usepackage{setspace} % para hipervinculo
+\usepackage[normalem]{ulem}
+\usepackage{siunitx}       % Asegúrate de tener este paquete en el preámbulo
+\usepackage{booktabs}
+\sisetup{
+    output-decimal-marker = {.},
+    group-separator = {,},
+    group-minimum-digits = 4,
+    detect-all
+}
+
+% Etiqueta en el caption (en la tabla misma)
+\usepackage{caption}
+\captionsetup[table]{name=Tabla, labelfont=bf, labelsep=period}
+
+% Prefijo en la *Lista de tablas*
+\usepackage{tocloft}
+\renewcommand{\cfttabpresnum}{Tabla~} % texto antes del número
+\renewcommand{\cfttabaftersnum}{.}    % punto después del número
+\setlength{\cfttabnumwidth}{5em}      % ancho para "Tabla 10." ajusta si hace falta
+
+
+
+% --- Márgenes y encabezado ---
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+% Alturas del encabezado (un poco más por las 2–3 líneas del header)
+\setlength{\headheight}{32pt}
+\setlength{\headsep}{20pt}
+
+\definecolor{maroon}{RGB}{128, 0, 0}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+% Regla del encabezado (opcional)
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Encabezado izquierdo
+\fancyhead[L]{%
+  \textcolor{maroon}{\textbf{El Colegio de México}}\\
+  \textbf{Macroeconomics 3}
+}
+
+% Encabezado derecho
+\fancyhead[R]{%
+  Topic 3: Government Budget Deficits, the Current
+Account and Ricardian Equivalence
+\\
+  \textbf{Jose Daniel Fuentes García}\\
+  Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+}
+
+% Número de página al centro del pie
+\fancyfoot[C]{\thepage}
+
+% --- APLICAR EL MISMO ESTILO A PÁGINAS "PLAIN" (TOC, LOT, LOF) ---
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \fancyhead[L]{%
+    \textcolor{maroon}{\textbf{El Colegio de México}}\\
+    \textbf{Macroeconomics 3}
+  }
+  \fancyhead[R]{%
+    Topic 3: Government Budget Deficits, the Current
+Account and Ricardian Equivalence\\
+    \textbf{Jose Daniel Fuentes García}\\
+    Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+  }
+  \fancyfoot[C]{\thepage}
+}
+
+% Pie de página centrado
+\fancyfoot[C]{\thepage\ de \pageref{LastPage}}
+
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Color principal ---
+\definecolor{formalblue}{RGB}{0,51,102} % azul marino sobrio
+
+% --- Estilo de títulos ---
+\titleformat{\section}[hang]{\bfseries\Large\color{formalblue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\bfseries\large\color{formalblue}}{\thesubsection}{1em}{}
+
+
+% --- Listas ---
+\setlist[itemize]{leftmargin=1.2em}
+
+% --- Sin portada ---
+\title{}
+\author{}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{-1cm}
+    \noindent
+    \begin{minipage}[t]{0.49\textwidth}
+        \includegraphics[height=2.2cm]{colmex.jpg}
+    \end{minipage}%
+    \begin{minipage}[t]{0.49\textwidth}
+        \raggedleft
+        \includegraphics[height=2.2cm]{cee.jpg}
+    \end{minipage}
+
+    \vspace*{2cm}
+
+    \begin{center}
+        \Huge \textbf{CENTRO DE ESTUDIOS ECONÓMICOS} \\[1.5em]
+        \Large Maestría en Economía 2024--2026 \\[2em]
+        \Large Macroeconomics 3 \\[3em]
+        \LARGE \textbf{Topic 3: Government Budget Deficits, the Current
+Account and Ricardian Equivalence} \\[3em]
+        \large \textbf{PRESENTED BY:} José Daniel Fuentes García \\[3em]
+        \large \textbf{Disclaimer:} I am not the original intellectual author of the material presented in these notes. The content is strongly based on a combination of lecture notes, textbook references, and personal annotations for learning purposes. Any errors or omissions are entirely my own responsibility.\\[0.9em]
+        
+    \end{center}
+
+    \vfill
+\end{titlepage}
+
+\newpage
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+\newpage
+
+\section*{\noindent\textbf{3.1 Introduction and Aims}}
+\addcontentsline{toc}{section}{3.1 Introduction and Aims}
+
+\begin{center}
+\textcolor{red}{\textit{``Blessed are the young, for they shall inherit the national debt''}}\\
+\textcolor{red}{Herbert Hoover}
+\end{center}
+
+\begin{itemize}
+\item Up to this point, we've been relying on the representative agent model to understand the current account and the key economic forces that shape it.
+
+\item While this model forms the backbone of the theoretical approach in our course, it’s not the only one. There are other important frameworks used in macroeconomics—especially in international contexts.
+
+\item One key implication of the representative agent framework is that it supports the idea of \textbf{Ricardian Equivalence}.
+
+\item When Ricardian Equivalence holds, government borrowing (or deficits) doesn't change national saving—because people adjust their private saving in response.
+
+\item To explore what happens when this equivalence breaks down, we’ll turn to a different modeling approach: the \textbf{Overlapping Generations (OLG)} framework.
+
+\item In OLG models, individuals live for a limited time—typically two periods—while the government is modeled as living forever.
+
+\item \textbf{Intuition:} Ricardian Equivalence relies on agents internalizing future taxes. But in OLG models, each generation lives only briefly and may not fully account for future fiscal burdens—breaking the equivalence.
+\end{itemize}
+
+\begin{itemize}
+\item To explore why Ricardian Equivalence may fail, we’ll build a standard two-period Overlapping Generations (OLG) model. In this setup, taxes and government borrowing influence individuals' consumption decisions.
+
+\item From this framework, several key insights emerge:
+\end{itemize}
+
+\begin{enumerate}
+\item Budget deficits that are financed by tax cuts can significantly influence a country's current account—contrary to Ricardian Equivalence predictions.
+
+\item A nation's productivity level plays a central role in shaping its saving behavior, which in turn affects the current account.
+
+\item The distribution of taxes across different generations can create short-run effects on a country's external balance.
+
+\item In an open-economy setting with two countries (where the interest rate adjusts endogenously), tax policy can shift global savings and investment patterns—altering the world interest rate, capital flows, and the allocation of resources across borders.
+\end{enumerate}
+
+\begin{itemize}
+\item \textbf{Intuition:} OLG models let us capture how intergenerational dynamics and policy timing affect macroeconomic outcomes like saving, borrowing, and the current account—especially in open economies.
+\end{itemize}
+
+\begin{center}
+\textcolor{red}{\underline{\textbf{Reading}}}
+\end{center}
+
+\begin{itemize}
+\item Obstfeld and Rogoff (1996), \textit{Chapter 3}, Sections 3.1, 3.2, and 3.6.
+
+\item Seater (1993), ``Ricardian Equivalence'', \textit{Journal of Economic Literature}, 31, pp.~142–190.
+\end{itemize}
+
+\section*{\noindent\textbf{3.2 The Ricardian Equivalence Outcome under the \\ 
+Representative-Agent Framework}}
+\addcontentsline{toc}{section}{3.2 The Ricardian Equivalence Outcome under the Representative-Agent Framework}
+
+\begin{itemize}
+\item Why are government budget deficits considered neutral in representative agent models?
+
+\item Let’s assume, as before, that the population size is constant and equal to 1.
+
+\item This means that individual-level quantities are equivalent to aggregate economy-wide quantities.
+
+\item We begin with the familiar two-period model introduced in Topic 1.
+
+\item When investment is present, the intertemporal budget constraint of the representative individual is:
+\[
+C_1 + I_1 + \frac{C_2 + I_2}{1 + r} = Y_1 - T_1 + \frac{Y_2 - T_2}{1 + r}. \tag{1}
+\]
+
+\item Previously, we assumed a balanced government budget in each period:
+\[
+G_1 = T_1 \quad \text{and} \quad G_2 = T_2,
+\]
+where \( T \) is a lump-sum tax.
+
+\item Now let’s relax that assumption. The government’s intertemporal budget constraint becomes:
+\[
+G_1 + \frac{G_2}{1 + r} = T_1 + \frac{T_2}{1 + r}. \tag{2}
+\]
+
+\item \textbf{Intuition:} In representative agent models, what matters is the present value of taxes, not their timing. So even if taxes shift across periods, consumption choices remain unchanged under Ricardian Equivalence.
+\end{itemize}
+
+\begin{itemize}
+\item Equation (2) tells us that if the government starts with zero debt, then its spending is limited to the present value of its tax revenues.
+
+\item Substituting (2) into the individual’s intertemporal budget constraint (1) gives:
+\[
+C_1 + I_1 + \frac{C_2 + I_2}{1 + r} = Y_1 - G_1 + \frac{Y_2 - G_2}{1 + r}.
+\]
+
+\item This is exactly the same equation we’d get if the government balanced its budget in every period.
+
+\item As a result, the representative agent behaves as if the government budget were balanced at all times—making the same consumption and investment choices.
+
+\item Government budget imbalances don’t affect individual decision-making, as long as $G_1$ and $G_2$ are unchanged. There’s no impact on real allocation.
+
+\item This result hinges on lump-sum taxes: postponing taxes only shifts them forward with interest, which the same taxpayer eventually pays.
+
+\item Therefore, what matters for consumption is the present value of government spending—not whether the government runs a deficit.
+
+\item In other words, under these conditions, government borrowing doesn’t change consumption choices.
+
+\item While rescheduling taxes changes when the government saves, it doesn't change how much it saves in total—so national or aggregate saving is unaffected.
+
+\item \textbf{Intuition:} Ricardian Equivalence holds because the representative agent fully internalizes government borrowing: they save more today knowing they'll face future taxes.
+\end{itemize}
+
+\begin{itemize}
+\item Private saving is defined as:
+\[
+S_P = Y - T - C
+\]
+
+\item Government saving (i.e., the budget surplus) is:
+\[
+S_G = T - G
+\]
+
+\item Total national saving (private plus government) is therefore:
+\[
+S_P + S_G = Y - C - G
+\]
+
+\item Since consumption remains unchanged under Ricardian Equivalence, national saving also stays the same.
+
+\item This happens because any change in government saving is exactly offset by an opposite change in private saving.
+
+\item For example, if the government cuts taxes in period 1 by $dT$ (and raises them in period 2 by $(1 + r)dT$), the private sector increases its saving by $dT$ in period 1—anticipating the future tax hike.
+
+\item As a result, the agent’s optimal consumption path remains unchanged, despite the timing of taxes being altered.
+
+\item This leads to a central conclusion: the timing of taxes (and government budget balances) doesn’t affect real allocation in the economy.
+
+\item This idea is known as the \textbf{Ricardian Equivalence of debt and taxes}.
+
+\item \textbf{Intuition:} Ricardian Equivalence holds because forward-looking agents smooth consumption and fully internalize future tax liabilities, neutralizing any effect of debt-financed tax changes on saving or consumption.
+\end{itemize}
+
+\begin{itemize}
+\item We now turn to the infinite-horizon setup from Topic 2 to explore the Ricardian Equivalence result in a more general setting.
+
+\item The representative agent’s asset accumulation is described by:
+\[
+B^p_{t+1} - B^p_t = Y_t + r B^p_t - T_t - C_t - I_t,
+\]
+where $B^p_t$ is the stock of financial assets at the end of period $t - 1$, and $T_t$ represents lump-sum taxes.
+
+\item Assuming a constant interest rate $r$, we can derive the agent’s intertemporal (lifetime) budget constraint as:
+\[
+\sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} (C_s + I_s) + \lim_{T \to \infty} \left( \frac{1}{1 + r} \right)^T B^p_{t+T+1}
+= (1 + r) B^p_t + \sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} (Y_s - T_s)
+\]
+
+\item Rearranging:
+\[
+\Rightarrow \sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} (C_s + I_s)
+= (1 + r) B^p_t + \sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} (Y_s - T_s)
+\]
+
+\item The condition
+\[
+\lim_{T \to \infty} \left( \frac{1}{1 + r} \right)^T B^p_{t+T+1} = 0
+\]
+is the standard transversality condition (TVC), ensuring that the agent cannot accumulate infinite wealth.
+
+\item \textbf{Intuition:} The present value of consumption and investment must equal the present value of income minus taxes, plus initial wealth. Ricardian Equivalence emerges because only the present value of taxes matters—not their timing.
+\end{itemize}
+
+\begin{itemize}
+\item The government’s period-by-period budget constraint is:
+\[
+B^G_{t+1} - B^G_t = T_t + r B^G_t - G_t
+\]
+
+\item This leads to the government’s lifetime (intertemporal) budget constraint:
+\[
+\sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} G_s + \lim_{T \to \infty} \left( \frac{1}{1 + r} \right)^T B^G_{t+T+1}
+= (1 + r) B^G_t + \sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} T_s
+\]
+
+\item Rearranged:
+\[
+\Rightarrow \sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} G_s
+= (1 + r) B^G_t + \sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} T_s
+\]
+
+\item As with households, we assume the transversality condition (TVC) holds:
+\[
+\lim_{T \to \infty} \left( \frac{1}{1 + r} \right)^T B^G_{t+T+1} = 0
+\]
+
+\item \textbf{Interpretation:} Just like in the two-period model, the present value of government consumption must equal the present value of tax revenues plus the initial net asset position. If $B^G_t < 0$, the government starts with debt.
+
+\item \textbf{Intuition:} This constraint ensures fiscal solvency. The government can shift taxes over time, but it can’t spend beyond its lifetime resources.
+\end{itemize}
+
+\begin{itemize}
+\item The net foreign asset position of the economy is the sum of private and government assets:
+\[
+B = B^p + B^G
+\]
+
+\item We can validate Ricardian Equivalence in this context by combining the household and government lifetime budget constraints and using $B = B^p + B^G$:
+\[
+\sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} (C_s + I_s)
+= (1 + r) B_t + \sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} (Y_s - G_s)
+\]
+
+\item This expression shows that only the present value of government purchases $G$ influences equilibrium.
+
+\item How those purchases are financed—through taxes or debt—has no effect on individual consumption or investment decisions.
+
+\item Therefore, simply changing the timing of lump-sum taxes doesn't affect the open economy's equilibrium.
+
+\item Since the representative agent fully internalizes the government's budget constraint, it doesn't matter whether net foreign assets are held by the private sector or by the government.
+
+\item For instance, if the government receives a transfer of foreign assets from the private sector, it can lower taxes by an equivalent amount—leaving the agent’s disposable income unchanged.
+
+\item \textbf{Intuition:} In representative agent models, what matters is government spending, not how it’s financed. Ricardian Equivalence ensures that asset ownership shifts between public and private hands without real economic impact.
+\end{itemize}
+
+\section*{\noindent\textbf{3.3 Reasons for Ricardian non-Equivalence}}
+\addcontentsline{toc}{section}{3.3 Reasons for Ricardian non-Equivalence}
+
+\begin{itemize}
+\item In this section, we explore the assumptions under which Ricardian Equivalence may break down.
+
+
+\subsection*{\noindent\textbf{1. Distortionary taxes}}
+\addcontentsline{toc}{subsection}{1. Distortionary taxes}
+\begin{itemize}
+    \item Distortionary taxation is one of the main reasons Ricardian Equivalence can fail.
+
+    \item For instance, in models where households choose how much to work (i.e., labor supply is endogenous), taxes on labor income distort incentives.
+
+    \item Such taxes can reduce labor supply and saving, prompting households to adjust their consumption behavior in response.
+
+    \item If the government cuts taxes today by borrowing (raising future taxes), households may anticipate higher future marginal tax rates.
+
+    \item In response, they might work more today (when taxes are low) and less in the future, thus altering the timing of labor and consumption.
+
+    \item This shift is called intertemporal substitution in labor supply. It creates real effects by changing how tax distortions are spread across periods.
+
+    \item As a result, changes in the timing of taxes (even if lump-sum) now matter—violating Ricardian Equivalence.
+\end{itemize}
+
+\item \textbf{Intuition:} When taxes influence behavior (e.g., labor supply), the timing of taxation matters. Shifting taxes over time leads households to change their work and consumption choices, breaking the neutrality implied by Ricardian Equivalence.
+\end{itemize}
+
+\subsection*{\noindent\textbf{2. Credit (borrowing) Restrictions}}
+\addcontentsline{toc}{subsection}{2. Credit (borrowing) Restrictions}
+
+\begin{itemize}
+\item Our baseline model assumes that households can borrow and lend freely at the same interest rate as the government.
+
+\item In practice, however, households may face \textbf{credit constraints}, which can lead to a breakdown in Ricardian Equivalence.
+
+\item For example, even if someone expects to earn much more in the future, they might not be able to borrow today—especially if they lack sufficient collateral.
+
+\item A credit-constrained consumer is thus unable to smooth consumption over time. Instead, they spend all of their current income today, even though they'd prefer to borrow against future earnings.
+
+\item If the government cuts taxes today and finances it by borrowing, credit-constrained households will increase their current consumption—despite knowing that future taxes will be higher.
+
+\item In this way, the government effectively relaxes private borrowing constraints by using its own access to capital markets to shift consumption from the future to the present on behalf of constrained households.
+
+\item \textbf{Intuition:} Credit constraints prevent households from fully smoothing consumption. A tax cut financed by debt gives them extra liquidity—so their behavior changes, violating Ricardian Equivalence.
+\end{itemize}
+
+\subsection*{\noindent\textbf{3. Finite Horizons for the Household}}
+\addcontentsline{toc}{subsection}{3. Finite Horizons for the Household}
+
+\begin{itemize}
+\item In our baseline model, we assumed that households and the government shared the same time horizon.
+
+\item But in reality, governments continue to exist beyond the lives of any single generation of households.
+
+\item Many current taxpayers (such as the elderly) may reasonably believe that future generations—not themselves—will bear the burden of repaying public debt through future taxation.
+
+\item So, shifting from tax-financed to debt-financed government spending effectively pushes the cost of financing onto future generations.
+
+\item \textbf{As a result, a debt-financed tax cut raises the perceived wealth of current generations, increasing their consumption.}
+
+\item However, it's important to note: just because lifespans are finite doesn’t automatically mean Ricardian Equivalence fails.
+
+\item \textbf{If future generations are linked to the current generation through bequests}, then Ricardian Equivalence may still hold. This connection maintains an implicit infinite horizon across generations.
+
+\item For instance, if parents care about the well-being of their children (and their children care about theirs), then tax savings today may be passed forward via bequests—offsetting future tax burdens.
+
+\item \textbf{Intuition:} When people don’t live forever, they may ignore future taxes and consume more today. But if they leave bequests and care about their heirs, Ricardian Equivalence can still work through intergenerational links.
+\end{itemize}
+
+\section*{\noindent\textbf{3.4 The Diamond Overlapping Generations (OLG) Model}}
+\addcontentsline{toc}{section}{3.4 The Diamond Overlapping Generations (OLG) Model}
+
+\begin{itemize}
+    \item Before considering an open economy OLG model and the breakdown of Ricardian Equivalence, let us start by developing the famous closed economy \textbf{OLG Diamond model}.
+    \item \textbf{Key questions:}
+    \begin{itemize}
+        \item Does the economy converge to the steady state for any initial condition $K_0$?
+        \item If yes, is this steady state Pareto efficient? (i.e., competitive equilibrium = social planner)
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.5em}
+
+\subsection*{\noindent\textbf{Assumptions}}
+\addcontentsline{toc}{subsection}{Assumptions}
+
+\begin{itemize}
+    \item Time is discrete and runs to infinity.
+    \item Each generation of individuals lives for two periods, denoted $y$ (young) and $o$ (old), and a new generation is born each period.
+    \item Households born on date $t$ are assumed to have a separable utility function:
+\end{itemize}
+
+\[
+U(c_t^y, c_{t+1}^o) = u(c_t^y) + \beta u(c_{t+1}^o)
+\]
+
+\begin{itemize}
+    \item where $c_t^y$ denotes consumption when young of someone born on date $t$ and $c_{t+1}^o$ denotes consumption of the same person when old in period $t+1$.
+    \item As usual, $0 < \beta < 1$ denotes the discount factor.
+\end{itemize}
+
+\begin{itemize}
+    \item Individuals within the same generation are treated identically—no intra-generational differences.
+    
+    \item The period utility function $u(C)$ is assumed to be strictly increasing, concave, and twice differentiable.
+    
+    \item \textbf{Exponential population growth:} The number of young individuals in period $t$, denoted $L_t$, grows at a constant rate $n$:
+    \[
+    L_{t} = (1 + n)L_{t-1} \Rightarrow L_t = (1 + n)^t L_0,
+    \]
+    where $L_0$ is the initial population size.
+    
+    \item Time is discrete and infinite ($t = 0, 1, 2, \ldots$).
+    
+    \item Output is a homogeneous good that can be consumed or invested in capital.
+    
+    \item Capital is the only asset and is entirely owned by households. It is rented to firms.
+    
+    \item There are three perfectly competitive markets: for output, labor, and capital services.
+    
+    \item Production is carried out by competitive firms with constant returns to scale, using an aggregate production function:
+    \[
+    Y_t = F(K_t, L_t).
+    \]
+    
+    \item Only the young supply labor, inelastically providing one unit each. They receive the equilibrium wage rate $w_t$. The trade-off between labor and leisure is considered exogenous.
+    
+    \item Capital fully depreciates after use: $\delta = 1$.
+    
+    \item The model assumes perfect foresight—there is no uncertainty.
+\end{itemize}
+
+\textbf{Intuition:}  
+This framework abstracts from heterogeneity and focuses on generational behavior over time. Each young agent works and saves for old age, shaping capital accumulation and intertemporal dynamics. The lack of uncertainty and full depreciation simplify the analysis.
+
+
+\subsection*{\noindent\textbf{Firms’ Problems}}
+\addcontentsline{toc}{subsection}{Firms’ Problem}
+\begin{itemize}
+    \item Firms maximize profit by choosing labor and capital.
+    
+    \item First express the production function in \textit{intensive form}:
+    \[
+    Y_t = F(K_t, L_t) = L_t F(k_t, 1) \equiv L_t f(k_t),
+    \]
+    where $k_t \equiv \frac{K_t}{L_t}$ is the capital-labor ratio.
+
+    \item Profit maximization requires that the marginal product of capital equals the rental rate of capital:
+    \[
+    F_K(K_t, L_t) = \frac{\partial L_t f(k_t)}{\partial K_t} = f'(k_t) = R_t, \tag{5}
+    \]
+
+    \item And firms hire labor up to the point where the marginal product of labor equals the wage:
+    \[
+    F_L(K_t, L_t) = \frac{\partial L_t f(k_t)}{\partial L_t} = f(k_t) - k_t f'(k_t) = w_t. \tag{6}
+    \]
+
+    \item Note that the gross return to saving equals the rental rate of return from capital:
+    \[
+    1 + r_t = R_t = f'(k_t) \tag{7}
+    \]
+\end{itemize}
+
+\begin{itemize}
+    \item i.e., the owner of $K_t$ units of physical capital receives a real net rate of return on capital:
+    \[
+    \frac{R_t K_t - \delta K_t}{K_t} = R_t - \delta,
+    \]
+    \item where $\delta$ is the depreciation rate of capital
+    \item No-arbitrage requires that capital and other assets (e.g., loans) yield the same rate of return
+    \[
+    R_t - \delta = r_t,
+    \]
+    \item where $r_t$ is the market interest rate
+    \item Since by assumption $\delta = 1$, equation (7) automatically follows
+\end{itemize}
+
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Firm's maximization problem:}
+\[
+\max_{K_t, L_t} \left\{ F(K_t, L_t) - R_t K_t - w_t L_t \right\}
+\]
+
+\textbf{Assume intensive form of production:}
+\[
+Y_t = F(K_t, L_t) = L_t f(k_t), \quad \text{where} \quad k_t = \frac{K_t}{L_t}
+\]
+
+\textbf{Lagrangian:} (not necessary here since unconstrained, but we proceed with FOCs)
+
+\textbf{First-order conditions:}
+\begin{align*}
+\frac{\partial \Pi}{\partial K_t} &: \quad \frac{\partial}{\partial K_t} \left[ L_t f\left( \frac{K_t}{L_t} \right) - R_t K_t - w_t L_t \right] 
+= f'(k_t) - R_t = 0 \Rightarrow R_t = f'(k_t) \\
+\frac{\partial \Pi}{\partial L_t} &: \quad \frac{\partial}{\partial L_t} \left[ L_t f\left( \frac{K_t}{L_t} \right) - R_t K_t - w_t L_t \right] 
+= f(k_t) - k_t f'(k_t) - w_t = 0 \Rightarrow w_t = f(k_t) - k_t f'(k_t)
+\end{align*}
+
+\textbf{No-arbitrage and depreciation condition:}
+\[
+\text{Owner of capital receives: } \frac{R_t K_t - \delta K_t}{K_t} = R_t - \delta
+\]
+\[
+\text{No-arbitrage: } R_t - \delta = r_t \quad \Rightarrow \quad R_t = r_t + \delta
+\]
+
+\textbf{If } $\delta = 1$, \textbf{then:}
+\[
+R_t = r_t + 1 \quad \Rightarrow \quad f'(k_t) = R_t = 1 + r_t
+\]
+
+\textbf{Summary:}
+\begin{align*}
+R_t &= f'(k_t) = 1 + r_t \\
+w_t &= f(k_t) - k_t f'(k_t)
+\end{align*}
+}
+
+\textbf{Intuition: }Firms choose capital and labor so that each input’s marginal product equals its price—capital earns its marginal return, and workers earn their marginal productivity.
+This ensures \textbf{efficient resource allocation in competitive markets.}
+The equilibrium interest rate and wage reflect the productivity of capital and labor, respectively.
+
+
+\subsection*{\noindent\textbf{{Households Problem}}}
+\addcontentsline{toc}{subsection}{{Households Problem}}
+
+\begin{itemize}
+    \item Savings $S_t$ by the young in period $t$ are determined from the solution of the following maximization problem:
+    \[
+    \max_{C_t^y,\, C_{t+1}^o} \ u(C_t^y) + \beta u(C_{t+1}^o),
+    \]
+    \item subject to:
+    \[
+    C_t^y + S_t = w_t,
+    \qquad
+    C_{t+1}^o = (1 + r_{t+1}) S_t.
+    \]
+    
+    \item Eliminating $S_t$ yields the intertemporal budget constraint:
+    \[
+    C_t^y + \frac{C_{t+1}^o}{1 + r_{t+1}} = w_t.
+    \]
+    
+    \item Using this budget constraint to substitute for $C_{t+1}^o$ in the utility function yields the following unconstrained maximization problem:
+    \[
+    \max_{C_t^y} \ u(C_t^y) + \beta u\left((1 + r_{t+1}) w_t - (1 + r_{t+1}) C_t^y\right).
+    \]
+    
+    \item The FOC for this problem yields the familiar \textit{consumption Euler equation}:
+    \[
+    u'(C_t^y) = \beta (1 + r_{t+1}) u'(C_{t+1}^o). \tag{8}
+    \]
+    
+    \item Together, the Euler equation (8) and the intertemporal budget constraint characterize the optimal consumption path.
+    
+    \item Combining the Euler equation and the intertemporal budget constraint, one obtains an implicit function that determines savings per person:
+    \[
+    S_t = S(w_t, 1 + r_{t+1}). \tag{9}
+    \]
+    
+    \item Since only the young save, total savings is $T S_t = S_t \cdot L_t$.
+    
+    \item The law of motion for the capital stock is consequently:
+    \[
+    K_{t+1} = (1 - \delta) K_t + I_t
+    \Rightarrow
+    K_{t+1} = I_t = T S_t = S_t \cdot L_t = L_t \cdot S(w_t, 1 + r_{t+1}). \tag{10}
+    \]
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Maximization problem:}
+\[
+\max_{C_t^y, C_{t+1}^o} \ u(C_t^y) + \beta u(C_{t+1}^o)
+\quad \text{s.t.} \quad C_t^y + S_t = w_t, \quad C_{t+1}^o = (1 + r_{t+1}) S_t
+\]
+
+\textbf{Step 1:} Substitute the second constraint into the first:
+\[
+C_t^y + \frac{C_{t+1}^o}{1 + r_{t+1}} = w_t
+\]
+
+\textbf{Step 2:} Rearranged intertemporal budget constraint:
+\[
+C_{t+1}^o = (1 + r_{t+1})(w_t - C_t^y)
+\]
+
+\textbf{Unconstrained maximization:}
+\[
+\max_{C_t^y} \ u(C_t^y) + \beta u\left((1 + r_{t+1})(w_t - C_t^y)\right)
+\]
+
+\textbf{Lagrangian (optional, but implied):}
+\[
+\mathcal{L}(C_t^y) = u(C_t^y) + \beta u\left((1 + r_{t+1})(w_t - C_t^y)\right)
+\]
+
+\textbf{First-order condition:}
+\[
+\frac{\partial \mathcal{L}}{\partial C_t^y} = u'(C_t^y) - \beta (1 + r_{t+1}) u'\left(C_{t+1}^o\right) = 0
+\]
+
+\textbf{Euler equation:}
+\[
+u'(C_t^y) = \beta (1 + r_{t+1}) u'(C_{t+1}^o)
+\]
+
+\textbf{Saving:}
+\[
+S_t = w_t - C_t^y
+\]
+
+\textbf{Capital accumulation:}
+\[
+K_{t+1} = S_t \cdot L_t
+\]
+
+}
+
+\textbf{Intuition:} The Euler equation shows how individuals optimally trade off consumption today versus tomorrow.
+
+It balances the marginal benefit of consuming now with the discounted, interest-adjusted benefit of saving and consuming later.
+
+\subsection*{\noindent\textbf{Equilibrium}}
+\addcontentsline{toc}{subsection}{Equilibrium}
+
+A perfect foresight equilibrium is represented by sequences of aggregate capital stock, household consumption and prices $\{K_t, c_t^y, c_t^o, r_t, w_t\}$ satisfying the firm optimality conditions (6), (7); household optimality conditions (8) and (9); and the law of motion for capital (10).
+
+\begin{itemize}
+    \item Divide (10) by $L_{t+1}$:
+    \[
+    \frac{K_{t+1}}{L_{t+1}} = k_{t+1} = \frac{L_t S(w_t, 1 + r_{t+1})}{L_{t+1}}.
+    \]
+    
+    \item Since $\frac{L_{t+1}}{L_t} = 1 + n$:
+    \[
+    \Rightarrow k_{t+1} = \frac{S(w_t, 1 + r_{t+1})}{1 + n}.
+    \]
+
+    \item Now using (6) and (7) to substitute out $w_t$ and $1 + r_{t+1}$ yields:
+    \[
+    k_{t+1} = \frac{S\left(f(k_t) - k_t f'(k_t), f'(k_{t+1})\right)}{1 + n}. \tag{11}
+    \]
+    
+    \item This non-linear first-order difference equation is the fundamental law of motion of the OLG economy.
+    
+    \item A steady state, $k_{t+1} = k_t = k^*$, is given by the solution of (11):
+    \[
+    k^* = \frac{S\left(f(k) - k f'(k), f'(k)\right)}{1 + n}.
+    \]
+    
+    \item Since the savings function $S(\cdot, \cdot)$ can take any form, the difference equation (11) can lead to complicated dynamics, and multiple steady states.
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Objective:} Derive the law of motion for capital in per capita terms in the OLG economy.
+
+\vspace{1em}
+
+\textbf{Step 1: Start with aggregate law of motion for capital (from households savings)}
+\[
+K_{t+1} = I_t = T S_t = S_t \cdot L_t = L_t \cdot S(w_t, 1 + r_{t+1})
+\]
+
+\textbf{Step 2: Convert to per capita capital} by dividing both sides by $L_{t+1}$:
+\[
+k_{t+1} = \frac{K_{t+1}}{L_{t+1}} = \frac{L_t \cdot S(w_t, 1 + r_{t+1})}{L_{t+1}}
+\]
+
+\textbf{Step 3: Use population growth} $L_{t+1} = (1 + n)L_t \Rightarrow \frac{L_t}{L_{t+1}} = \frac{1}{1 + n}$:
+\[
+k_{t+1} = \frac{S(w_t, 1 + r_{t+1})}{1 + n}
+\]
+
+\textbf{Step 4: Express $w_t$ and $1 + r_{t+1}$ from firm's optimality conditions (6) and (7):}
+\[
+w_t = f(k_t) - k_t f'(k_t), \quad 1 + r_{t+1} = f'(k_{t+1})
+\]
+
+\textbf{Step 5: Plug into the law of motion for capital:}
+\[
+k_{t+1} = \frac{S\left(f(k_t) - k_t f'(k_t), f'(k_{t+1})\right)}{1 + n}
+\]
+
+\textbf{Step 6: Define steady state by setting } $k_{t+1} = k_t = k^*$:
+\[
+k^* = \frac{S\left(f(k) - k f'(k), f'(k)\right)}{1 + n}
+\]
+}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{graph1.jpg}
+    \caption{Phase diagram of capital accumulation in the OLG model. The steady state $k^*$ is determined by the intersection where $k_{t+1} = k_t$, derived from the capital accumulation law $k_{t+1} = \frac{S(w_t, 1 + r_{t+1})}{1 + n}$. The dynamic behavior of capital depends on the shape of the savings function and production technology.}
+    \label{fig:olg_phase_diagram}
+\end{figure}
+
+\begin{itemize}
+    \item The graph shows the dynamic path of capital accumulation: how today's capital-labor ratio \(k(t)\) determines tomorrow's \(k(t+1)\).
+    \item Steady states occur where the capital accumulation curve intersects the 45$^\circ$ line; these are points where \(k(t+1) = k(t)\).
+    \item Multiple intersections imply multiple steady states—some stable, some unstable—reflecting that the economy can converge to different long-run outcomes depending on initial conditions.
+\end{itemize}
+
+\subsection*{\noindent\textbf{Restrictions on Utility and Production Functions}}
+\addcontentsline{toc}{subsection}{Restrictions on Utility and Production Functions}
+
+\begin{itemize}
+\item To describe the steady-state equilibrium and how the economy moves over time, we assume individuals have CRRA (Constant Relative Risk Aversion) preferences:
+\[
+U(C_t^y, C_{t+1}^o) = \frac{(C_t^y)^{1 - \theta} - 1}{1 - \theta} + \beta \left( \frac{(C_{t+1}^o)^{1 - \theta} - 1}{1 - \theta} \right),
+\]
+which lets us compare utility from consuming when young vs. old in a consistent way.
+
+\item The utility curvature is governed by \( \theta > 0 \), and output is produced using a Cobb-Douglas production function:
+\[
+f(k) = k^\alpha,
+\]
+a common form where \( \alpha \) captures capital's share in production.
+
+\item The capital share satisfies \( 0 < \alpha < 1 \). From intertemporal optimization, we derive the Euler equation:
+\[
+\frac{C_{t+1}^o}{C_t^y} = \left[ \beta (1 + r_{t+1}) \right]^{\frac{1}{\theta}},
+\]
+which equates the marginal utility tradeoff between consuming today and tomorrow.
+
+\item Given the lifetime budget constraint, we can solve for optimal consumption and savings:
+\[
+C_t^y = \left( \frac{\varphi_{t+1} - 1}{\varphi_{t+1}} \right) w_t, \qquad S_t = w_t - C_t^y = \frac{w_t}{\varphi_{t+1}},
+\]
+\[
+\text{where } \varphi_{t+1} \equiv 1 + \beta^{\frac{1}{\theta}} (1 + r_{t+1})^{\frac{1 - \theta}{\theta}} > 1.
+\]
+This tells us how a worker splits their wage between present and future consumption.
+
+\item We can analyze how savings respond to changes in factor prices through these derivatives:
+\[
+S_W \equiv \frac{\partial s_t}{\partial w_t} = \frac{1}{\varphi_{t+1}} \in (0,1),
+\]
+\[
+S_R \equiv \frac{\partial s_t}{\partial R_{t+1}} = \left( \frac{1 - \theta}{\theta} \right) \left[ \beta R_{t+1}^{\frac{1}{\theta}} \right] \frac{s_t}{\varphi_{t+1}}.
+\]
+These expressions tell us how sensitive savings are to changes in wages and interest rates.
+
+\item The sign of \( S_R \) depends on the value of \( \theta \): it's positive if \( \theta < 1 \), negative if \( \theta > 1 \), and exactly zero if \( \theta = 1 \). So preferences determine whether higher returns encourage or discourage savings.
+
+\item Since \( R = 1 + r \), it determines the relative price of future consumption. A higher \( R \) means consumption when old is cheaper compared to now.
+
+\item A rise in \( R \) affects savings behavior through two channels: income and substitution effects.
+
+\item \textbf{Income effect}: If returns go up, your future consumption from a given amount of saving is worth more, so you might save less.
+
+\item \textbf{Substitution effect}: A higher return makes it more rewarding to postpone consumption, encouraging more saving when young.
+
+\item When \( \theta > 1 \), the income effect dominates. People want to consume more in both periods and thus save less.
+
+\item When \( \theta < 1 \), the substitution effect dominates. People prefer to shift consumption to the future and save more today.
+
+\item When \( \theta = 1 \), corresponding to log utility, the two effects cancel out perfectly—so changes in interest rates do not influence saving.
+
+\item \textbf{Intuition}: Preferences (through \( \theta \)) shape how people trade off consumption over time. The return on savings (via \( r \)) affects this decision depending on whether substitution or income motives are stronger.
+\end{itemize}
+
+\begin{itemize}
+\item The special case where \( \theta = 1 \) corresponds to logarithmic preferences. This is very commonly used, so from now on we adopt log utility for simplicity and tractability.
+
+\item Under log utility, the savings function simplifies to:
+\[
+S_t = \frac{\beta}{1 + \beta} w_t.
+\]
+
+\item Plugging this into the capital accumulation equation (11), we obtain:
+\[
+k_{t+1} = \frac{S_t}{1 + n} = \frac{\beta w_t}{(1 + \beta)(1 + n)} = \frac{\beta (1 - \alpha) k_t^\alpha}{(1 + \beta)(1 + n)}. \tag{12}
+\]
+This expresses how capital per worker evolves over time in terms of its current value.
+
+\item Two steady-state equilibria can result from this dynamic equation:
+\begin{enumerate}
+  \item A trivial steady state: \( k^* = 0 \)
+  \item A non-trivial steady state:
+  \[
+  k^* = \left[ \frac{\beta (1 - \alpha)}{(1 + \beta)(1 + n)} \right]^{\frac{1}{1 - \alpha}}.
+  \]
+\end{enumerate}
+
+\item Given that output per worker is \( y = \frac{Y}{L} = k^\alpha \), the steady-state level of output per worker becomes:
+\[
+y^* = \left[ \frac{\beta (1 - \alpha)}{(1 + \beta)(1 + n)} \right]^{\frac{\alpha}{1 - \alpha}}.
+\]
+
+\item Equations like (12) generally can’t be solved explicitly over time, but we can still learn about the dynamics using a qualitative tool known as a \textit{Phase Diagram}.
+
+\item Our main goal in this type of analysis is to determine whether the economy will converge toward the non-trivial steady-state \( k^* > 0 \) over time.
+
+\item To study the local stability of each steady state, we evaluate the slope (derivative) of the capital accumulation function at the steady state:
+\[
+f'(k_t) = \frac{\alpha \beta (1 - \alpha) k_t^{\alpha - 1}}{(1 + \beta)(1 + n)} > 0. \tag{13}
+\]
+This tells us how sensitive future capital is to today's capital.
+
+\item Since the derivative is positive, we have \textit{monotonic dynamics} — capital either increases or decreases smoothly, without oscillations.
+
+\item Evaluating the slope at the non-trivial steady state \( k^* > 0 \), we find:
+\[
+0 < f'(k^* > 0) = \alpha < 1,
+\]
+which implies that the steady state is locally stable — the system gradually converges toward it.
+
+\item The concavity of the transition function helps us visualize its dynamics. Because:
+\[
+f''(k_t) = \frac{\alpha \beta (1 - \alpha)(\alpha - 1) k_t^{\alpha - 2}}{(1 + \beta)(1 + g)(1 + n)} < 0,
+\]
+we know the function is strictly concave for all \( k_t > 0 \).
+
+\item This strict concavity means the adjustment path is smooth and diminishing over time.
+
+\item Therefore, as long as we start with a positive capital stock \( k_0 > 0 \), the economy will converge globally to the non-trivial steady state.
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Utility maximization problem:}
+\[
+\max_{C_t^y, C_{t+1}^o} \quad U(C_t^y, C_{t+1}^o) = \frac{(C_t^y)^{1 - \theta} - 1}{1 - \theta} + \beta \frac{(C_{t+1}^o)^{1 - \theta} - 1}{1 - \theta}
+\]
+
+\textbf{Subject to:}
+\[
+C_t^y + \frac{C_{t+1}^o}{1 + r_{t+1}} = w_t
+\]
+
+\textbf{Lagrangian:}
+\[
+\mathcal{L} = \frac{(C_t^y)^{1 - \theta} - 1}{1 - \theta} + \beta \frac{(C_{t+1}^o)^{1 - \theta} - 1}{1 - \theta} + \lambda \left( w_t - C_t^y - \frac{C_{t+1}^o}{1 + r_{t+1}} \right)
+\]
+
+\textbf{FOCs:}
+\begin{align*}
+\frac{\partial \mathcal{L}}{\partial C_t^y} &: \quad (C_t^y)^{-\theta} - \lambda = 0 \quad \Rightarrow \quad \lambda = (C_t^y)^{-\theta} \\
+\frac{\partial \mathcal{L}}{\partial C_{t+1}^o} &: \quad \beta (C_{t+1}^o)^{-\theta} - \lambda \cdot \frac{1}{1 + r_{t+1}} = 0 \\
+&\Rightarrow \quad \beta (C_{t+1}^o)^{-\theta} = \lambda \cdot \frac{1}{1 + r_{t+1}} \\
+&\Rightarrow \quad \beta (C_{t+1}^o)^{-\theta} = (C_t^y)^{-\theta} \cdot \frac{1}{1 + r_{t+1}}
+\end{align*}
+
+\textbf{Euler equation:}
+\[
+\left( \frac{C_{t+1}^o}{C_t^y} \right)^{-\theta} = \frac{1}{\beta (1 + r_{t+1})} \quad \Rightarrow \quad \frac{C_{t+1}^o}{C_t^y} = [\beta (1 + r_{t+1})]^{\frac{1}{\theta}}
+\]
+
+\textbf{Lifetime budget constraint:}
+\[
+C_t^y + \frac{C_{t+1}^o}{1 + r_{t+1}} = w_t
+\]
+
+\textbf{Substitute } \( C_{t+1}^o = \left[ \beta (1 + r_{t+1}) \right]^{\frac{1}{\theta}} C_t^y \):
+
+\[
+C_t^y + \frac{ \left[ \beta (1 + r_{t+1}) \right]^{\frac{1}{\theta}} C_t^y }{1 + r_{t+1}} = w_t
+\]
+
+\textbf{Factor out } \( C_t^y \):
+
+\[
+C_t^y \left( 1 + \frac{ \left[ \beta (1 + r_{t+1}) \right]^{\frac{1}{\theta}} }{1 + r_{t+1}} \right) = w_t
+\]
+
+\textbf{Define } \( \varphi_{t+1} \equiv 1 + \beta^{\frac{1}{\theta}} (1 + r_{t+1})^{\frac{1 - \theta}{\theta}} \):
+
+\[
+C_t^y = \frac{w_t}{\varphi_{t+1}}, \quad S_t = w_t - C_t^y = w_t \left( \frac{\varphi_{t+1} - 1}{\varphi_{t+1}} \right)
+\]
+
+\[
+\varphi_{t+1} = \frac{w_t}{C_t^y}
+\]
+
+
+\textbf{Summary:}
+\begin{align*}
+\frac{C_{t+1}^o}{C_t^y} &= [\beta(1 + r_{t+1})]^{\frac{1}{\theta}} \\
+C_t^y &= \left( \frac{\varphi_{t+1} - 1}{\varphi_{t+1}} \right) w_t \\
+S_t &= \frac{w_t}{\varphi_{t+1}} \\
+\varphi_{t+1} &= 1 + \beta^{\frac{1}{\theta}} (1 + r_{t+1})^{\frac{1 - \theta}{\theta}} > 1
+\end{align*}
+}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{graph2.jpg}
+    \caption{Phase diagram showing the dynamics of capital accumulation. The arrows indicate convergence toward the non-trivial steady state \( k^* \).}
+    \label{fig:phase_k_dynamics}
+\end{figure}
+
+\begin{itemize}
+\item The curved line represents the capital accumulation equation \( k_{t+1} = f(k_t) \), while the 45° line shows points where \( k_{t+1} = k_t \); their intersection at \( k^* \) is the steady state.
+\item Arrows illustrate that regardless of whether the initial capital stock is below or above \( k^* \), the economy gradually converges toward the steady state — confirming its stability.
+\end{itemize}
+
+\subsection*{\noindent\textbf{Capital Over-Accumulation and Dynamic Inefficiency}}
+\addcontentsline{toc}{subsection}{Capital Over-Accumulation and Dynamic Inefficiency}
+
+\begin{itemize}
+\item Before continuing, it’s important to ask whether the competitive equilibrium in our OLG model is Pareto optimal — that is, whether resources are allocated efficiently across generations.
+
+\item In the standard overlapping generations (OLG) model, competitive equilibrium doesn’t always lead to Pareto efficiency. In fact, whenever the steady-state interest rate \( r \) is less than the population growth rate \( n \), the economy exhibits \textit{dynamic inefficiency}.
+
+\item In such a case, the capital stock is too high. Reducing it from the competitive steady state would raise the consumption levels of all generations, improving welfare.
+
+\item To explore this, let’s work with the OLG model under log utility and Cobb-Douglas production.
+
+\item Start from the economy-wide resource constraint:
+\[
+C_t = Y_t - I_t = Y_t - T S_t = F(K_t, L_t) - K_{t+1}
+\]
+
+\item Divide through by labor \( L_t \), using lower-case letters to denote per-worker terms:
+\[
+\Rightarrow \quad c_t \equiv \frac{C_t}{L_t} = f(k_t) - (1 + n) k_{t+1}
+\]
+\[
+\Rightarrow \quad c^* = f(k^*) - (1 + n) k^*
+\]
+
+\item Therefore, the derivative of steady-state consumption with respect to capital is:
+\[
+\frac{\partial c^*}{\partial k^*} = f'(k^*) - (1 + n)
+\]
+
+\item The \textbf{golden rule} level of capital is the one that maximizes consumption. At that point:
+\[
+\frac{\partial c^*}{\partial k^*} = 0 \quad \Rightarrow \quad f'(k_{\text{gold}}) = (1 + n)
+\]
+
+\item For a Cobb-Douglas production function, this gives:
+\[
+k_{\text{gold}} = \left[ \frac{\alpha}{1 + n} \right]^{\frac{1}{1 - \alpha}}
+\]
+
+\item Meanwhile, the competitive economy settles at:
+\[
+k^* = \left[ \frac{\beta(1 - \alpha)}{(1 + \beta)(1 + n)} \right]^{\frac{1}{1 - \alpha}}
+\]
+
+\item Firms maximize profits by equating marginal product of capital to the gross interest rate:
+\[
+1 + r^* = R^* = f'(k^*) = \alpha k^{\alpha - 1} = \frac{\alpha}{1 - \alpha} \left( \frac{1 + \beta}{\beta} \right) (1 + n)
+\]
+
+\item Therefore, we can alternatively express the steady-state capital-labor ratio as:
+\[
+k^* = \left[ \frac{\alpha}{1 + r} \right]^{\frac{1}{1 - \alpha}}
+\]
+
+\item \textbf{Intuition:} If the interest rate is too low relative to population growth, the economy is “saving too much” — accumulating more capital than is socially optimal. The golden rule defines the capital level that maximizes consumption. If the competitive outcome exceeds that, reducing capital raises everyone’s consumption.
+\end{itemize}
+
+\begin{itemize}
+\item If \( r < n \), then \( k^* > k_{\text{gold}} \) and \( \frac{\partial c^*}{\partial k^*} < 0 \), which implies that the competitive economy is dynamically inefficient!
+
+\item In this case, the economy accumulates too much capital — meaning that by reducing savings, we could raise total steady-state consumption.
+
+\item This outcome may seem surprising, especially since the model assumes perfect competition and no externalities — yet inefficiency still arises from intergenerational trade-offs.
+
+\item \textbf{Intuition:} When population grows faster than the return on capital, saving becomes excessive from a social standpoint. Cutting capital improves everyone’s consumption, even in a frictionless competitive setup.
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Step 1: Resource constraint in per capita terms:}
+\[
+C_t = Y_t - I_t = Y_t - K_{t+1}
+\quad \Rightarrow \quad
+c_t \equiv \frac{C_t}{L_t} = f(k_t) - (1 + n) k_{t+1}
+\]
+
+\textbf{At steady state:}
+\[
+k_{t+1} = k^* \quad \Rightarrow \quad
+c^* = f(k^*) - (1 + n)k^*
+\]
+
+\textbf{Step 2: Marginal condition for dynamic efficiency:}
+\[
+\frac{\partial c^*}{\partial k^*} = f'(k^*) - (1 + n)
+\]
+
+\textbf{Golden rule:}
+\[
+\frac{\partial c^*}{\partial k^*} = 0 \quad \Rightarrow \quad f'(k_{\text{gold}}) = 1 + n
+\]
+
+\textbf{Step 3: Cobb-Douglas production function:}
+\[
+f(k) = k^\alpha \quad \Rightarrow \quad f'(k) = \alpha k^{\alpha - 1}
+\]
+
+\textbf{Apply golden rule:}
+\[
+\alpha k_{\text{gold}}^{\alpha - 1} = 1 + n
+\quad \Rightarrow \quad
+k_{\text{gold}} = \left( \frac{\alpha}{1 + n} \right)^{\frac{1}{1 - \alpha}}
+\]
+
+\textbf{Step 4: Competitive steady state capital level:}
+\[
+k^* = \left( \frac{\beta(1 - \alpha)}{(1 + \beta)(1 + n)} \right)^{\frac{1}{1 - \alpha}}
+\]
+
+\textbf{Step 5: Compare marginal returns and condition:}
+\[
+f'(k^*) = 1 + r
+\quad \text{(by firm's FOC)}
+\]
+
+\textbf{If } \( r < n \), then:
+\[
+1 + r < 1 + n \Rightarrow f'(k^*) < f'(k_{\text{gold}})
+\Rightarrow k^* > k_{\text{gold}}
+\Rightarrow \frac{\partial c^*}{\partial k^*} < 0
+\]
+
+\textbf{Conclusion:}
+\[
+\text{If } r < n, \text{ the competitive economy is dynamically inefficient.}
+\]
+}
+
+\subsection*{\noindent\textbf{Intuition for Dynamic Inefficiency}}
+\addcontentsline{toc}{subsection}{Intuition for Dynamic Inefficiency}
+
+\begin{itemize}
+\item Individuals living at time \( t \) face market prices that are determined by the existing capital stock, which results from past generations' saving behavior.
+
+\item In this way, the capital stock today reflects decisions made by earlier generations — shaping the economic environment faced by the current one.
+
+\item This creates a \textbf{pecuniary externality}: the decisions of previous generations indirectly affect the welfare of current generations by influencing market prices.
+
+\item Pecuniary externalities capture how price changes (from others’ decisions) affect a household’s utility — not through direct consumption effects, but indirectly via the market mechanism.
+
+\item These externalities are the root cause of dynamic inefficiency. While pecuniary effects always exist in general equilibrium, they are usually second-order and do not cause inefficiencies.
+
+\item However, in the OLG framework, pecuniary externalities can become first-order when there is a continuous flow of new agents entering the economy each period.
+
+\item Dynamic inefficiency stems from the economy accumulating too much capital over time.
+
+\item This happens because each young generation needs to save for their own retirement, which leads to more and more capital being accumulated.
+
+\item Ironically, the more they save, the lower the return on capital becomes — which can unintentionally encourage the next generation to save even more.
+
+\item The reduced return on capital is itself a pecuniary externality — a consequence of today's saving decisions that distorts tomorrow’s incentives.
+
+\item If the economy had better ways to provide for retirement (like pensions), it could avoid this over-accumulation problem.
+
+\item A social planner is not constrained by market returns in determining how much old agents can consume. This flexibility allows for better intertemporal allocation.
+
+\item Therefore, when the capital stock exceeds the golden rule (i.e., when \( r < n \)), a planner could increase overall welfare by reallocating resources rather than relying solely on saving.
+
+\item This inefficiency doesn’t stem from typical frictions or market failures. Instead, it arises from the economy’s intergenerational structure — making it a unique case called \textbf{dynamic inefficiency}.
+
+\item \textbf{Intuition:} In OLG models, current saving affects future interest rates, which in turn shape future saving. If this loop leads to excessive capital and declining returns, the economy becomes dynamically inefficient — even in a perfectly competitive setup.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{graph2.jpg}
+    \caption{Phase diagram showing the dynamics of capital accumulation. The arrows indicate convergence toward the non-trivial steady state \( k^* \).}
+    \label{fig:phase_k_dynamics}
+\end{figure}
+
+\begin{itemize}
+\item Log utility and Cobb-Douglas production technology
+
+\item Provided \( r < n \), the steady-state capital level satisfies \( k^* > k_{\text{gold}} \)
+
+\item This implies over-accumulation of capital, making the steady state inefficient
+
+\item The result is dynamic inefficiency driven by a pecuniary externality that leads to welfare loss
+\end{itemize}
+
+\section*{\noindent\textbf{3.5 Government Budget Deficits in an OLG Model}}
+\addcontentsline{toc}{section}{3.5 Government Budget Deficits in an OLG Model}
+
+\begin{itemize}
+\item This section shows how a simple overlapping generations (OLG) model breaks the connection between the planning horizon of private individuals and that of the government.
+
+\item As a result, the classical Ricardian Equivalence fails in this model. Changes in lump-sum taxation can shift the economy’s equilibrium because individuals do not internalize the government’s intertemporal budget constraint.
+
+\item The OLG model also gives very different predictions about private saving behavior compared to standard representative agent models studied so far.
+\end{itemize}
+
+\subsection*{\noindent\textbf{Assumptions: A Small Open Economy Endowment Economy}}
+\addcontentsline{toc}{subsection}{Assumptions: A Small Open Economy Endowment Economy}
+
+\begin{itemize}
+\item Each generation lives for two periods: once as a young worker (denoted \( Y \)) and then as an old retiree (denoted \( O \)). A new generation is born in every period.
+
+\item For simplicity, we normalize the population so that each generation consists of one individual.
+
+\item The utility function of a person born at date \( t \) is given by:
+\[
+U(c_t^Y, c_{t+1}^O) = \log(c_t^Y) + \beta \log(c_{t+1}^O),
+\]
+which captures preferences over consumption when young and old, with a discount factor \( \beta \).
+
+\item Here, \( c_t^Y \) is consumption during youth (period \( t \)), and \( c_{t+1}^O \) is consumption during old age (period \( t+1 \)) for the same individual.
+
+\item We assume log utility and perfect foresight — individuals fully understand the future economic environment.
+
+\item Let \( \tau_t^Y \) represent net lump-sum taxes paid when young at time \( t \), and \( \tau_{t+1}^O \) when old at time \( t+1 \). Negative values indicate net transfers (i.e., receiving rather than paying taxes).
+
+\item This framework allows for the possibility that taxation may differ by age even within the same period: \( \tau_t^Y \ne \tau_t^O \).
+
+\item We assume that there is no intergenerational transfer of wealth — in other words, no inheritances are allowed.
+
+\item \textbf{Intuition:} This setup isolates the role of government taxation and saving decisions over the life cycle in a clean environment. By using log utility, we simplify the algebra while still capturing intertemporal trade-offs. Allowing differential taxes across age groups lets us analyze how fiscal policy affects individual choices in the absence of bequests.
+\end{itemize}
+
+\begin{itemize}
+\item The individual's lifetime budget constraint is:
+\[
+c_t^Y + \frac{c_{t+1}^O}{1 + r} = y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r}. \tag{15}
+\]
+
+\item Substituting this into the utility function gives the following maximization problem:
+\[
+\max_{c_t^Y} \log(c_t^Y) + \beta \log\left( y_{t+1}^O - \tau_{t+1}^O + (1 + r) y_t^Y - (1 + r) \tau_t^Y - (1 + r) c_t^Y \right)
+\]
+
+\item Solving this yields the first-order condition (Euler equation):
+\[
+c_{t+1}^O = \beta (1 + r) c_t^Y \tag{16}
+\]
+
+\item The path of consumption over time depends on the relative magnitude of \( \beta \) and \( \frac{1}{1 + r} \):
+\begin{itemize}
+    \item If \( \beta > \frac{1}{1 + r} \), consumption rises with age (upward-tilting path)
+    \item If \( \beta < \frac{1}{1 + r} \), consumption falls with age (downward-tilting path)
+\end{itemize}
+
+\item Using both the Euler equation \eqref{16} and budget constraint \eqref{15}, we derive the explicit consumption functions:
+\[
+c_t^Y = \left( \frac{1}{1 + \beta} \right) \left( y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} \right) \tag{17}
+\]
+\[
+c_{t+1}^O = (1 + r) \left( \frac{\beta}{1 + \beta} \right) \left( y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} \right) \tag{18}
+\]
+
+\item \textbf{Intuition:} The household spreads consumption across periods by smoothing marginal utility. The Euler equation shows how much old-age consumption is worth in terms of current consumption, while the closed-form solutions clarify how taxes and income from both periods shape optimal behavior.
+\end{itemize}
+
+\begin{itemize}
+\item Although the individual’s optimization problem looks similar to that in a representative agent model, the OLG framework differs because there are always two generations alive at each point in time.
+
+\item Therefore, to analyze aggregate outcomes, we must sum over both the young and old individuals living in the economy during period \( t \).
+
+\item Aggregate consumption is given by:
+\[
+C_t = c_t^Y + c_t^O.
+\]
+
+\item To derive the government’s budget constraint, we must account for the fact that the young and old can face different taxes.
+
+\item The government budget constraint is:
+\[
+B_{t+1}^G - B_t^G = \tau_t^Y + \tau_t^O + r B_t^G - G_t, \tag{19}
+\]
+where:
+\begin{itemize}
+    \item \( G_t \): government consumption/spending
+    \item \( B_t^G \): government assets (if negative, this is public debt)
+    \item \( \tau_t^Y, \tau_t^O \): taxes paid by the young and old generations
+\end{itemize}
+
+\item The transversality condition (TVC) on government assets requires:
+\[
+\lim_{T \to \infty} \left( \frac{1}{1 + r} \right)^T B_{t+T+1}^G = 0,
+\]
+ensuring that debt doesn't explode in the long run.
+
+\item \textbf{Intuition:} In contrast to representative agent models, the OLG setting features overlapping generations that jointly determine aggregate variables. Fiscal policy must balance not just intertemporal budgets, but also how taxes and transfers affect both cohorts simultaneously.
+\end{itemize}
+
+\begin{itemize}
+\item Using equation \eqref{19} and imposing the transversality condition, the government's intertemporal budget constraint becomes:
+\[
+\sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} G_s = (1 + r) B_t^G + \sum_{s=t}^{\infty} \left( \frac{1}{1 + r} \right)^{s - t} (\tau_s^Y + \tau_s^O)
+\]
+
+\item This has the same form as in the representative agent model, since aggregate tax revenue is just the sum \( T = \tau^Y + \tau^O \).
+
+\item To simplify the analysis, we assume that all relevant variables are constant over time:
+\[
+y_t^Y, y_t^O, \tau_t^Y, \tau_t^O, G_t \text{ are constant}.
+\]
+
+\item In this case, each young agent is identical across generations. So, both young and old individuals have constant consumption:
+\[
+c^Y = \left( \frac{1}{1 + \beta} \right) \left( y^Y - \tau^Y + \frac{y^O - \tau^O}{1 + r} \right)
+\]
+\[
+c^O = (1 + r) \left( \frac{\beta}{1 + \beta} \right) \left( y^Y - \tau^Y + \frac{y^O - \tau^O}{1 + r} \right)
+\]
+
+\item Thus, aggregate consumption is also constant over time:
+\[
+C = c^Y + c^O = \left( \frac{1 + \beta(1 + r)}{1 + \beta} \right) \left( y^Y - \tau^Y + \frac{y^O - \tau^O}{1 + r} \right)
+\]
+
+\item \textbf{Intuition:} With constant incomes, taxes, and preferences, each generation behaves identically, and consumption remains stable over time. Government debt dynamics do not disrupt this equilibrium as long as the intertemporal budget constraint and transversality condition are satisfied.
+\end{itemize}
+
+\begin{itemize}
+\item The government's lifetime budget constraint can be written as:
+\[
+G = r B^G + \tau^Y + \tau^O.
+\]
+
+\item Substituting this into the aggregate consumption equation to eliminate \( \tau^O \), we obtain:
+\[
+C = \left( \frac{1 + \beta (1 + r)}{1 + \beta} \right) \left( y^Y + \frac{y^O - G - r \tau^Y + r B^G}{1 + r} \right)
+\]
+
+\item Importantly, we don’t need the assumption \( \beta = \frac{1}{1 + r} \) to achieve constant aggregate consumption.
+
+\item While individuals may experience changing consumption over their lifetime, each person is replaced by an identical new agent after two periods. This means the overall cross-sectional pattern of consumption remains steady.
+
+\item Therefore, the \textit{cross-sectional profile} of consumption across cohorts is constant, even if individuals' consumption paths tilt over time.
+
+\item Aggregate consumption depends not only on public spending \( G \), but also on how taxes are distributed and the size of government assets (or debt).
+
+\item \textbf{Conclusion:} Because private agents do not internalize the government's intertemporal budget — especially in an overlapping generations setting — \textbf{Ricardian Equivalence fails}.
+
+\item \textbf{Intuition:} In the OLG model, the government's debt and tax choices affect aggregate demand — not because people are irrational, but because each generation is economically distinct. Without dynastic links, agents do not offset government borrowing with saving.
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Step 1: Lifetime budget constraint}
+\[
+c_t^Y + \frac{c_{t+1}^O}{1 + r} = y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r}
+\]
+
+\textbf{Step 2: Utility maximization (log utility)}
+\[
+\max_{c_t^Y} \log(c_t^Y) + \beta \log(c_{t+1}^O)
+\]
+
+\textbf{Substitute } \( c_{t+1}^O \) from budget constraint:
+\[
+c_{t+1}^O = (1 + r)\left(y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} - c_t^Y\right)
+\]
+
+\textbf{Objective becomes:}
+\[
+\max_{c_t^Y} \log(c_t^Y) + \beta \log\left( (1 + r)\left[ y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} - c_t^Y \right] \right)
+\]
+
+\textbf{First-order condition:}
+\begin{align*}
+\frac{d}{dc_t^Y} \left[ \log(c_t^Y) + \beta \log(c_{t+1}^O) \right] &= 0 \\
+\Rightarrow \frac{1}{c_t^Y} - \beta \cdot \frac{(1 + r)}{c_{t+1}^O} &= 0 \\
+\Rightarrow c_{t+1}^O &= \beta (1 + r) c_t^Y
+\end{align*}
+
+\textbf{Euler equation:}
+\[
+c_{t+1}^O = \beta (1 + r) c_t^Y \tag{Euler}
+\]
+
+\textbf{Step 3: Solve consumption from budget and Euler equation}
+
+\textbf{Plug Euler into budget constraint:}
+\[
+c_t^Y + \frac{\beta (1 + r) c_t^Y}{1 + r} = y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r}
+\]
+
+\textbf{Simplify:}
+\[
+c_t^Y (1 + \beta) = y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r}
+\]
+
+\textbf{Solve for } \( c_t^Y \):
+\[
+c_t^Y = \left( \frac{1}{1 + \beta} \right) \left( y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} \right)
+\]
+
+\textbf{Then:}
+\[
+c_{t+1}^O = \beta (1 + r) c_t^Y
+= (1 + r) \left( \frac{\beta}{1 + \beta} \right) \left( y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} \right)
+\]
+
+\textbf{Final consumption functions:}
+\begin{align*}
+c_t^Y &= \left( \frac{1}{1 + \beta} \right) \left( y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} \right) \tag{17} \\
+c_{t+1}^O &= (1 + r) \left( \frac{\beta}{1 + \beta} \right) \left( y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} \right) \tag{18}
+\end{align*}
+
+\textbf{Step 4: Aggregate consumption (2 generations alive)}
+\[
+C_t = c_t^Y + c_t^O
+\]
+
+\textbf{If } all variables constant over time:
+\[
+y_t^Y = y^Y, \quad y_{t+1}^O = y^O, \quad \tau_t^Y = \tau^Y, \quad \tau_{t+1}^O = \tau^O
+\]
+
+\[
+C = \left( \frac{1 + \beta (1 + r)}{1 + \beta} \right) \left( y^Y - \tau^Y + \frac{y^O - \tau^O}{1 + r} \right)
+\]
+
+\textbf{Step 5: Government budget constraint}
+\[
+G = r B^G + \tau^Y + \tau^O
+\]
+
+\textbf{Substitute into consumption equation to eliminate } \( \tau^O \):
+\[
+C = \left( \frac{1 + \beta (1 + r)}{1 + \beta} \right) \left( y^Y + \frac{y^O - G - r \tau^Y + r B^G}{1 + r} \right)
+\]
+
+\textbf{Key result: Ricardian equivalence fails.}
+}
+
+\subsection*{\noindent\textbf{Government Saving, Private Saving and the Current Account}}
+\addcontentsline{toc}{subsection}{Government Saving, Private Saving and the Current Account}
+
+\begin{itemize}
+\item How do changes in the government's budget deficit affect the nation’s current account balance?
+
+\item The current account reflects the change in the economy’s net foreign asset position.
+
+\item In a setting without physical investment, all net assets are simply financial claims on foreigners — meaning no domestic capital accumulation complicates the picture.
+
+\item Let total national assets be:
+\[
+B_t = B_t^p + B_t^G,
+\]
+where \( B^p \) is private sector foreign assets and \( B^G \) is government foreign assets.
+
+\item Then, the current account is defined as:
+\[
+CA_t = B_{t+1} - B_t = B_{t+1}^p + B_{t+1}^G - (B_t^p + B_t^G)
+= (B_{t+1}^p - B_t^p) + (B_{t+1}^G - B_t^G). \tag{20}
+\]
+
+\item This shows that the current account equals total net saving in the economy — i.e., the sum of:
+\[
+S_t^p = B_{t+1}^p - B_t^p \quad \text{(private saving)}
+\]
+\[
+S_t^G = B_{t+1}^G - B_t^G \quad \text{(government saving)}
+\]
+
+\item Alternatively, one can still define the current account from the national income identity:
+\[
+CA_t = r B_t + Y_t - C_t - G_t,
+\]
+but equation \eqref{20} provides a cleaner decomposition for our purpose.
+
+\item \textbf{Intuition:} The current account measures how much the country as a whole is saving or dissaving relative to the rest of the world. When the government runs a deficit (i.e., saves less or dissaves), this tends to reduce the current account — unless offset by higher private saving.
+\end{itemize}
+
+\begin{itemize}
+\item The question we now explore is: For a given government policy, how is aggregate private saving determined?
+
+\item At the end of period \( t \), the private financial assets in the economy equal the savings of the young in that period, since the old consume all remaining wealth and die with zero assets.
+
+\item The young of period \( t \) start with no assets, so their saving is:
+\[
+S_t^Y = B_{t+1}^p \tag{21}
+\]
+
+\item The old of period \( t \) de-accumulate all assets they previously saved in youth (or repay debt), so their saving is:
+\[
+S_t^O = -S_{t-1}^Y = -B_t^p \tag{22}
+\]
+
+\item Therefore, total net private saving is:
+\[
+S_t^p = S_t^Y + S_t^O = B_{t+1}^p - B_t^p
+\]
+
+\item This is simply the sum of saving by the young and dissaving by the old — which together determine how private net foreign assets evolve over time.
+
+\item \textbf{Intuition:} In the OLG model, private saving isn’t just what current agents set aside — it’s the net result of what the young are saving today minus what the old are withdrawing. This two-generation dynamic gives rise to aggregate saving behavior quite different from representative agent models.
+\end{itemize}
+
+\begin{itemize}
+\item A key implication of equation \eqref{21} is that the economy’s net foreign assets at the end of period \( t \) are the sum of savings by the young and the government:
+\[
+B_{t+1} = B_{t+1}^p + B_{t+1}^G = S_t^Y + B_{t+1}^G
+\]
+
+\item In the special case where \( \beta (1 + r) = 1 \), individual consumption paths are flat:
+\[
+c_t^Y = c_{t+1}^O
+\]
+
+\item From equations (17) and (18), this implies:
+\[
+c_t^Y = \left( \frac{1}{1 + \beta} \right) \left( y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} \right)
+\]
+\[
+c_{t+1}^O = \left( \frac{1}{1 + \beta} \right) \left( y_t^Y - \tau_t^Y + \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} \right)
+\]
+
+\item With this, saving by the young becomes:
+\[
+S_t^Y = y_t^Y - \tau_t^Y - c_t^Y = \frac{\beta}{1 + \beta} \left[ \left( y_t^Y - \tau_t^Y \right) - \left( \frac{y_{t+1}^O - \tau_{t+1}^O}{1 + r} \right) \right] = B_{t+1}^p \tag{23}
+\]
+
+\item \textbf{Intuition:} When preferences and returns are aligned (i.e., \( \beta(1 + r) = 1 \)), agents choose a perfectly smooth consumption path. In this case, saving by the young exactly bridges the gap between their own needs and anticipated old-age consumption — allowing us to directly express saving as a simple function of lifetime resources.
+\end{itemize}
+
+\begin{itemize}
+  \item Consolidating equations \eqref{23} and \eqref{22}, which relate to the saving behavior of the young and old respectively, we derive the expression for total private saving:
+  \[
+  S_t^p = B_{t+1}^p - B_t^p = S_t^Y - S_{t-1}^Y = \frac{\beta}{1 + \beta} \left[ \Delta (y_t^Y - \tau_t^Y) - \Delta (y_{t+1}^O - \tau_{t+1}^O) \right] \tag{24}
+  \]
+  
+  \item Here, the disposable income changes are defined as:
+  \[
+  \Delta (y_t^Y - \tau_t^Y) = (y_t^Y - \tau_t^Y) - (y_{t-1}^Y - \tau_{t-1}^Y)
+  \]
+  \[
+  \Delta (y_{t+1}^O - \tau_{t+1}^O) = (y_{t+1}^O - \tau_{t+1}^O) - (y_t^O - \tau_t^O)
+  \]
+
+  \item \textbf{Interpretation:} This expression tells us that total private saving in the economy is driven by how the disposable income of different age cohorts changes over time.
+
+  \item \textbf{Implication:} 
+  \begin{itemize}
+    \item When the disposable income of the young increases more than that of the old, i.e., 
+    \[
+    \Delta (y_t^Y - \tau_t^Y) > \Delta (y_{t+1}^O - \tau_{t+1}^O),
+    \]
+    total private saving rises.
+    
+    \item This aligns with the idea that rising productivity or income for the young (relative to the old) leads to more saving by the young and less dissaving by the old.
+  \end{itemize}
+
+  \item \textbf{Intuition:} 
+  \begin{itemize}
+    \item Aggregate private saving captures how the life-cycle income profile of households evolves.
+    \item The model highlights that private saving is not just a function of current income, but also of intertemporal shifts in income across generations.
+    \item Hence, economies with rapidly increasing productivity among the young tend to exhibit higher private saving rates.
+  \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+  \item A rise in expected aggregate output growth raises the aggregate savings rate when the young are net savers. Higher growth influences the overall saving rate through a scale effect — it increases the wealth accumulated by young savers relative to the wealth de-accumulated by the old.
+
+  \item This outcome does \textit{not} occur in a representative agent framework, because in that setup higher expected future income reduces the incentive to save today.
+  
+  \item \textbf{Intuition:} The OLG model reveals a key departure from representative agent models — here, forward-looking young agents save more under growth because they do not internalize the reduced saving needs of future generations.
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Government Saving, Private Saving, and the Current Account:}
+
+\textbf{Step 1: Define the current account as the change in total net foreign assets}
+\[
+CA_t = B_{t+1} - B_t
+\]
+
+\textbf{Step 2: Decompose total assets into private and government components}
+\[
+B = B^p + B^G \Rightarrow CA_t = B^p_{t+1} - B^p_t + B^G_{t+1} - B^G_t
+\]
+
+\textbf{Step 3: Define savings for private and government sectors}
+\[
+S^p_t = B^p_{t+1} - B^p_t, \quad S^G_t = B^G_{t+1} - B^G_t
+\Rightarrow CA_t = S^p_t + S^G_t
+\]
+
+\textbf{Step 4: Define private saving from young and old}
+\begin{align*}
+S^Y_t &= B^p_{t+1} \quad \text{(young save)} \\
+S^O_t &= -B^p_t \quad \text{(old dissave)} \\
+S^p_t &= S^Y_t + S^O_t = B^p_{t+1} - B^p_t
+\end{align*}
+
+\textbf{Step 5: Using Euler equation and budget constraint, we solve for saving of young}
+\[
+S^Y_t = y^Y_t - \tau^Y_t - c^Y_t = \frac{\beta}{1+\beta} \left[ (y^Y_t - \tau^Y_t) - (y^O_{t+1} - \tau^O_{t+1}) \right]
+\Rightarrow B^p_{t+1} = S^Y_t
+\]
+
+\textbf{Step 6: Total private saving becomes}
+\[
+S^p_t = \frac{\beta}{1+\beta} \left[ \Delta(y^Y_t - \tau^Y_t) - \Delta(y^O_{t+1} - \tau^O_{t+1}) \right]
+\]
+
+\textbf{Step 7: Total net foreign assets now satisfy}
+\[
+B_{t+1} = S^Y_t + B^G_{t+1}
+\Rightarrow CA_t = S^p_t + S^G_t
+\]
+
+\textbf{Summary:} Private saving depends on changes in disposable income across generations. High growth in young's income leads to higher saving, increasing net foreign assets.
+}
+
+
+\subsection*{\noindent\textbf{The Timing of Taxes: An Example}}
+\addcontentsline{toc}{subsection}{The Timing of Taxes: An Example}
+
+\begin{itemize}
+  \item In OLG models, the timing of taxes can have significant effects on both aggregate consumption and the current account.
+  
+  \item Consider an example: suppose the government finances a \textit{one-time transfer payment} (a “gift”) using debt.
+  
+  \item This transfer is split equally between the current young and the current old generation.
+  
+  \item In a representative agent model, such a debt-financed transfer would have no real effect — neither on consumption, nor the current account, nor welfare. Why?
+  
+  \item Because a forward-looking representative agent anticipates that future taxes will need to repay the debt. As a result, the agent saves the transfer entirely to offset this expected liability.
+  
+  \item \textbf{Key Insight:} In our OLG framework, the two-period-lived individuals \textit{do not fully internalize} future taxes, especially since the young and old are different people. Hence, this intertemporal neutrality breaks down.
+  
+  \item \textbf{Conclusion:} The timing of taxes \textit{does matter} in the OLG model. A bond-financed gift can change both current consumption and the current account.
+\end{itemize}
+
+\subsubsection*{\noindent\textbf{Description of the Fiscal Policy}}
+\addcontentsline{toc}{subsubsection}{Description of the Fiscal Policy}
+
+\begin{itemize}
+  \item Suppose that in period $t = 0$, the government lowers the per capita taxes paid by both the young and old by $d/2$, financing its higher budget deficit in period 0 by selling bonds worth $d$ to each of the current young.
+  
+  \item That is, the current tax bill of the young falls to $\tau_0^Y - \frac{d}{2}$ and the current tax bill of the old falls to $\tau_0^O - \frac{d}{2}$.
+  
+  \item The government’s net end-of-period assets $B_1^G$ consequently decline to $B_1^G - d$.
+  
+  \item We will assume that the tax burden due to future interest payments on the added debt $rd$ is split evenly between young and old generations.
+  
+  \item That is, for all $t \geq 1$, per capita taxes on the young rise to $\tau_t^Y + \frac{rd}{2}$ and per capita taxes on the old rise to $\tau_t^O + \frac{rd}{2}$.
+  
+  \item \textbf{What are the consequences of such a policy?} Unlike the representative agent model, aggregate consumption rises in the short run and falls in the long run.
+  
+  \item Let variables with asterisks $^*$ denote the economy’s path after the fiscal policy is implemented.
+  
+  \item The period 0 old clearly consume their entire “gift,” so:
+  \[
+  c_0^{O*} = c_0^O + \frac{d}{2}. \tag{25}
+  \]
+\end{itemize}
+
+\begin{itemize}
+  \item The young in period 0 receive the same gift of $d/2$ as the old, but they do \textit{not} consume it all at once. Why?
+  \begin{enumerate}
+    \item They prefer to smooth their consumption over both periods of life.
+    \item They will face higher taxes of $rd/2$ in old age, so the net benefit of the gift is smaller for them.
+  \end{enumerate}
+  
+  \item \textbf{Without the gift}, the young's consumption demand is:
+  \[
+  c_0^Y = \left( \frac{1}{1+\beta} \right) \left( y_0^Y - \tau_0^Y + \frac{y_1^O - \tau_1^O}{1+r} \right)
+  \]
+  
+  \item \textbf{With the gift}, the young adjust their consumption:
+  \[
+  c_0^{Y*} = c_0^Y + \frac{1}{1+\beta} \left[ \frac{d}{2} - \left( \frac{1}{1+r} \right) \frac{rd}{2} \right]
+  = c_0^Y + \frac{1}{1+\beta} \left( \frac{1}{1+r} \right) \frac{d}{2}
+  \tag{26}
+  \]
+  
+  \item \textbf{Intuition:} the young consume \textit{less} of the gift upfront because they expect to be taxed later. They internalize that some of today’s benefit will need to be repaid.
+
+  \item Adding the old’s and young’s consumption responses:
+  \begin{align*}
+  c_0^{O*} + c_0^{Y*} - (c_0^O + c_0^Y)
+  &= \left[ 1 + \frac{1}{(1+\beta)(1+r)} \right] \frac{d}{2}
+  \end{align*}
+
+  \item \textbf{Conclusion:} Aggregate consumption in period 0 increases due to the fiscal transfer, but the total rise is \textit{less than} the total size of the transfer $d$, since part of it is saved in anticipation of future taxes.
+\end{itemize}
+
+\begin{itemize}
+  \item While period 0 aggregate consumption has risen, what happens next periods?
+
+  \item The period 1 old generation still enjoys higher consumption (from (18)):
+  \[
+  c_{t+1}^{0} = (1+r)\left(\frac{\beta}{1+\beta}\right)\left(y_{t}^{Y} - \tau_{t}^{Y} + \frac{y_{t+1}^{0} - \tau_{t+1}^{0}}{1+r}\right),
+  \]
+
+  \item Simplifying gives:
+  \[
+  c_{1}^{0*} = c_{1}^{0} + (1+r)\frac{\beta}{1+\beta}\left[\frac{d}{2} - \left(\frac{1}{1+r}\right)\frac{rd}{2}\right]
+              = c_{1}^{0} + \left(\frac{\beta}{1+\beta}\right)\frac{d}{2}. \tag{27}
+  \]
+
+  \item However, the period 1 young and all later generations lose, since higher taxes reduce their lifetime income:
+  \[
+  -\left[\frac{rd}{2} + \left(\frac{1}{1+r}\right)\frac{rd}{2}\right]
+  = -\frac{(2r+r^{2})}{1+r}\frac{d}{2}.
+  \]
+
+  \item Their consumption when young falls to:
+  \[
+  c_{t}^{Y*} = c_{t}^{Y} - \frac{1}{1+\beta}\frac{(2r+r^{2})}{1+r}\frac{d}{2}. \tag{28}
+  \]
+
+  \item And their consumption when old falls to:
+  \[
+  c_{t}^{0*} = c_{t}^{0} - (1+r)\frac{\beta}{1+\beta}\frac{(2r+r^{2})}{1+r}\frac{d}{2}
+            = c_{t}^{0} - \frac{\beta}{1+\beta}(2r+r^{2})\frac{d}{2}. \tag{29}
+  \]
+
+  \item \textit{Intuition:} The initial old gain because they enjoy higher consumption, but future generations face lower lifetime resources due to distortionary taxes. This leads to reduced consumption both when young and old.
+\end{itemize}
+
+\begin{itemize}
+  \item Combining (27) and (28) (the latter for $t=1$), we see that aggregate period 1 consumption changes by:
+  \[
+  c_{1}^{0*} + c_{1}^{Y*} - (c_{1}^{0} + c_{1}^{Y}) 
+  = \left[\frac{\beta}{1+\beta} - \frac{1}{1+\beta}\left(\frac{2r+r^{2}}{1+r}\right)\right]\frac{d}{2},
+  \]
+  
+  \item This expression has an ambiguous sign.
+
+  \item Combining (28) and (29), it is straightforward to show that aggregate consumption is unambiguously lower from period 2 onwards:
+  \[
+  c_{2}^{0*} + c_{2}^{Y*} - (c_{2}^{0} + c_{2}^{Y}) 
+  = -\frac{1}{1+\beta}[2r+r^{2}]\left[\beta + \frac{1}{1+r}\right]\frac{d}{2} < 0.
+  \]
+
+  \item The new government budget constraint has real effects: transfer and tax policies shift income across generations.
+
+  \item Generations alive at time 0 gain, since they receive a net positive transfer (financed by future generations), which raises their consumption.
+
+  \item Future generations, however, are “hurt” by the budget deficit. Their consumption is lower, but this does not affect period 0 aggregate consumption because these cohorts had not yet been born.
+
+  \item \textit{Intuition:} The deficit redistributes across generations. The initial old benefit, but starting from period 2, aggregate consumption is strictly lower, as the tax burden reduces the resources of all later generations.
+\end{itemize}
+
+\begin{itemize}
+  \item Ricardian Equivalence fails because government borrowing shifts current taxes from today’s generation onto unrelated future generations who will be born later.
+
+  \item We can solve for the path of the current account:
+  \[
+  CA_{t} = rB_{t} + Y_{t} - C_{t} - G_{t}.
+  \]
+
+  \item Since output and government spending are constant, and net foreign assets in period 0 are given, the only element of the current account equation that can change is aggregate consumption.
+
+  \item Hence, the current account change in period 0 is negative but smaller than 1:
+  \[
+  CA_{0}^{*} - CA_{0} = -\big[c_{0}^{0*} + c_{0}^{Y*} - (c_{0}^{0} + c_{0}^{Y})\big] 
+  = -\left[1 + \frac{1}{(1+\beta)(1+r)}\right]\frac{d}{2}.
+  \]
+
+  \item To find the period 1 current account change, notice that the increase in net foreign assets at the start of period 1 equals the change in the period 0 current account.
+
+  \item Therefore:
+  \[
+  CA_{1}^{*} - CA_{1} 
+  = r\big[CA_{0}^{*} - CA_{0}\big] - \big[c_{1}^{0*} + c_{1}^{Y*} - (c_{1}^{0} + c_{1}^{Y})\big] 
+  = -\frac{\beta}{1+\beta}(1+r)\frac{d}{2}.
+  \]
+
+  \item This remains negative in period 1.
+
+  \item \textit{Intuition:} Borrowing today raises consumption for the current old, but shifts the repayment burden to the future. As a result, the current account worsens immediately and stays negative, reflecting intergenerational redistribution.
+\end{itemize}
+
+\begin{itemize}
+  \item It is easy to verify that there is no further change in the current account for $t > 1$, since from that point all generations share the debt burden equally.
+
+  \item Therefore, the current account only worsens temporarily but returns to its original path after two periods.
+
+  \item However, the period 0 fiscal deficit leaves permanent effects:
+
+  \begin{itemize}
+    \item For those born in or after period 1, consumption is lower in both periods of life.
+    \item The higher current account deficits in periods 0 and 1 mean that government indebtedness reduces the economy’s net foreign asset position.
+    \item The higher consumption enjoyed by those alive in period 0 is financed by accumulating foreign debt, which future generations must repay.
+  \end{itemize}
+
+  \item \textit{Intuition:} The deficit creates only a short-lived deterioration in the current account, but its true legacy is permanent: future generations suffer lower lifetime consumption because they must service the debt incurred to finance period 0’s higher consumption.
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Policy at $t=0$:}
+\[
+\tau_0^{Y*}=\tau_0^{Y}-\frac{d}{2},\qquad 
+\tau_0^{O*}=\tau_0^{O}-\frac{d}{2},\qquad 
+B_1^{G*}=B_1^{G}-d,
+\]
+\[
+\tau_t^{Y*}=\tau_t^{Y}+\frac{rd}{2},\qquad 
+\tau_t^{O*}=\tau_t^{O}+\frac{rd}{2}\qquad (t\ge 1).
+\]
+
+\textbf{Period 0 old: consume gift}
+\[
+c_0^{0*}=c_0^{0}+\frac{d}{2}. \tag{25}
+\]
+
+\textbf{Period 0 young: baseline demand (from (17))}
+\[
+c_0^{Y}=\frac{1}{1+\beta}\!\left(y_0^{Y}-\tau_0^{Y}+\frac{y_1^{O}-\tau_1^{O}}{1+r}\right).
+\]
+
+\textbf{PV income change for $t=0$ young}
+\[
+\Delta \text{PV}=\frac{d}{2}-\frac{1}{1+r}\frac{rd}{2}.
+\]
+
+\textbf{Young consumption response}
+\[
+\Delta c_0^{Y}=\frac{1}{1+\beta}\left[\frac{d}{2}-\frac{1}{1+r}\frac{rd}{2}\right]
+=\frac{1}{(1+\beta)(1+r)}\frac{d}{2},
+\]
+\[
+c_0^{Y*}=c_0^{Y}+\Delta c_0^{Y}
+=c_0^{Y}+\frac{1}{1+\beta}\left[\frac{d}{2}-\frac{rd}{2(1+r)}\right]. \tag{26}
+\]
+
+\textbf{Aggregate period 0 consumption change}
+\[
+(c_0^{0*}+c_0^{Y*})-(c_0^{0}+c_0^{Y})
+=\frac{d}{2}+\frac{1}{1+\beta}\left[\frac{d}{2}-\frac{rd}{2(1+r)}\right]
+=\boxed{\left[1+\frac{1}{(1+\beta)(1+r)}\right]\frac{d}{2}}.
+\]
+}
+
+\section*{\noindent\textbf{3.6 Global Effects of Government Deficits}}
+\addcontentsline{toc}{section}{3.6 Global Effects of Government Deficits}
+
+\begin{itemize}
+  \item Up to now we studied a small open economy with an exogenous world interest rate. 
+
+  \item We now ask: how do tax policies of large countries affect the global economy?
+
+  \item To address this, we set up a two-country equilibrium model with overlapping generations.
+
+  \item Assumptions:
+  \begin{itemize}
+    \item Capital is perfectly mobile across countries, but labor is not (no migration or immigration).
+    \item This is a two-country extension of the closed-economy Diamond model from Section 3.4.
+  \end{itemize}
+
+  \item There are two countries: Home (H) and Foreign (F).  
+  Both share identical preferences and technologies.  
+  Foreign variables are denoted with an asterisk $^*$.
+
+  \item As before, each agent lives for two periods: supplies labor when young and nothing when old.
+
+  \item \textit{Intuition:} Moving from a small to a large open economy changes the role of fiscal policy: now government deficits can influence the world interest rate, transmitting effects across both countries through capital flows.
+\end{itemize}
+
+\begin{itemize}
+  \item In Home (Foreign), the young generation born at date $t$ has $N_t$ ($N_t^*$) members.
+
+  \item The levels of the two populations may differ, but both have the same net growth rate $n$:
+  \[
+  N_t = (1+n)N_{t-1}, 
+  \qquad 
+  N_t^* = (1+n)N_{t-1}^*.
+  \]
+
+  \item Assumption: the young pay taxes, the old do not.
+
+  \item The savings problem of a young person in Home is:
+  \[
+  U(c_t^Y, c_{t+1}^O) = \log c_t^Y + \beta \log c_{t+1}^O,
+  \]
+  subject to
+  \[
+  c_t^Y + s_t^Y = w_t - \tau_t^Y, 
+  \qquad 
+  c_{t+1}^O = (1+r_{t+1})s_t^Y.
+  \]
+
+  \item The FOC gives the standard Euler equation. Combined with the budget constraint, savings in Home are:
+  \[
+  s_t^Y = \frac{\beta}{1+\beta}(w_t - \tau_t^Y). \tag{30}
+  \]
+
+  \item Similarly, for Foreign:
+  \[
+  s_t^{Y*} = \frac{\beta}{1+\beta}(w_t^* - \tau_t^{Y*}).
+  \]
+
+  \item \textit{Intuition:} Each young agent allocates income between present and future consumption, saving a fixed fraction $\tfrac{\beta}{1+\beta}$ of net labor income. Both Home and Foreign economies follow the same logic, so any fiscal policy in one country directly affects savings and capital flows globally.
+\end{itemize}
+
+\begin{itemize}
+  \item Assume both countries have a Cobb–Douglas production function:
+  \[
+  Y_t = K_t^{\alpha} L_t^{\,1-\alpha}, \qquad 0<\alpha<1.
+  \]
+
+  \item Under competitive markets, factors earn their marginal products.
+
+  \item Marginal product of capital (rental rate of return):
+  \[
+  R_t = F_K(K_t,L_t) = \alpha K_t^{\alpha-1} L_t^{\,1-\alpha} 
+  = \alpha k_t^{\alpha-1}.
+  \]
+
+  \item Marginal product of labor (wage rate):
+  \[
+  w_t = F_L(K_t,L_t) = (1-\alpha)K_t^{\alpha}L_t^{-\alpha} 
+  = (1-\alpha)k_t^{\alpha}. \tag{31}
+  \]
+
+  \item Define $k_t \equiv K_t/L_t$ as the capital–labor ratio.
+
+  \item With integrated world capital markets, the capital–labor ratio must be the same across both countries, since technologies are identical. Denote this common value as $k^W$.
+
+  \item Then:
+  \[
+  R_t = \alpha k_t^{\alpha-1} = \alpha (k_t^*)^{\alpha-1} = \alpha (k^W)^{\alpha-1}. \tag{32}
+  \]
+
+  \item \textit{Intuition:} In equilibrium, capital mobility ensures a common world interest rate. Wages differ only through population sizes, while returns to capital depend on the shared world capital–labor ratio.
+\end{itemize}
+
+\begin{itemize}
+  \item Assume initially no government debt, so taxes are zero: $\tau_t^Y = \tau_t^{Y*} = 0$.
+
+  \item Without government debt, global equilibrium requires that aggregate savings of the young equal the world supply of capital available next period:
+  \[
+  K_{t+1} + K_{t+1}^* = N_t s_t^Y + N_t^* s_t^{Y*}. \tag{33}
+  \]
+
+  \item With immobile labor, market clearing requires:
+  \[
+  L_t = N_t, 
+  \qquad 
+  L_t^* = N_t^*.
+  \]
+
+  \item From (30) and (31), equilibrium saving of a young Home resident is:
+  \[
+  s_t^Y = \frac{\beta}{1+\beta}(w_t - \tau_t^Y) 
+         = \frac{\beta}{1+\beta}w_t 
+         = \frac{\beta (1-\alpha)}{1+\beta}(k_t^W)^{\alpha}.
+  \]
+
+  \item Similarly, for a young Foreign resident:
+  \[
+  s_t^{Y*} = \frac{\beta (1-\alpha)}{1+\beta}(k_t^W)^{\alpha}.
+  \]
+
+  \item \textit{Intuition:} With no government debt, both Home and Foreign young save the same fixed share of net labor income. Since labor is immobile but capital is mobile, savings pool globally and determine the world capital–labor ratio.
+\end{itemize}
+
+\begin{itemize}
+  \item Using the equilibrium condition (33):
+  \[
+  K_{t+1} + K_{t+1}^* = N_t s_t^Y + N_t^* s_t^{Y*},
+  \]
+  and substituting savings expressions:
+  \[
+  K_{t+1} + K_{t+1}^* = \frac{\beta (1-\alpha)}{1+\beta}(k_t^W)^{\alpha}(N_t + N_t^*).
+  \]
+
+  \item Divide both sides by the world labor force $N_t + N_t^*$, and note:
+  \[
+  \frac{K_{t+1} + K_{t+1}^*}{N_t + N_t^*} 
+  = (1+n)\frac{K_{t+1} + K_{t+1}^*}{N_{t+1}+N_{t+1}^*} 
+  = (1+n)\frac{K_{t+1} + K_{t+1}^*}{L_{t+1}+L_{t+1}^*} 
+  = (1+n)k_{t+1}^W.
+  \]
+
+  \item Therefore, the law of motion for the world capital–labor ratio is:
+  \[
+  k_{t+1}^W = \frac{\beta (1-\alpha)}{(1+n)(1+\beta)}(k_t^W)^{\alpha}. \tag{34}
+  \]
+
+  \item \textit{Intuition:} World savings by the young finance future capital. Since population grows at rate $n$, effective capital per worker evolves through a non-linear difference equation, determining the global dynamics of $k^W$.
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Step 1: Demography}
+\[
+N_t=(1+n)N_{t-1},\qquad N_t^*=(1+n)N_{t-1}^*,\qquad L_t=N_t,\; L_t^*=N_t^*.
+\]
+
+\textbf{Step 2: Household problem (young pay taxes, old pay none)}
+\[
+\max_{s_t^Y}\;\log c_t^Y+\beta\log c_{t+1}^O
+\quad\text{s.t.}\quad
+c_t^Y+s_t^Y=w_t-\tau_t^Y,\;\; c_{t+1}^O=(1+r_{t+1})s_t^Y.
+\]
+
+\textbf{FOC (Euler) $\Rightarrow$ savings rule}
+\[
+\frac{1}{c_t^Y}=\beta\frac{1+r_{t+1}}{c_{t+1}^O}
+\;\Rightarrow\;
+s_t^Y=\frac{\beta}{1+\beta}\,(w_t-\tau_t^Y),\qquad
+s_t^{Y*}=\frac{\beta}{1+\beta}\,(w_t^*-\tau_t^{Y*}). \tag{30}
+\]
+
+\textbf{Step 3: Technology and factor prices (Cobb–Douglas)}
+\[
+Y_t=K_t^{\alpha}L_t^{\,1-\alpha},\quad 0<\alpha<1,\quad k_t\equiv K_t/L_t.
+\]
+\[
+R_t=F_K=\alpha k_t^{\alpha-1},\qquad 
+w_t=F_L=(1-\alpha)k_t^{\alpha}. \tag{31}
+\]
+
+\textbf{Step 4: Integrated world capital (identical technologies)}
+\[
+k_t=k_t^*=k_t^W \;\Rightarrow\; 
+R_t=\alpha(k_t^W)^{\alpha-1}=R_t^*. \tag{32}
+\]
+
+\textbf{Step 5: Baseline with no government debt}
+\[
+\tau_t^Y=\tau_t^{Y*}=0.
+\]
+
+\textbf{Step 6: World capital accumulation / market clearing}
+\[
+K_{t+1}+K_{t+1}^* = N_t s_t^Y + N_t^* s_t^{Y*}. \tag{33}
+\]
+
+\textbf{Substitute (30) and (31) with $\tau=0$, $k_t=k_t^W$}
+\[
+s_t^Y=\frac{\beta}{1+\beta}(1-\alpha)(k_t^W)^{\alpha},\qquad
+s_t^{Y*}=\frac{\beta}{1+\beta}(1-\alpha)(k_t^W)^{\alpha}.
+\]
+\[
+\Rightarrow\;
+K_{t+1}+K_{t+1}^*
+=\frac{\beta(1-\alpha)}{1+\beta}(k_t^W)^{\alpha}\,(N_t+N_t^*).
+\]
+
+\textbf{Step 7: Law of motion for world capital–labor ratio}
+\[
+k_{t+1}^W
+=\frac{K_{t+1}+K_{t+1}^*}{L_{t+1}+L_{t+1}^*}
+=\frac{K_{t+1}+K_{t+1}^*}{N_{t+1}+N_{t+1}^*}
+=\frac{\beta(1-\alpha)}{1+\beta}(k_t^W)^{\alpha}\,
+\frac{N_t+N_t^*}{N_{t+1}+N_{t+1}^*}.
+\]
+\[
+N_{t+1}+N_{t+1}^*=(1+n)(N_t+N_t^*) \;\Rightarrow\;
+\boxed{\;k_{t+1}^W=\frac{\beta(1-\alpha)}{(1+n)(1+\beta)}\,(k_t^W)^{\alpha}\;}. \tag{34}
+\]
+}
+
+\begin{itemize}
+  \item \textbf{Step 1: Steady-state values.}  
+  The steady state satisfies $k_{t+1}^W = k_t^W = \bar{k}^W$.  
+
+  \item From (34), there are two steady states:  
+  \[
+  \bar{k}^W(1) = 0, 
+  \qquad 
+  \bar{k}^W(2) = \left[\frac{\beta(1-\alpha)}{(1+n)(1+\beta)}\right]^{\tfrac{1}{1-\alpha}}.
+  \]
+
+  \item \textbf{Step 2: Local stability of the non-trivial steady state.}  
+  The derivative of (34) is:
+  \[
+  f'(k_t^W) = \frac{\alpha \beta (1-\alpha)}{(1+n)(1+\beta)}(k_t^W)^{\alpha-1}. \tag{35}
+  \]
+
+  \item Evaluating at the non-trivial steady state $\bar{k}^W(2)$:
+  \[
+  f'(\bar{k}^W(2)) = \alpha. \tag{36}
+  \]
+
+  \item Since $0<\alpha<1$, the non-trivial steady state is locally stable under Cobb–Douglas technology. Moreover, monotonic convergence occurs because $f'(k^W)>0$.
+
+  \item \textit{Intuition:} The world capital–labor ratio converges to a positive steady state. Stability is guaranteed because the slope at the steady state is $\alpha<1$, ensuring dampened adjustments over time.
+\end{itemize}
+
+\begin{itemize}
+  \item \textbf{Step 3: Draw the Phase Diagram}  
+
+  \item From (34), the first derivative is:
+  \[
+  \frac{dk_{t+1}^W}{dk_t^W} 
+  = \frac{\alpha \beta (1-\alpha)}{(1+n)(1+\beta)} (k_t^W)^{\alpha-1} > 0,
+  \]
+  so the transition curve is upward-sloping for all $k_t^W > 0$.
+
+  \item Next, compute the second derivative:
+  \[
+  \frac{d^2 k_{t+1}^W}{d(k_t^W)^2} 
+  = \frac{\alpha \beta (1-\alpha)(\alpha-1)}{(1+n)(1+\beta)} (k_t^W)^{\alpha-2} < 0,
+  \]
+  which shows the transition curve is strictly concave for all $k_t^W > 0$.
+
+  \item \textit{Intuition:} The dynamics of the world capital–labor ratio follow a concave, upward-sloping transition path. This guarantees convergence towards the steady state from below and rules out oscillatory dynamics.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{graph3.jpg}
+    \caption{Phase diagram}
+    \label{fig:phase_k_dynamics}
+\end{figure}
+
+\begin{itemize}
+  \item The phase diagram shows that the world capital–labor ratio $k_t^W$ converges monotonically towards the stable steady state $\bar{k}^W(2)$.  
+
+  \item If the economy starts with $k_0^W < \bar{k}^W(2)$, capital accumulates gradually along the transition curve until the steady state is reached.  
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Step 1: Steady state(s)}
+
+From law of motion:
+\[
+k_{t+1}^W = \frac{\beta(1-\alpha)}{(1+n)(1+\beta)}(k_t^W)^{\alpha}.
+\]
+
+Steady state requires $k_{t+1}^W = k_t^W = \bar{k}^W$:
+\[
+\bar{k}^W = \frac{\beta(1-\alpha)}{(1+n)(1+\beta)}(\bar{k}^W)^{\alpha}.
+\]
+
+Trivial solution:
+\[
+\bar{k}^W(1)=0.
+\]
+
+Non-trivial solution:
+\[
+\bar{k}^W(2)=\left[\frac{\beta(1-\alpha)}{(1+n)(1+\beta)}\right]^{\tfrac{1}{1-\alpha}}.
+\]
+
+---
+
+\textbf{Step 2: Local stability of non-trivial steady state}
+
+Derivative of transition function:
+\[
+f'(k_t^W) = \frac{d}{dk_t^W}\left(\frac{\beta(1-\alpha)}{(1+n)(1+\beta)}(k_t^W)^{\alpha}\right).
+\]
+
+\[
+f'(k_t^W)=\frac{\alpha\beta(1-\alpha)}{(1+n)(1+\beta)}(k_t^W)^{\alpha-1}. \tag{35}
+\]
+
+At $\bar{k}^W(2)$:
+\[
+f'(\bar{k}^W(2))=\alpha. \tag{36}
+\]
+
+Since $0<\alpha<1$, steady state is locally stable.
+
+---
+
+\textbf{Step 3: Phase diagram properties}
+
+First derivative positive:
+\[
+\frac{dk_{t+1}^W}{dk_t^W}
+=\frac{\alpha\beta(1-\alpha)}{(1+n)(1+\beta)}(k_t^W)^{\alpha-1}>0,
+\]
+$\Rightarrow$ transition curve is upward sloping.
+
+Second derivative:
+\[
+\frac{d^2 k_{t+1}^W}{d(k_t^W)^2}
+=\frac{\alpha\beta(1-\alpha)(\alpha-1)}{(1+n)(1+\beta)}(k_t^W)^{\alpha-2}<0,
+\]
+$\Rightarrow$ transition curve is strictly concave.
+
+
+\textbf{Result:} Dynamics are monotonic and concave, converging to $\bar{k}^W(2)$.
+}
+
+
+\begin{itemize}
+  \item We now analyze the global effect of government deficits and debts.
+
+  \item Suppose the Home government, starting with zero net assets, issues a positive quantity of debt to the current old as a transfer (a “gift”).
+
+  \item The Home government then taxes all future young generations so that the government debt-to-labor ratio remains constant:
+  \[
+  -\frac{B_t^G}{N_t} = \bar{d}.
+  \]
+
+  \item With no government consumption, the government budget constraint is:
+  \[
+  B_{t+1}^G = (1+r_t)B_t^G + N_t \tau_t^Y,
+  \]
+  where $\tau_t^Y$ is the tax per unit of labor and $r_t$ is the endogenous interest rate.
+
+  \item Divide through by $N_{t+1}$:
+  \[
+  \bar{d} = -\frac{B_{t+1}^G}{N_{t+1}} = (1+r_t)\frac{N_t}{N_{t+1}}\bar{d} - \frac{N_t}{N_{t+1}}\tau_t^Y.
+  \]
+
+  \item Since $\tfrac{N_t}{N_{t+1}} = \tfrac{1}{1+n}$, we obtain:
+  \[
+  \bar{d} = \frac{(1+r_t)\bar{d} - \tau_t^Y}{1+n},
+  \]
+  which rearranges to:
+  \[
+  \tau_t^Y = (r_t - n)\bar{d}. \tag{37}
+  \]
+
+  \item \textit{Intuition:} Issuing debt today requires future generations to pay higher taxes. The tax rate depends positively on the interest rate and debt burden, and negatively on population growth, which helps dilute the debt.
+\end{itemize}
+
+\begin{itemize}
+  \item Combining (37) with (30) gives the new saving function for the Home young:
+  \[
+  s_t^Y = \frac{\beta}{1+\beta}(w_t - \tau_t^Y) 
+  = \frac{\beta}{1+\beta}(w_t - (r_t - n)\bar{d}).
+  \]
+
+  \item Using (31) and (32):
+  \[
+  s_t^Y = \frac{\beta}{1+\beta}\Big[(1-\alpha)(k_t^W)^{\alpha} - (\alpha(k_t^W)^{\alpha-1} - n)\bar{d}\Big]. \tag{38}
+  \]
+
+  \item The savings of Foreign young, who are untaxed, remain:
+  \[
+  s_t^{Y*} = \frac{\beta}{1+\beta}(1-\alpha)(k_t^W)^{\alpha}.
+  \]
+
+  \item With government debt, world market-clearing requires young savers to hold both capital and Home government debt. Hence (33) becomes:
+  \[
+  K_{t+1} + K_{t+1}^* - B_{t+1}^G = N_t s_t^Y + N_t^* s_t^{Y*}. \tag{39}
+  \]
+
+  \item Substituting (38) and the Foreign saving function into (39), and dividing by the total labor force $N_t + N_t^*$, yields:
+  \[
+  k_{t+1}^W = \frac{\beta}{(1+n)(1+\beta)}\Big\{ (1-\alpha)(k_t^W)^{\alpha} - \big[\alpha(k_t^W)^{\alpha-1} - n\big]\bar{d} \Big\} - \bar{d}.
+  \]
+
+  \item \textit{Intuition:} Government debt crowds out capital accumulation by diverting savings into public bonds. Taxes on Home residents reduce their savings, and equilibrium requires that global savings now finance both capital and government debt.
+\end{itemize}
+
+\begin{itemize}
+  \item Define the Home country’s share of the world labor force as:
+  \[
+  x \equiv \frac{N_t}{N_t + N_t^*}.
+  \]
+
+  \item Since 
+  \[
+  \frac{\partial k_{t+1}^W}{\partial k_t^W} > 0 
+  \quad \text{and} \quad 
+  \frac{\partial^2 k_{t+1}^W}{\partial (k_t^W)^2} < 0,
+  \]
+  the transition curve in the phase diagram is strictly concave.
+
+  \item As before, the system has one stable steady state and one unstable steady state.
+
+  \item The following phase diagram illustrates the dynamics of world capital after the Home government introduces public debt.
+
+  \item \textit{Intuition:} With debt issuance, the shape of the transition curve remains concave, preserving the existence of a stable steady state. However, the steady-state level of world capital is now lower, reflecting crowding out by government debt.
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{graph4.jpg}
+    \caption{Phase diagram}
+    \label{fig:phase_k_dynamics}
+\end{figure}
+
+\begin{itemize}
+  \item The dashed curve shows that the introduction of Home government debt shifts the transition path of world capital downward, reducing the long-run steady-state level of $k^W$.  
+
+  \item As a result, the economy still converges to a stable steady state, but at a lower capital–labor ratio due to the crowding-out effect of public debt.  
+\end{itemize}
+
+\begin{itemize}
+  \item The stable steady-state capital ratio $\bar{k}^W(2)$ is lower in the presence of public debt.
+
+  \item The other steady state $\bar{k}^W(1)$ is no longer at zero, but remains unstable.
+
+  \item Domestic public debt reduces saving by the young and diverts global savings into government paper assets. As a result, steady-state capital intensity falls in both Home and Foreign.
+
+  \item Consequently, the world interest rate rises.
+
+  \item With higher world interest rates, global investment declines.
+
+  \item \textbf{Key insight:} When a large country runs a fiscal deficit (e.g. the USA) and capital markets are internationally integrated, the debt crowds out capital accumulation both abroad and at home.
+  
+  \item \textit{Intuition:} Government debt in a large economy not only reduces its own capital stock but also depresses global investment, transmitting the crowding-out effect worldwide.
+\end{itemize}
+
+\begin{itemize}
+  \item The world interest rate depends on the global capital–labor ratio:
+  \[
+  R_t = \alpha \cdot (k_t^W)^{\alpha-1}.
+  \]
+
+  \item An increase in $R_t$ reduces world investment $I_t^W$ and total world saving $S_t^W$:
+  \[
+  \uparrow R_t \;\;\Rightarrow\;\; \downarrow I_t^W = \downarrow S_t^W.
+  \]
+
+  \item Under Ricardian Equivalence:
+  \[
+  \downarrow S^G,\;\; \uparrow S^p,\;\; \bar{S}^W \;\;\text{(no effect on world saving)}.
+  \]
+
+  \item In the OLG economy:
+  \[
+  \downarrow S^G,\;\; \downarrow S^p,\;\; \downarrow S^W = \downarrow I^W.
+  \]
+
+  \item Government debt therefore crowds out private saving in both Home and Foreign.
+
+  \item \textbf{Question:} Is this crowding-out effect beneficial?
+
+  \item \textit{Intuition:} Unlike in Ricardian equivalence, debt in an OLG world lowers global savings and investment, raising interest rates and reducing capital accumulation everywhere.
+\end{itemize}
+
+\begin{itemize}
+  \item The welfare effect of government debt depends on the initial steady state.  
+
+  \item If the economy was dynamically inefficient ($r < n$), introducing government debt raises welfare.  
+
+  \item By reducing capital accumulation, debt moves the world economy closer to the golden rule level of capital.  
+
+  \item Conversely, if $r \geq n$, government debt lowers welfare.  
+
+  \item \textit{Intuition:} Debt can be welfare-improving when it corrects overaccumulation of capital, but harmful otherwise since it reduces capital below the efficient level.  
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+
+\textbf{Policy + targets:}
+\[
+-\frac{B_t^G}{N_t}=\bar d, \qquad G_t=0.
+\]
+
+\textbf{Government budget:}
+\[
+B_{t+1}^G=(1+r_t)B_t^G+N_t\tau_t^Y.
+\]
+
+Divide by $N_{t+1}=(1+n)N_t$ and use $-\tfrac{B_t^G}{N_t}=\bar d$:
+\[
+\bar d=-\frac{B_{t+1}^G}{N_{t+1}}=\frac{(1+r_t)\bar d-\tau_t^Y}{1+n}
+\;\;\Rightarrow\;\;
+\boxed{\tau_t^Y=(r_t-n)\bar d.} \tag{37}
+\]
+
+\textbf{Factor prices (Cobb–Douglas):}
+\[
+w_t=(1-\alpha)(k_t^W)^{\alpha}, \qquad r_t=\alpha(k_t^W)^{\alpha-1}.
+\]
+
+\textbf{Home saving rule (use (30)):}
+\[
+s_t^Y=\frac{\beta}{1+\beta}(w_t-\tau_t^Y)
+=\frac{\beta}{1+\beta}\Big[(1-\alpha)(k_t^W)^{\alpha}-(\alpha(k_t^W)^{\alpha-1}-n)\bar d\Big]. \tag{38}
+\]
+
+\textbf{Foreign saving (untaxed):}
+\[
+s_t^{Y*}=\frac{\beta}{1+\beta}(1-\alpha)(k_t^W)^{\alpha}.
+\]
+
+\textbf{World asset market with public debt:}
+\[
+K_{t+1}+K_{t+1}^*-B_{t+1}^G=N_t s_t^Y+N_t^* s_t^{Y*}. \tag{39}
+\]
+
+\textbf{Per world worker. Let }
+\[
+x\equiv \frac{N_t}{N_t+N_t^*}, \qquad 
+\frac{N_{t+1}}{N_{t+1}+N_{t+1}^*}=\frac{N_t}{N_t+N_t^*}=x.
+\]
+
+\[
+k_{t+1}^W-\frac{B_{t+1}^G}{N_{t+1}+N_{t+1}^*}
+=\frac{N_t s_t^Y+N_t^* s_t^{Y*}}{(1+n)(N_t+N_t^*)}.
+\]
+
+Use $\tfrac{B_{t+1}^G}{N_{t+1}}=-\bar d \;\Rightarrow\; \tfrac{B_{t+1}^G}{N_{t+1}+N_{t+1}^*}=-x\bar d$:
+\[
+k_{t+1}^W+x\bar d=\frac{x s_t^Y+(1-x)s_t^{Y*}}{1+n}.
+\]
+
+\textbf{Substitute $s_t^Y,s_t^{Y*}$:}
+\[
+\boxed{k_{t+1}^W=\frac{\beta}{(1+n)(1+\beta)}\Big[(1-\alpha)(k_t^W)^{\alpha}-x\big(\alpha(k_t^W)^{\alpha-1}-n\big)\bar d\Big]-x\bar d.}
+\]
+
+\textbf{Slope and curvature:}
+\[
+\frac{\partial k_{t+1}^W}{\partial k_t^W}
+=\frac{\beta\alpha(1-\alpha)}{(1+n)(1+\beta)}\Big[(k_t^W)^{\alpha-1}+x\bar d\,(k_t^W)^{\alpha-2}\Big]>0,
+\]
+\[
+\frac{\partial^2 k_{t+1}^W}{\partial (k_t^W)^2}
+=\frac{\beta\alpha(1-\alpha)}{(1+n)(1+\beta)}\Big[(\alpha-1)(k_t^W)^{\alpha-2}+x\bar d\,(\alpha-2)(k_t^W)^{\alpha-3}\Big]<0.
+\]
+
+\textbf{Steady states:}
+\[
+k_{t+1}^W=k_t^W=\bar k^W \quad \Rightarrow \quad
+\text{one unstable near 0, one stable } \bar k^W_{\text{debt}}<\bar k^W_{\text{no debt}}.
+\]
+
+\textbf{World interest and crowding out:}
+\[
+R_t=\alpha(k_t^W)^{\alpha-1}, \qquad \bar k^W \downarrow \;\Rightarrow\; R \uparrow,\; S^W=I^W \downarrow.
+\]
+
+\textbf{Welfare (dynamic efficiency):}
+\[
+\text{Golden rule: } R=n.
+\]
+\[
+\boxed{r<n \;\Rightarrow\; \text{debt }(\bar d>0)\text{ raises welfare (reduces overaccumulation)};
+\qquad r\ge n \;\Rightarrow\; \text{debt lowers welfare}.}
+\]
+
+}
+
+
+
+\end{document}
