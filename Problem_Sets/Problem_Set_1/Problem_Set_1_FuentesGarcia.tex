@@ -1,0 +1,1685 @@
+\documentclass[12pt]{article}
+
+% --- Paquetes ---
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{ams math}
+\usepackage[spanish,es-tabla]{babel}   % español
+\usepackage[utf8]{inputenc}            % acentos
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{lastpage}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[table]{xcolor} % para \cellcolor y \rowcolor
+\usepackage{colortbl}      % colores en tablas
+\usepackage{float}         % para usar [H] si quieres fijar la tabla
+\usepackage{array}         % mejor control de columnas
+\usepackage{amssymb}       % para palomita
+\usepackage{graphicx}      % para logo github
+\usepackage{hyperref}
+\usepackage{setspace} % para hipervinculo
+\usepackage[normalem]{ulem}
+\usepackage{siunitx}       % Asegúrate de tener este paquete en el preámbulo
+\usepackage{booktabs}
+\sisetup{
+    output-decimal-marker = {.},
+    group-separator = {,},
+    group-minimum-digits = 4,
+    detect-all
+}
+
+% Etiqueta en el caption (en la tabla misma)
+\usepackage{caption}
+\captionsetup[table]{name=Tabla, labelfont=bf, labelsep=period}
+
+% Prefijo en la *Lista de tablas*
+\usepackage{tocloft}
+\renewcommand{\cfttabpresnum}{Tabla~} % texto antes del número
+\renewcommand{\cfttabaftersnum}{.}    % punto después del número
+\setlength{\cfttabnumwidth}{5em}      % ancho para "Tabla 10." ajusta si hace falta
+
+
+
+% --- Márgenes y encabezado ---
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+% Alturas del encabezado (un poco más por las 2–3 líneas del header)
+\setlength{\headheight}{32pt}
+\setlength{\headsep}{20pt}
+
+\definecolor{maroon}{RGB}{128, 0, 0}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+% Regla del encabezado (opcional)
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Encabezado izquierdo
+\fancyhead[L]{%
+  \textcolor{maroon}{\textbf{El Colegio de México}}\\
+  \textbf{Macroeconomics 3}
+}
+
+% Encabezado derecho
+\fancyhead[R]{%
+  Homework 1\\
+  \textbf{Jose Daniel Fuentes García}\\
+  Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+}
+
+% Número de página al centro del pie
+\fancyfoot[C]{\thepage}
+
+% --- APLICAR EL MISMO ESTILO A PÁGINAS "PLAIN" (TOC, LOT, LOF) ---
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \fancyhead[L]{%
+    \textcolor{maroon}{\textbf{El Colegio de México}}\\
+    \textbf{Macroeconomics 3}
+  }
+  \fancyhead[R]{%
+    Homework 1:The Intertemporal Current Account Model\\
+    \textbf{Jose Daniel Fuentes García}\\
+    Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+  }
+  \fancyfoot[C]{\thepage}
+}
+
+% Pie de página centrado
+\fancyfoot[C]{\thepage\ de \pageref{LastPage}}
+
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Color principal ---
+\definecolor{formalblue}{RGB}{0,51,102} % azul marino sobrio
+
+% --- Estilo de títulos ---
+\titleformat{\section}[hang]{\bfseries\Large\color{formalblue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\bfseries\large\color{formalblue}}{\thesubsection}{1em}{}
+
+
+% --- Listas ---
+\setlist[itemize]{leftmargin=1.2em}
+
+% --- Sin portada ---
+\title{}
+\author{}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{-1cm}
+    \noindent
+    \begin{minipage}[t]{0.49\textwidth}
+        \includegraphics[height=2.2cm]{colmex.jpg}
+    \end{minipage}%
+    \begin{minipage}[t]{0.49\textwidth}
+        \raggedleft
+        \includegraphics[height=2.2cm]{cee.jpg}
+    \end{minipage}
+
+    \vspace*{2cm}
+
+    \begin{center}
+        \Huge \textbf{CENTRO DE ESTUDIOS ECONÓMICOS} \\[1.5em]
+        \Large Maestría en Economía 2024--2026 \\[2em]
+        \Large Macroeconomics 3 \\[3em]
+        \LARGE \textbf{Homework 1: The Intertemporal Current Account Model} \\[3em]
+        \large \textbf{PRESENTED BY:} José Daniel Fuentes García \\[3em]
+        \large \textbf{PROFESSOR:} Stephen McKnight \\[0.9em]
+        
+    \end{center}
+
+    \vfill
+\end{titlepage}
+
+\newpage
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+
+\newpage
+
+\section*{\noindent\textbf{Problem 1}}
+\addcontentsline{toc}{section}{Problem 1}
+
+\doublespacing
+
+Consider a \textbf{two-period small open endowment economy}. Suppose that the representative agent has \textbf{lifetime utility} given by:
+
+\[
+U = \log(C_1) + \beta \log(C_2),
+\]
+
+where \( C_t \) is the \textbf{consumption level} in period \( t = \{1,2\} \), and \( 0 < \beta < 1 \) is the \textbf{subjective discount factor}. In each period, the agent receives with certainty an \textbf{endowment} \( Y_t \). Initially assume that there is \textbf{no government consumption} in the economy (\( G_t = 0 \)).
+
+
+\subsection*{\noindent\textbf{a)}}
+\addcontentsline{toc}{subsection}{a)}
+
+If \( r \) denotes the \textbf{exogenously given world real interest rate} for borrowing and lending from the world financial market, derive the \textbf{period 1 and period 2 budget constraints} and the \textbf{intertemporal budget constraint}. Assume that the economy’s \textbf{initial net foreign assets are zero}.
+
+% --- Definir color rojo formal ---
+\definecolor{formalred}{RGB}{178,34,34} % rojo tipo "firebrick"
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\singlespacing
+
+
+\textbf{Assumptions:}
+\begin{itemize}
+  \item \( C_t \): consumption in period \( t \), \( t = 1, 2 \)  
+  \item \( Y_t \): endowment (income) in period \( t \)
+  \item \( B_t \): NFA in \( t \) 
+  \item \( r \): world interest rate
+\end{itemize}
+
+\textbf{Initial condition:} \( B_0 = 0 \) \\
+\textbf{Terminal condition:} \( B_2 = 0 \)
+
+\vspace{0.5em}
+\textbf{Period 1 Budget Constraint: [ Consumption = Income ]}
+
+\[
+\fcolorbox{red}{white}{$
+  C_1 + B_1 = Y_1 + (1 + r)B_0
+$}
+\]
+
+Since \( B_0 = 0 \), this simplifies to:
+\[
+C_1 + B_1 = Y_1 \tag{1}
+\]
+
+\vspace{0.5em}
+\textbf{Period 2 Budget Constraint:}
+\[
+C_2 + B_2 = Y_2 + (1 + r)B_1 \quad
+\]
+Since \( B_2 = 0 \), this becomes:
+\[
+C_2 = Y_2 + (1 + r)B_1 \tag{2}
+\]
+
+From equation (1), solve for \( B_1 \):
+\[
+B_1 = Y_1 - C_1 \tag{3}
+\]
+
+Substitute (3) into (2):
+\[
+C_2 = Y_2 + (1 + r)(Y_1 - C_1) \tag{4}
+\]
+
+Expanding:
+\[
+C_2 = Y_2 + (1 + r)Y_1 - (1 + r)C_1 \tag{5}
+\]
+
+Rearranging terms:
+\[
+\fcolorbox{red}{white}{$
+(1 + r)C_1 + C_2 = (1 + r)Y_1 + Y_2
+$} \tag{6}
+\]
+
+
+Divide both sides by \( (1 + r) \) to get the \textbf{intertemporal budget constraint}:
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle
+C_1 + \frac{C_2}{1 + r} = Y_1 + \frac{Y_2}{1 + r}
+$} \quad \text{[Intertemporal BC]}
+\]
+
+\subsection*{\noindent\textbf{b)}}
+\addcontentsline{toc}{subsection}{b)}
+
+Given the budget constraints derived above, solve the agent’s maximization problem.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Intertemporal Budget Constraint (from above):}
+
+\[
+C_1 + \frac{C_2}{1 + r} = Y_1 + \frac{Y_2}{1 + r} \quad \text{[Intertemporal BC]} \tag{1}
+\]
+
+
+\textbf{Maximization problem:}
+\[
+\max_{C_1, C_2} \log C_1 + \beta \log C_2 \quad \text{s.t. constraint (1)} \tag{2}
+\]
+
+\textbf{Lagrangian:}
+\[
+\mathcal{L} = \log C_1 + \beta \log C_2 - \lambda \left( C_1 + \frac{C_2}{1 + r} - Y_1 - \frac{Y_2}{1 + r} \right) \tag{3}
+\]
+
+\textbf{First-order conditions:}
+\begin{align*}
+\frac{\partial \mathcal{L}}{\partial C_1} &: \quad \frac{1}{C_1} - \lambda = 0 \Rightarrow \lambda = \frac{1}{C_1} \tag{4} \\
+\frac{\partial \mathcal{L}}{\partial C_2} &: \quad \frac{\beta}{C_2} - \lambda \cdot \frac{1}{1 + r} = 0 \Rightarrow \lambda = \frac{\beta(1 + r)}{C_2} \tag{5}
+\end{align*}
+
+\textbf{Euler Equation (from (4) = (5)):}
+\[
+\frac{1}{C_1} = \frac{\beta(1 + r)}{C_2} \Rightarrow C_2 = \beta(1 + r)C_1 \tag{6}
+\]
+
+\textbf{Substitute (6) into (1):}
+\[
+C_1 + \frac{\beta(1 + r)C_1}{1 + r} = Y_1 + \frac{Y_2}{1 + r} \Rightarrow (1 + \beta)C_1 = Y_1 + \frac{Y_2}{1 + r} \tag{7}
+\]
+
+\vspace{0.5em}
+\textbf{Optimal } \( C_1^* \):
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle
+C_1^* = \dfrac{(1 + r)Y_1 + Y_2}{(1 + \beta)(1 + r)}
+$} \tag{8}
+\]
+
+
+\textbf{Optimal } \( C_2^* \) (using equation (6)):
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle
+C_2^* = \beta(1 + r)C_1^* = \frac{\beta\left( (1 + r)Y_1 + Y_2 \right)}{1 + \beta}
+$} \tag{9}
+\]
+
+\textbf{Optimal asset holdings } \( B_1^* = Y_1 - C_1^* \):
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle
+B_1^* = Y_1 - C_1^* = \frac{\beta Y_1 - \frac{Y_2}{1 + r}}{1 + \beta}
+= \frac{\beta(1 + r)Y_1 - Y_2}{(1 + \beta)(1 + r)}
+$} \tag{10}
+\]
+
+
+\subsection*{\noindent\textbf{c)}}
+\addcontentsline{toc}{subsection}{c)}
+
+
+If \( \beta = 0.8 \), \( r = 0.25 \), \( Y_1 = 5 \) and \( Y_2 = 10 \), derive the optimal consumption level in each period.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Optimal } \( C_1^* \):
+\begin{align*}
+C_1^* &= \frac{Y_1 + \dfrac{Y_2}{1 + r}}{1 + \beta} \\
+C_1^* &= \frac{5 + \dfrac{10}{1.25}}{1 + 0.8} \\
+C_1^* &= \frac{5 + 8}{1.8} \\
+C_1^* &= \frac{13}{1.8} \\
+&\fcolorbox{red}{white}{$
+\displaystyle C_1^* = \frac{65}{9} \approx 7.22
+$}
+\end{align*}
+
+\vspace{1em}
+\textbf{Optimal } \( C_2^* \):
+\begin{align*}
+C_2^* &= \beta(1 + r)C_1^* \\
+C_2^* &= 0.8 \cdot 1.25 \cdot 7.22 \\
+C_2^* &= 1 \cdot 7.22 \\
+&\fcolorbox{red}{white}{$
+\displaystyle C_2^* = \frac{65}{9} \approx 7.22
+$}
+\end{align*}
+
+Both consumption levels are the same because preferences and the interest rate align so that the agent perfectly \textbf{smooths consumption} across periods.
+
+\subsection*{\noindent\textbf{d)}}
+\addcontentsline{toc}{subsection}{d)}
+
+Define the current account for this economy. Using the results obtained from \textbf{(c)}
+above, calculate the current account in each period.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\singlespacing
+
+\textbf{From the period budget constraint:}
+\[
+C_t + B_t = Y_t + (1 + r)B_{t-1}
+\]
+
+\textbf{Rearranged:}
+\[
+B_t - B_{t-1} = Y_t - C_t + r B_{t-1}
+\]
+
+\textbf{Define the current account:}
+\[
+CA_t \equiv B_t - B_{t-1}
+\]
+
+\textbf{Substitute:}
+\[
+CA_t = Y_t - C_t + r B_{t-1}
+\]
+
+\vspace{1em}
+\textbf{Using:} \( \beta = 0.8, \quad r = 0.25, \quad Y_1 = 5, \quad Y_2 = 10, \quad C_1 = C_2 = \dfrac{65}{9} \)
+
+\vspace{1em}
+\textbf{Solve for } \( B_1 \):
+\[
+B_1 = Y_1 - C_1 = 5 - \frac{65}{9} = \boxed{-\frac{20}{9}}
+\]
+
+\vspace{1em}
+\textbf{Period 1 Current Account:}
+\begin{align*}
+CA_1 &= Y_1 - C_1 + r B_0 \\
+CA_1 &= 5 - \frac{65}{9} + 0.25 \cdot 0 \\
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle CA_1 = -\frac{20}{9} \approx -2.22
+$}
+\]
+\end{align*}
+
+\vspace{1em}
+\textbf{Period 2 Current Account:}
+\begin{align*}
+CA_2 &= Y_2 - C_2 + r B_1 \\
+CA_2 &= 10 - \frac{65}{9} + 0.25 \cdot \left(-\frac{20}{9}\right) \\
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle CA_2 = \frac{20}{9} \approx 2.22
+$}
+\]
+
+\end{align*}
+
+\textbf{Checks:}
+
+\textbf{Current Account (CA):}
+
+\[
+CA_1 = Y_1 - C_1 \quad \text{(since } B_0 = 0\text{)}
+\]
+
+\[
+CA_2 = Y_2 - C_2 + r B_1
+\]
+
+\vspace{1em}
+\textbf{Trade Balance (TB):}
+
+\[
+TB_1 = Y_1 - C_1, \qquad TB_2 = Y_2 - C_2
+\]
+
+\vspace{1em}
+\textbf{Intertemporal consistency:}
+
+\[
+CA_2 = -CA_1
+\]
+
+\textit{(Because } \( CA_1 + CA_2 = B_2 - B_0 = 0 \) \textit{ with } \( B_0 = B_2 = 0 \) \textit{)}
+
+
+\subsection*{\noindent\textbf{e)}}
+\addcontentsline{toc}{subsection}{e)}
+
+Define the autarky interest rate and use the parameter values given in \textbf{c)} above to
+calculate its value.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Definition (Autarky Interest Rate):}
+
+The autarky interest rate \( r_A \) is such that there is no trade, i.e.:
+\[
+B_1 = 0 \quad \Rightarrow \quad C_1 = Y_1, \quad C_2 = Y_2
+\]
+
+\textbf{Euler Equation:}
+\[
+C_2 = \beta(1 + r)C_1
+\]
+
+\textbf{Autarky condition:}
+\[
+Y_2 = \beta(1 + r_A)Y_1
+\]
+
+\textbf{Solve for } \( r_A \):
+\begin{align*}
+1 + r_A &= \frac{Y_2}{\beta Y_1} \\
+r_A &= \frac{Y_2}{\beta Y_1} - 1
+\end{align*}
+
+\textbf{Substitute: } \( \beta = 0.8, \quad Y_1 = 5, \quad Y_2 = 10 \)
+\begin{align*}
+r_A &= \frac{10}{0.8 \cdot 5} - 1 \\
+r_A &= \frac{10}{4} - 1 \\
+r_A &= 2.5 - 1 \\
+&\fcolorbox{red}{white}{$\displaystyle r_A = 1.5$}
+\end{align*}
+
+\vspace{1em}
+\textbf{Check:} Use optimal consumption formula with \( r_A \)
+
+\textbf{Check } \( C_1^* \):
+\begin{align*}
+C_1^* &= \frac{Y_1 + \dfrac{Y_2}{1 + r_A}}{1 + \beta} \\
+C_1^* &= \frac{5 + \dfrac{10}{2.5}}{1.8} \\
+C_1^* &= \frac{5 + 4}{1.8} \\
+C_1^* &= \frac{9}{1.8} \\
+C_1^* &= 5 = Y_1
+\end{align*}
+
+\textbf{Check } \( C_2^* \):
+\begin{align*}
+C_2^* &= \beta(1 + r_A)C_1^* \\
+C_2^* &= 0.8 \cdot 2.5 \cdot 5 \\
+C_2^* &= 10 = Y_2
+\end{align*}
+
+\textbf{Check } \( B_1 = Y_1 - C_1^* = 0 \)
+
+
+\subsection*{\noindent\textbf{f)}}
+\addcontentsline{toc}{subsection}{f)}
+
+Depict your results showing equilibrium consumption levels under autarky, equilibrium
+consumption levels for the small open economy and the current account for both
+periods.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\begin{figure}[H]
+    \centering
+    {\captionsetup{font=small}
+    \caption{r Autrky vs r Open Economy}  % ← afuera del grupo
+    \vspace{0.3em}
+    
+    \includegraphics[width=0.90\textwidth]{grafi1.jpg}
+    
+    \caption*{Fuente: Elaboración propia} 
+
+\end{figure}
+
+
+\subsection*{\noindent\textbf{g)}}
+\addcontentsline{toc}{subsection}{g)}
+
+Assume now that there is a temporary increase in government spending. Specifically, suppose that the government consumes the amount \( G_1 = 2 \) in period 1 and nothing in period 2 (\( G_2 = 0 \)).
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{New budget constraint (with government spending):}
+\[
+C_1 + \frac{C_2}{1 + r} = (Y_1 - G_1) + \frac{Y_2 - G_2}{1 + r}
+\]
+
+\textbf{Given:}
+\[
+\beta = 0.8, \quad r = 0.25, \quad Y_1 = 5, \quad Y_2 = 10, \quad G_1 = 2, \quad G_2 = 0
+\]
+\[
+Y_1 - G_1 = 3, \quad Y_2 - G_2 = 10
+\]
+
+\textbf{Utility:} \( U = \log C_1 + \beta \log C_2 \)
+
+\textbf{Optimal consumption (as in part b, replacing \( Y_t \) with \( Y_t - G_t \)):}
+\begin{align*}
+C_1^* &= \frac{Y_1 - G_1 + \dfrac{Y_2 - G_2}{1 + r}}{1 + \beta} \\
+C_1^* &= \frac{3 + \dfrac{10}{1.25}}{1.8} \\
+C_1^* &= \frac{3 + 8}{1.8} \\
+C_1^* &= \frac{11}{1.8} = \frac{55}{9} \approx 6.11 \\
+&\fcolorbox{red}{white}{$\displaystyle C_1^* = \frac{55}{9} \approx 6.11$}
+\end{align*}
+
+\vspace{1em}
+\begin{align*}
+C_2^* &= \beta(1 + r) C_1^* \\
+C_2^* &= 0.8 \cdot 1.25 \cdot \frac{55}{9} \\
+C_2^* &= \frac{55}{9} \approx 6.11 \\
+&\fcolorbox{red}{white}{$\displaystyle C_2^* = \frac{55}{9} \approx 6.11$}
+\end{align*}
+
+\textbf{Comparison with no-\( G \) case:}
+\[
+C_1^* = C_2^* = \frac{65}{9} \approx 7.22 \quad \Rightarrow \quad \text{Fall in consumption: } \frac{10}{9} \approx 1.11
+\]
+
+\vspace{1em}
+\textbf{Current Account:} (using \( CA_t = Y_t - C_t - G_t + r B_{t-1} \), with \( B_0 = 0 \))
+
+\textbf{Period 1:}
+\begin{align*}
+CA_1 &= (Y_1 - G_1) - C_1^* \\
+CA_1 &= 3 - \frac{55}{9} \\
+CA_1 &= -\frac{28}{9} \approx -3.11 \\
+&\fcolorbox{red}{white}{$\displaystyle CA_1 = -\frac{28}{9} \approx -3.11$}
+\end{align*}
+
+\vspace{1em}
+\textbf{Period 2:}
+\begin{align*}
+CA_2 &= (Y_2 - G_2) - C_2^* + r B_1 \\
+CA_2 &= 10 - \frac{55}{9} + 0.25 \cdot \left(-\frac{28}{9} \right) \\
+CA_2 &= \frac{35}{9} - \frac{7}{9} = \frac{28}{9} \approx 3.11 \\
+&\fcolorbox{red}{white}{$\displaystyle CA_2 = \frac{28}{9} \approx 3.11$}
+\end{align*}
+
+\textit{Note: } \( CA_2 = -CA_1 \), as required by the condition \( B_2 = B_0 = 0 \).
+
+\doublespacing
+
+\textbf{A temporary increase in government spending} in period 1 reduces the \textbf{resources available for private consumption} today, shifting the \textbf{intertemporal budget constraint inward}. Since \textbf{households prefer to smooth consumption over time}, they “spread the pain” by lowering both \textbf{current and future consumption} rather than absorbing the entire adjustment in period 1.
+
+As a result, the economy runs a \textbf{current account deficit} in the first period, \textbf{borrowing from abroad} to finance part of the government’s higher spending, and later repays through a \textbf{current account surplus} in the second period. This ensures that the \textbf{intertemporal budget constraint holds} while keeping \textbf{consumption as smooth as possible}.
+
+
+\newpage
+
+\section*{\noindent\textbf{Problem 2}}
+\addcontentsline{toc}{section}{Problem 2}
+
+Consider a two-period small open endowment economy. Suppose that the representative agent has lifetime utility given by:
+
+\[
+U = u(C_1) + \beta u(C_2),
+\]
+
+where \(\mathbf{0 < \beta < 1}\) is the subjective discount factor. Suppose the agent receives an endowment \(\mathbf{Y_1 = 1}\) and \(\mathbf{Y_2 = x}\). Assume that government consumes the amount \(\mathbf{G_1 \geq 0}\) and \(\mathbf{G_2 \geq 0}\) but balances its budget every period.
+
+\subsection*{\noindent\textbf{a)}}
+\addcontentsline{toc}{subsection}{a)}
+
+Derive the intertemporal budget constraint and the current account for this economy
+(assume that the economy’s initial net foreign assets are zero).
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\singlespacing
+
+% Requires: \usepackage{amsmath,xcolor}
+\textbf{Assumptions:}
+\begin{itemize}
+  \item \( C_t \): consumption in period \( t \), \( t = 1, 2 \)
+  \item \( Y_1 = 1,\; Y_2 = x \): endowment income
+  \item \( G_t \): government spending in each period
+  \item \( T_t = G_t \): Balanced Budget
+  \item \( B_t \): net foreign asset position at end of period \( t \)
+  \item \( r \): world interest rate
+  \item \( \beta \in (0,1) \): discount factor
+\end{itemize}
+
+\textbf{Initial and Terminal Conditions}
+
+\[
+B_0 = 0 \quad \text{(initial NFA)}
+\]
+
+\[
+B_2 = 0 \quad \text{(terminal NFA)}
+\]
+
+\textbf{Period 1 Budget Constraint}
+
+\[
+C_1 + B_1 = Y_1 - T_1
+\]
+
+\[
+C_1 + B_1 = 1 - G_1 \quad (1)
+\]
+
+\textbf{Period 2 Budget Constraint}
+
+\[
+C_2 + B_2 = Y_2 - T_2 + (1+r)B_1
+\]
+
+\[
+C_2 = x - G_2 + (1+r)B_1 \quad (2)
+\]
+
+\textbf{Substitute \( B_1 \) from (1):}
+
+\[
+B_1 = 1 - G_1 - C_1 \quad (3)
+\]
+
+\textbf{Into (2):}
+
+\[
+C_2 = x - G_2 + (1+r)(1 - G_1 - C_1) \quad (4)
+\]
+
+\textbf{Expand (4):}
+
+\[
+C_2 = x - G_2 + (1+r)(1 - G_1) - (1+r)C_1 \quad (5)
+\]
+
+\textbf{Rearrange (5):}
+
+\[
+(1+r)C_1 + C_2 = (1+r)(1 - G_1) + x - G_2 \quad (6)
+\]
+
+\textbf{Divide both sides by \( (1+r) \):}
+
+\[
+C_1 + \frac{C_2}{1+r} = (1 - G_1) + \frac{x - G_2}{1+r} \quad (7)
+\]
+
+\textbf{Intertemporal Budget Constraint}
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle
+C_1 + \frac{C_2}{1+r} = (1 - G_1) + \frac{x - G_2}{1+r}
+$} \quad \text{[Intertemporal BC]}
+\]
+
+\textbf{Current Account — Period 1}
+
+\[
+CA_1 = Y_1 - G_1 - C_1 \quad (8)
+\]
+
+\[
+CA_1 = 1 - G_1 - C_1 \quad (9)
+\]
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle
+CA_1 = 1 - G_1 - C_1
+$}
+\]
+
+\textbf{Current Account — Period 2}
+
+\[
+CA_2 = Y_2 - G_2 - C_2 \quad (10)
+\]
+
+\[
+CA_2 = x - G_2 - C_2 \quad (11)
+\]
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle
+CA_2 = x - G_2 - C_2
+$}
+\]
+
+\subsection*{\noindent\textbf{b)}}
+\addcontentsline{toc}{subsection}{b)}
+
+If the period utility function is given by 
+\[
+u(C) = \frac{C^{1-\tfrac{1}{\sigma}}}{1 - \tfrac{1}{\sigma}}, 
+\quad \text{where } \sigma > 0, \; \sigma \neq 1,
+\]
+derive the Euler equation for this economy. What is the autarky interest rate and how does it determine whether the economy runs a current account surplus or deficit?
+
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Given:} \(
+u(C)=\dfrac{C^{\,1-\tfrac{1}{\sigma}}}{1-\tfrac{1}{\sigma}},\;
+\sigma>0,\; \sigma \neq 1
+\)
+
+\textbf{Maximization Problem}
+
+Maximize: \(
+U = u(C_1) + \beta u(C_2)
+\)
+
+Subject to (IBC): \(
+C_1 + \dfrac{C_2}{1+r} = (1-G_1) + \dfrac{x-G_2}{1+r}
+\)
+
+\textbf{Lagrangian}
+
+\[
+L = u(C_1) + \beta u(C_2) + \lambda\!\left[(1-G_1) + \frac{x-G_2}{1+r} - C_1 - \frac{C_2}{1+r}\right]
+\]
+
+\textbf{First-Order Conditions}
+
+\[
+\frac{\partial L}{\partial C_1} = u'(C_1) - \lambda = 0 \quad\text{(FOC1)}, \qquad
+\frac{\partial L}{\partial C_2} = \beta u'(C_2) - \lambda\frac{1}{1+r} = 0 \quad\text{(FOC2)}
+\]
+
+From FOC1–FOC2: \(u'(C_1) = \beta(1+r)u'(C_2)\).
+
+\textbf{Marginal Utility}
+
+\[
+u'(C) = C^{-\tfrac{1}{\sigma}}
+\]
+
+\textbf{Euler Equation}
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle
+C_1^{-\tfrac{1}{\sigma}} = \beta(1+r)\, C_2^{-\tfrac{1}{\sigma}}
+$}
+\]
+
+Equivalently,
+\[
+\left(\frac{C_2}{C_1}\right)^{\tfrac{1}{\sigma}} = \beta(1+r)
+\quad\Rightarrow\quad
+\frac{C_2}{C_1} = [\beta(1+r)]^{\sigma}.
+\]
+
+\textbf{Autarky Interest Rate}
+
+Autarky: \(B_1=0 \Rightarrow C_1 = 1-G_1,\; C_2 = x-G_2\).
+
+Plug into Euler:
+\[
+(1-G_1)^{-\tfrac{1}{\sigma}} = \beta(1+r_a)(x-G_2)^{-\tfrac{1}{\sigma}}
+\quad\Rightarrow\quad
+\beta(1+r_a) = \left(\frac{x-G_2}{\,1-G_1\,}\right)^{\tfrac{1}{\sigma}}.
+\]
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle
+r_a = \frac{1}{\beta}\left(\frac{x-G_2}{\,1-G_1\,}\right)^{\tfrac{1}{\sigma}} - 1
+$}
+\]
+
+\textbf{CA Sign Condition}
+
+If \( r < r_a \):
+
+\[
+[\beta(1+r)]^{\sigma} < \frac{x-G_2}{1-G_1}
+\]
+
+\[
+\implies \; \frac{C_2}{C_1} < \frac{x-G_2}{1-G_1}
+\]
+
+\[
+\implies \; C_1 > 1-G_1
+\]
+
+\[
+\implies \; CA_1 = 1-G_1 - C_1 < 0 \quad \text{(Deficit)}
+\]
+
+
+If \( r > r_a \):
+
+\[
+[\beta(1+r)]^{\sigma} > \frac{x-G_2}{1-G_1}
+\]
+
+\[
+\implies \; \frac{C_2}{C_1} > \frac{x-G_2}{1-G_1}
+\]
+
+\[
+\implies \; C_1 < 1-G_1
+\]
+
+\[
+\implies \; CA_1 = 1-G_1 - C_1 > 0 \quad \text{(Surplus)}
+\]
+
+\begin{itemize}
+    \item When \( r < r_a \): the agent \textbf{borrows} to consume more today, causing a \textbf{CA deficit in period 1} and a \textbf{CA surplus in period 2}.
+    
+    \item When \( r > r_a \): the agent \textbf{saves}, consuming less today, leading to a \textbf{CA surplus in period 1} and a \textbf{CA deficit in period 2}.
+    
+    \item In both cases, the intertemporal budget constraint ensures the \textbf{net foreign asset position returns to zero} by the end.
+    
+    \item If \( r = r_a \): there is no incentive to trade intertemporally, so \textbf{consumption equals income in each period} and \(\textbf{CA = 0}\) throughout.
+\end{itemize}
+
+
+\subsection*{\noindent\textbf{c)}}
+\addcontentsline{toc}{subsection}{c)}
+
+Assume that \( \beta(1+r) = 1 \). Using the autarky interest rate derived in (b), show whether the country runs a current account surplus or deficit in period 1 when:  
+
+\begin{enumerate}
+    \item \( G_1 = G_2 = 0 \), and \( x < 1 \).
+    \item \( G_1 > 0, \; G_2 = 0 \), and \( x = 1 \).
+\end{enumerate}
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER (1):}}
+
+\textbf{Recall: Autarky Interest Rate \( r_a \)}
+
+From earlier:
+
+\[
+1+r_a = \frac{1}{\beta} \left( \frac{x-G_2}{1-G_1} \right)^{\tfrac{1}{\sigma}}
+\]
+
+Plug in \( G_1 = G_2 = 0 \):
+
+\[
+1+r_a = \frac{1}{\beta} \left( \frac{x}{1} \right)^{\tfrac{1}{\sigma}}
+= \frac{1}{\beta} \, x^{\tfrac{1}{\sigma}}
+\]
+
+\textbf{Compare with World Interest Rate \( r \)}
+
+Given:
+
+\[
+\beta(1+r) = 1 \quad \Rightarrow \quad 1+r = \frac{1}{\beta}
+\]
+
+Compare:
+
+\[
+1+r_a = \frac{1}{\beta} x^{\tfrac{1}{\sigma}}
+\quad \text{vs.} \quad
+1+r = \frac{1}{\beta}
+\]
+
+Since \( x < 1 \) and \( \sigma > 0 \), we get:
+
+\[
+x^{\tfrac{1}{\sigma}} < 1
+\]
+
+\[
+\implies \; 1+r_a < 1+r
+\]
+
+\[
+\implies \; r_a < r
+\]
+
+
+\textbf{Interpretation}
+
+\[
+r > r_a \;\; \Rightarrow \;\; \text{agent saves in period 1}
+\]
+
+\[
+\Rightarrow \;\; C_1 < Y_1
+\]
+
+\[
+\Rightarrow \;\; CA_1 > 0
+\]
+
+\textbf{Conclusion:} The country runs a \textbf{current account surplus in period 1}.
+
+\begin{itemize}
+    \item Given \( \beta(1+r) = 1 \), the consumer is \textbf{indifferent between consuming today or tomorrow} only if income is equal across periods.
+    
+    \item Since \( x < 1 \), \textbf{future income is lower}, so the autarky interest rate satisfies \( r_a < r \), making \textbf{saving attractive}.
+    
+    \item This leads the agent to \textbf{consume less than income today}, generating a \textbf{current account surplus in period 1}.
+\end{itemize}
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER (2):}}
+
+\textbf{Autarky Interest Rate}
+
+Recall:
+
+\[
+1+r_a = \frac{1}{\beta} \left( \frac{x-G_2}{1-G_1} \right)^{\tfrac{1}{\sigma}}
+\]
+
+Substitute \( x=1, \; G_2=0 \):
+
+\[
+1+r_a = \frac{1}{\beta} \left( \frac{1}{1-G_1} \right)^{\tfrac{1}{\sigma}}
+\]
+
+Since \( G_1 > 0 \), then 
+
+\[
+\frac{1}{1-G_1} > 1
+\]
+
+\[
+\implies \left( \frac{1}{1-G_1} \right)^{\tfrac{1}{\sigma}} > 1
+\]
+
+\[
+\implies 1+r_a > \frac{1}{\beta} = 1+r
+\]
+
+\[
+\implies r_a > r
+\]
+
+\textbf{Interpretation}
+
+\[
+r_a > r
+\]
+
+\[
+\implies \text{agent prefers to \textbf{borrow} (consume more today)}
+\]
+
+\[
+\implies C_1 > Y_1 - G_1
+\]
+
+\[
+\implies CA_1 < 0
+\]
+
+\textbf{Conclusion:} The country runs a \textbf{current account deficit in period 1}.
+
+\begin{itemize}
+    \item With \( x = 1 \), income is symmetric across periods.  
+    \item Since \( G_1 > 0 \), \textbf{net resources are lower today}.  
+    \item This makes \textbf{future resources relatively more attractive}, so \( r_a > r \).  
+    \item The agent \textbf{borrows to smooth consumption} "spreading the pain".  
+    \item Thus, \textbf{consumption exceeds income in period 1}, leading to a \textbf{current account deficit}.
+\end{itemize}
+
+
+\section*{\noindent\textbf{Problem 3}}
+\addcontentsline{toc}{section}{Problem 3}
+
+\doublespacing
+
+Consider a two-period small open endowment economy. Assume that the period utility 
+function is given by 
+\[
+u(C) = \frac{C^{\,1-\tfrac{1}{\sigma}}}{1 - \tfrac{1}{\sigma}}, 
+\quad \sigma > 0, \; \sigma \neq 1.
+\] 
+
+Further assume that the world interest rate \( r \) is set at such a level such that the small open economy 
+is a net borrower \( b_1 \) in period 1. 
+
+Now suppose that the government introduces capital controls thereby restricting the amount 
+the small open economy can borrow from the rest of the world. Let \( \bar{b}_1 \) denote the 
+level of borrowing in the presence of capital controls.
+
+\subsection*{\noindent\textbf{a)}}
+\addcontentsline{toc}{subsection}{a)}
+
+Show for which values of debt will these capital controls affect equilibrium consumption in the small open economy.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\singlespacing
+\textbf{Assumptions:}
+\begin{itemize}
+    \item Two-period small open economy
+    \item Utility: \( u(C) = \dfrac{C^{\,1-\tfrac{1}{\sigma}}}{1 - \tfrac{1}{\sigma}}, \quad \sigma > 0, \; \sigma \neq 1 \)
+    \item World interest rate \( r \)
+    \item Initial borrowing without restrictions: \( b_1^* \)
+    \item Capital controls impose: \( b_1 \leq \bar{b}_1 \)
+\end{itemize}
+
+\textbf{Maximizing Problem}
+
+Maximize:  
+\[
+U = u(C_1) + \beta u(C_2)
+\]
+
+Subject to (Recall IBC):  
+\[
+C_1 + \frac{C_2}{1+r} = Y_1 + \frac{Y_2}{1+r} \quad (1)
+\]
+
+\textbf{Euler Equation}
+
+\[
+C_1^{-\tfrac{1}{\sigma}} = \beta(1+r)\, C_2^{-\tfrac{1}{\sigma}} \quad (2)
+\]
+
+\[
+\frac{C_2}{C_1} = [\beta(1+r)]^{\sigma} \quad (3)
+\]
+
+\textbf{Substitute into (1)}
+
+\[
+C_1 + \frac{[\beta(1+r)]^{\sigma} \, C_1}{1+r} = Y_1 + \frac{Y_2}{1+r} \quad (4)
+\]
+
+\[
+C_1 \left[ 1 + \frac{[\beta(1+r)]^{\sigma}}{1+r} \right] = Y_1 + \frac{Y_2}{1+r} \quad (5)
+\]
+
+\textbf{Optimal Consumption}
+
+\[
+C_1^* = \frac{Y_1 + \tfrac{Y_2}{1+r}}{1 + \tfrac{[\beta(1+r)]^{\sigma}}{1+r}} \quad (6)
+\]
+
+\textbf{Optimal Borrowing}
+
+\[
+b_1^* = Y_1 - C_1^* \quad (7)
+\]
+
+\textbf{Capital Control Constraint}
+
+If  
+\[
+b_1^* > \bar{b}_1 \quad (8)
+\]  
+then the constraint binds.  
+
+New consumption under controls:  
+
+\[
+C_1 = Y_1 - \bar{b}_1 \quad (9)
+\]
+
+\[
+C_2 = Y_2 + (1+r)\bar{b}_1 \quad (10)
+\]
+
+\textbf{Conclusion:}
+
+\[
+\fcolorbox{red}{white}{$
+\; \text{Capital controls affect equilibrium consumption iff } b_1^* > \bar{b}_1 \;
+$}
+\]
+
+
+\begin{itemize}
+    \item Without controls, the agent chooses optimal borrowing \( b_1^* \) to \textbf{smooth consumption over time}.
+    
+    \item If the government imposes a tighter cap \( \bar{b}_1 < b_1^* \), the agent \textit{cannot borrow as much} and must \textbf{reduce consumption in period 1}.
+    
+    \item This constraint \textbf{breaks optimal smoothing}, so equilibrium consumption changes only when controls \textbf{bind} — that is, when \( b_1^* > \bar{b}_1 \).
+\end{itemize}
+
+
+\subsection*{\noindent\textbf{b)}}
+\addcontentsline{toc}{subsection}{b)}
+
+What will the interest rate be in the presence of capital controls?
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+
+\textbf{Assume: Capital Controls Bind}  
+
+\[
+b_1 = \bar{b}_1 \quad (1)
+\]
+
+\textbf{Period 1 Consumption}  
+
+\[
+C_1 = Y_1 - \bar{b}_1 \quad (2)
+\]
+
+\textbf{Period 2 Consumption}  
+
+\[
+C_2 = Y_2 + (1+r)\bar{b}_1 \quad (3)
+\]
+
+\textbf{Euler Equation (Always Holds):}  
+
+\[
+C_1^{-\tfrac{1}{\sigma}} = \beta(1+r) \, C_2^{-\tfrac{1}{\sigma}} \quad (4)
+\]
+
+\textbf{Substitute (2) and (3) into (4):}  
+
+\[
+(Y_1 - \bar{b}_1)^{-\tfrac{1}{\sigma}}
+= \beta(1+r) \, \big(Y_2 + (1+r)\bar{b}_1\big)^{-\tfrac{1}{\sigma}} \quad (5)
+\]
+
+\textbf{Rearrange:}  
+
+\[
+\frac{(Y_2 + (1+r)\bar{b}_1)^{-\tfrac{1}{\sigma}}}{(Y_1 - \bar{b}_1)^{-\tfrac{1}{\sigma}}}
+= \beta(1+r) \quad (6)
+\]
+
+\textbf{Raise both sides to power \( -\sigma \):}  
+
+\[
+\frac{Y_2 + (1+r)\bar{b}_1}{Y_1 - \bar{b}_1}
+= \big[\beta(1+r)\big]^{\sigma} \quad (7)
+\]
+
+\textbf{Final Expression (Implicit Equation for \(r\)):}  
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle 
+\frac{Y_2 + (1+r)\bar{b}_1}{\,Y_1 - \bar{b}_1\,} = \big[\beta(1+r)\big]^{\sigma}
+$}
+\]
+
+This is the \textbf{implicit equation for \(r\)} in the presence of binding capital controls.
+
+\begin{itemize}
+    \item \( r \) \textbf{adjusts} so that the agent, forced to borrow only \( \bar{b}_1 \), is still \textbf{optimizing consumption}.
+    
+    \item It \textbf{balances} how much "extra future consumption*"the agent gets from borrowing today, given the constraint.
+    
+    \item Thus, it is the \textbf{interest rate that makes the Euler equation hold} under the imposed borrowing limit.
+\end{itemize}
+
+
+\subsection*{\noindent\textbf{c)}}
+\addcontentsline{toc}{subsection}{c)}
+
+Analyze the effect of a temporary increase in the endowment of the economy. Will
+consumption smoothing take place in the presence of capital controls?
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Define the Shock}
+
+Only in Period 1  
+
+Original: \( Y_1, Y_2 \)  
+
+Shock:  
+\[
+Y_1' = Y_1 + \Delta, \quad \Delta > 0, 
+\qquad Y_2' = Y_2
+\]
+
+\textbf{Unconstrained Optimum}
+
+With no capital controls, the agent solves:  
+\[
+C_1 + \frac{C_2}{1+r} = Y_1' + \frac{Y_2'}{1+r}
+\]
+
+Smoothing condition (Euler equation):  
+\[
+C_1^{-\tfrac{1}{\sigma}} = \beta(1+r)\, C_2^{-\tfrac{1}{\sigma}}
+\]
+
+\(\Rightarrow\) Agent \textbf{spreads the shock \(\Delta\) across both periods}.
+
+\textbf{With Capital Controls}
+
+Let \(\bar{b}_1\) be binding before the shock.  
+
+New income: \( Y_1' = Y_1 + \Delta \)  
+
+Borrowing limit unchanged: \( b_1 = \bar{b}_1 \)  
+
+Then:  
+\[
+C_1 = Y_1' - \bar{b}_1 = (Y_1 + \Delta) - \bar{b}_1
+\]
+
+\[
+C_2 = Y_2 + (1+r)\bar{b}_1
+\]
+
+\(\Rightarrow\) \textbf{Consumption rises only in period 1}.  
+
+\(\Rightarrow\) \textbf{No adjustment in period 2}.  
+
+\textbf {Conclusion}
+
+\[
+\fcolorbox{red}{white}{$
+\; \text{No consumption smoothing under capital controls if } \bar{b}_1 \text{ still binds after the shock.} \;
+$}
+\]
+
+\begin{itemize}
+    \item With capital controls binding, the agent \textbf{cannot borrow or lend freely} to reallocate income over time.  
+    
+    \item When income \textbf{rises temporarily in period 1}, they \textbf{cannot save the extra} to shift consumption to period 2.  
+    
+    \item As a result, they are \textbf{forced to consume the entire increase immediately}, which \textbf{breaks consumption smoothing}.
+\end{itemize}
+ 
+
+\section*{\noindent\textbf{Problem 4}}
+\addcontentsline{toc}{section}{Problem 4}
+
+Consider a small open production economy with an infinite horizon. Suppose the production 
+technology is given by 
+\[
+Y_t = A_t F(K_t)
+\]
+where \( A_t \) denotes a positive productivity parameter and \( F(K_t) \) is a strictly increasing and strictly concave function.  
+
+Capital accumulates according to 
+\[
+K_{t+1} = K_t + I_t
+\]
+and net foreign assets accumulate via:
+\[
+B_{t+1} = Y_t + (1+r)B_t - C_t - I_t.
+\]
+
+
+\subsection*{\noindent\textbf{a)}}
+\addcontentsline{toc}{subsection}{a)}
+
+Derive the first-order conditions for this problem
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Maximizing Problem}  
+
+\[
+\max_{\{C_t, K_{t+1}, B_{t+1}\}} \sum_{s=t}^{\infty} \beta^{s-t} u(C_t)
+\]
+
+\textbf{Subject to}  
+
+\[
+B_{t+1} = A_t F(K_t) + (1+r)B_t - C_t - I_t \quad (1)
+\]
+
+\[
+K_{t+1} = K_t + I_t
+\]
+
+\[
+\implies\; I_t = K_{t+1} - K_t \quad (2)
+
+
+\textbf{Substitute (2) into (1)}  
+
+\[
+B_{t+1} = A_t F(K_t) + (1+r)B_t - C_t - (K_{t+1} - K_t) \quad (3)
+\]
+
+\[
+B_{t+1} = A_t F(K_t) + (1+r)B_t - C_t - K_{t+1} + K_t \quad (4)
+\]
+
+\textbf{Lagrangian}  
+
+\[
+L = \sum_{t=0}^{\infty} \beta^t 
+\Big[ u(C_t) + \lambda_t \big( A_t F(K_t) + (1+r)B_t - C_t - K_{t+1} + K_t - B_{t+1} \big) \Big] 
+\quad (5)
+\]
+
+\textbf{First-Order Condition  \(C_t\)}  
+
+\[
+\frac{\partial L}{\partial C_t} = \beta^t \big[u'(C_t) - \lambda_t \big] = 0
+\]
+
+\[
+\implies \lambda_t = u'(C_t) \quad (6)
+\]
+
+\textbf{First-Order Condition  \(B_{t+1}\)}  
+
+\[
+\frac{\partial L}{\partial B_{t+1}} = -\beta^t \lambda_t + \beta^{t+1} \lambda_{t+1}(1+r) = 0
+\]
+
+\[
+\implies \lambda_t = \beta(1+r)\lambda_{t+1} \quad (7)
+\]
+
+\textbf{First-Order Condition  \(K_{t+1}\)}  
+
+\[
+\frac{\partial L}{\partial K_{t+1}} = -\beta^t \lambda_t 
++ \beta^{t+1}\lambda_{t+1}\big(A_{t+1}F'(K_{t+1})+1\big) = 0
+\]
+
+\[
+\implies \lambda_t = \beta \lambda_{t+1}\big(A_{t+1}F'(K_{t+1})+1\big) \quad (8)
+\]
+
+\textbf{Final First-Order Conditions}
+
+\[
+\fcolorbox{red}{white}{$
+\begin{aligned}
+(1) \quad & \lambda_t = u'(C_t) \\[6pt]
+(2) \quad & \lambda_t = \beta(1+r)\lambda_{t+1} \\[6pt]
+(3) \quad & \lambda_t = \beta \lambda_{t+1}\big(A_{t+1}F'(K_{t+1})+1\big)
+\end{aligned}
+$}
+\]
+
+\subsection*{\noindent\textbf{b)}}
+\addcontentsline{toc}{subsection}{b)}
+
+Derive the intertemporal budget constraint and TVC condition.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Budget Constraint}
+
+\[
+B_{t+1} = A_t F(K_t) + (1+r)B_t - C_t - I_t \quad (1)
+\]
+
+\textbf{From capital accumulation}
+
+\[
+K_{t+1} = K_t + I_t 
+\]
+\[
+\implies\; I_t = K_{t+1} - K_t \quad (2)
+\]
+
+\textbf{Substitute (2) into (1)}
+
+\[
+B_{t+1} = A_t F(K_t) + (1+r)B_t - C_t - (K_{t+1}-K_t) \quad (3)
+\]
+
+\[
+B_{t+1} = A_t F(K_t) + (1+r)B_t - C_t - K_{t+1} + K_t \quad (4)
+\]
+
+\textbf{Solve forward for \(B_{t+1}\)}
+
+Start with (1):
+\[
+B_{t+1} = A_t F(K_t) + (1+r)B_t - C_t - I_t
+\]
+
+Divide both sides by \((1+r)^{t+1}\):
+\[
+\frac{B_{t+1}}{(1+r)^{t+1}}
+= \frac{A_t F(K_t)}{(1+r)^{t+1}}
++ \frac{B_t}{(1+r)^t}
+- \frac{C_t}{(1+r)^{t+1}}
+- \frac{I_t}{(1+r)^{t+1}} \quad (5)
+\]
+
+Repeat forward up to \(T\), then sum both sides:
+\[
+\frac{B_{T+1}}{(1+r)^{T+1}}
+= \frac{B_t}{(1+r)^t}
++ \sum_{s=t}^{T} \frac{A_s F(K_s) - C_s - I_s}{(1+r)^{s+1}}
+\quad (6)
+\]
+
+\textbf{Intertemporal Budget Constraint (IBC)}
+
+Let \(T \to \infty\). Then
+\[
+\lim_{T\to\infty} \frac{B_{T+1}}{(1+r)^{T+1}} = 0
+\quad \text{(TVC)} \quad (7)
+\]
+
+Thus,
+\[
+\frac{B_t}{(1+r)^t}
+= \sum_{s=t}^{\infty} \frac{C_s + I_s - A_s F(K_s)}{(1+r)^{s+1}}
+\quad \text{(IBC)}
+\]
+
+Or equivalently:
+\[
+\sum_{s=t}^{\infty} \frac{C_s + I_s}{(1+r)^{s+1}}
+= \sum_{s=t}^{\infty} \frac{A_s F(K_s)}{(1+r)^{s+1}}
++ \frac{B_t}{(1+r)^t}
+\]
+
+\textbf{Transversality Condition (TVC)}
+
+\[
+\lim_{t\to\infty} \frac{B_t}{(1+r)^t} = 0
+\]
+
+This rules out Ponzi schemes (indefinitely rolling over debt).
+
+
+\subsection*{\noindent\textbf{c)}}
+\addcontentsline{toc}{subsection}{c)}
+
+Assuming \((1+r)\beta = 1\) where \(0 < \beta < 1\) is the subjective discount factor, characterize the perfect foresight path for a constant value of \(A_t\) (i.e., \(A_t = A\) for all \(t = 0,1,2,\ldots\)).
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Given}  
+
+\[
+(1+r)\beta = 1
+\]
+
+\[
+A_t = A \quad \forall t \quad \text{(constant productivity)}
+\]
+
+\textbf{Consumption Euler Equation}  
+
+\[
+u'(C_t) = \beta(1+r)u'(C_{t+1}) \quad (1)
+\]
+
+Since \(\beta(1+r)=1\):  
+
+\[
+u'(C_t) = u'(C_{t+1}) \quad (2)
+\]
+
+\textbf{Implication: Constant Consumption}  
+
+\[
+C_t = C_{t+1} = C_{t+2} = \cdots \quad \Rightarrow \quad C_t = \bar{C} \quad (3)
+\]
+
+\textbf{Investment Euler Condition}  
+
+\[
+F'(K_{t+1}) = r A \quad (4)
+\]
+
+With \(A_t=A\):  
+
+\[
+F'(K_{t+1}) = r \quad \forall t \quad (5)
+\]
+
+\textbf{Capital Stock Constant}  
+
+\[
+K_{t+1} = \bar{K} \quad (6)
+\]
+
+\[
+I_t = K_{t+1} - K_t = 0 \quad (7)
+\]
+
+\textbf{Output Constant}  
+
+\[
+Y_t = AF(K_t) = AF(\bar{K}) = \bar{Y} \quad (8)
+\]
+
+\textbf{Budget Constraint in Steady State}  
+
+\[
+B_{t+1} = AF(\bar{K}) + (1+r)B_t - \bar{C} \quad (9)
+\]
+
+\[
+B_{t+1} = (1+r)B_t + \bar{Y} - \bar{C} \quad (10)
+\]
+
+\textbf{Steady State Condition (No Debt Explosion)}  
+
+\[
+\lim_{t \to \infty} \frac{B_t}{(1+r)^t} = 0 
+\quad \implies \quad \bar{C} = \bar{Y} \quad (11)
+\]
+
+Then:  
+
+\[
+B_{t+1} = (1+r)B_t + \bar{Y} - \bar{Y} = (1+r)B_t 
+\quad \implies \quad B_t = 0 \quad (12)
+\]
+
+(assuming initial \(B_0 = 0\))  
+
+\textbf{ Perfect Foresight Path}  
+
+\[
+\fcolorbox{red}{white}{$
+\begin{aligned}
+C_t &= \bar{C} = AF(\bar{K}) \\[6pt]
+K_t &= \bar{K} \quad \text{such that } F'(\bar{K}) = r \\[6pt]
+I_t &= 0 \\[6pt]
+B_t &= 0
+\end{aligned}
+$}
+\]
+
+Perfect foresight path: \textbf{no growth, constant consumption, efficient capital allocation}.
+
+
+\subsection*{\noindent\textbf{d)}}
+\addcontentsline{toc}{subsection}{d)}
+
+Suppose that in period \( t = -1 \) the economy is in the equilibrium derived in part (c) above. Suppose that in period 0 a temporary positive productivity shock occurs such that \( A \) rises from \( A \) to \( A^* \), and then returns to its initial level in period 1. Show that this results in an increase in consumption and period 0 saving, an initial improvement in the trade balance, and a current account surplus.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Assumptions:}
+\begin{itemize}
+    \item At \(t=-1\), the economy is in steady state:  
+    \[
+    A_{-1} = A, \quad C_t = \bar{C}, \quad K_t = \bar{K}, \quad B_t = 0
+    \]
+    \item At \(t=0\), a temporary productivity shock occurs:  
+    \[
+    A_0 = A^* > A, \quad A_1 = A
+    \]
+\end{itemize}
+
+\textbf{Effect on Output}  
+
+\[
+Y_0 = A^*F(K_0) > AF(K_0) = \bar{Y} \quad (1)
+\]
+
+\(\Rightarrow\) Output is temporarily higher in period 0.  
+
+\textbf{Household Behavior}  
+
+Euler equation:  
+\[
+u'(C_0) = \beta(1+r)u'(C_1) \quad (2)
+\]
+
+Since \(C_1 = \bar{C}\), the household smooths consumption:  
+\[
+C_0 \uparrow, \quad C_0 < Y_0 \quad \implies \quad \text{saves the difference} \quad (3)
+\]
+
+\textbf{Period 0 Saving}  
+
+Budget constraint:  
+\[
+B_1 = Y_0 + (1+r)B_0 - C_0 - I_0 \quad (4)
+\]
+
+In steady state: \(B_0=0, \; I_0=0, \; K_1=K_0=\bar{K}\).  
+
+So:  
+\[
+B_1 = Y_0 - C_0 > 0 \quad (5)
+\]
+
+\(\Rightarrow\) The agent accumulates foreign assets (\textbf{saves}).  
+
+\textbf{Trade Balance and Current Account}  
+
+Trade balance:  
+\[
+TB_0 = Y_0 - C_0 - I_0
+\]
+
+Since \(I_0=0\) and \(Y_0 > C_0\):  
+\[
+TB_0 > 0 \quad \text{(trade balance improves)}
+\]
+
+Current account:  
+\[
+CA_0 = TB_0 + rB_0 = TB_0 + 0 = TB_0 \quad \implies \quad CA_0 > 0
+\]
+
+\textbf{Results of a Temporary Productivity Shock in t}  
+
+\[
+\fcolorbox{red}{white}{$
+\begin{aligned}
+C_0 &\uparrow \quad \text{(consumption increases)} \\[6pt]
+B_1 &> 0 \quad \text{(period 0 saving)} \\[6pt]
+TB_0 &> 0 \quad \text{(trade balance improves)} \\[6pt]
+CA_0 &> 0 \quad \text{(current account surplus)}
+\end{aligned}
+$}
+\]
+
+
+
+\end{document}
