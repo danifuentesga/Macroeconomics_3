@@ -1,0 +1,2034 @@
+\documentclass[12pt]{article}
+
+% --- Paquetes ---
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{ams math}
+\usepackage[spanish,es-tabla]{babel}   % español
+\usepackage[utf8]{inputenc}            % acentos
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{lastpage}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[table]{xcolor} % para \cellcolor y \rowcolor
+\usepackage{colortbl}      % colores en tablas
+\usepackage{float}         % para usar [H] si quieres fijar la tabla
+\usepackage{array}         % mejor control de columnas
+\usepackage{amssymb}       % para palomita
+\usepackage{graphicx}      % para logo github
+\usepackage{hyperref}
+\usepackage{setspace} % para hipervinculo
+\usepackage[normalem]{ulem}
+\usepackage{siunitx}       % Asegúrate de tener este paquete en el preámbulo
+\usepackage{booktabs}
+\sisetup{
+    output-decimal-marker = {.},
+    group-separator = {,},
+    group-minimum-digits = 4,
+    detect-all
+}
+
+% Etiqueta en el caption (en la tabla misma)
+\usepackage{caption}
+\captionsetup[table]{name=Tabla, labelfont=bf, labelsep=period}
+
+% Prefijo en la *Lista de tablas*
+\usepackage{tocloft}
+\renewcommand{\cfttabpresnum}{Tabla~} % texto antes del número
+\renewcommand{\cfttabaftersnum}{.}    % punto después del número
+\setlength{\cfttabnumwidth}{5em}      % ancho para "Tabla 10." ajusta si hace falta
+
+
+
+% --- Márgenes y encabezado ---
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+% Alturas del encabezado (un poco más por las 2–3 líneas del header)
+\setlength{\headheight}{32pt}
+\setlength{\headsep}{20pt}
+
+\definecolor{maroon}{RGB}{128, 0, 0}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+% Regla del encabezado (opcional)
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Encabezado izquierdo
+\fancyhead[L]{%
+  \textcolor{maroon}{\textbf{El Colegio de México}}\\
+  \textbf{Macroeconomics 3}
+}
+
+% Encabezado derecho
+\fancyhead[R]{%
+  Problem Set 2: Dynamic Programming\\
+  \textbf{Jose Daniel Fuentes García}\\
+  Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+}
+
+% Número de página al centro del pie
+\fancyfoot[C]{\thepage}
+
+% --- APLICAR EL MISMO ESTILO A PÁGINAS "PLAIN" (TOC, LOT, LOF) ---
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \fancyhead[L]{%
+    \textcolor{maroon}{\textbf{El Colegio de México}}\\
+    \textbf{Macroeconomics 3}
+  }
+  \fancyhead[R]{%
+    Problem Set 2: Dynamic Programming\\
+    \textbf{Jose Daniel Fuentes García}\\
+    Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+  }
+  \fancyfoot[C]{\thepage}
+}
+
+% Pie de página centrado
+\fancyfoot[C]{\thepage\ de \pageref{LastPage}}
+
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Color principal ---
+\definecolor{formalblue}{RGB}{0,51,102} % azul marino sobrio
+
+% --- Estilo de títulos ---
+\titleformat{\section}[hang]{\bfseries\Large\color{formalblue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\bfseries\large\color{formalblue}}{\thesubsection}{1em}{}
+
+
+% --- Listas ---
+\setlist[itemize]{leftmargin=1.2em}
+
+% --- Sin portada ---
+\title{}
+\author{}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{-1cm}
+    \noindent
+    \begin{minipage}[t]{0.49\textwidth}
+        \includegraphics[height=2.2cm]{colmex.jpg}
+    \end{minipage}%
+    \begin{minipage}[t]{0.49\textwidth}
+        \raggedleft
+        \includegraphics[height=2.2cm]{cee.jpg}
+    \end{minipage}
+
+    \vspace*{2cm}
+
+    \begin{center}
+        \Huge \textbf{CENTRO DE ESTUDIOS ECONÓMICOS} \\[1.5em]
+        \Large Maestría en Economía 2024--2026 \\[2em]
+        \Large Macroeconomics 3 \\[3em]
+        \LARGE \textbf{Problem Set 2: Dynamic Programming} \\[3em]
+        \large \textbf{PRESENTED BY:} José Daniel Fuentes García \\[3em]
+        \large \textbf{PROFESSOR:} Stephen McKnight \\[0.9em]
+        
+    \end{center}
+
+    \vfill
+\end{titlepage}
+
+\newpage
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+
+\newpage
+
+\section*{\noindent\textbf{Problem 1}}
+\addcontentsline{toc}{section}{Problem 1}
+
+\noindent\textbf{[The Cass-Koopman Model]}\\
+
+\noindent Consider the following optimal growth problem. A consumer wants to maximize consumption:
+\[
+\sum_{t=0}^{\infty} \beta^t u(C_t),
+\]
+subject to a given value of the capital stock \( K_0 > 0 \), and a transition law:
+\[
+C_t + K_{t+1} = f(K_t),
+\]
+where \( 0 < \beta < 1 \), \( f'(K) > 0 \), \( f''(K) < 0 \), \( u'(C) > 0 \), \( u''(C) < 0 \), \( u'(0) = +\infty \).
+
+\doublespacing
+
+\subsection*{\noindent\textbf{a)}}
+\addcontentsline{toc}{subsection}{a)}
+
+\noindent Let the \textit{state variable} be defined as \( K_t \) and the \textit{control variable} as \( K_{t+1} \). Set up the Bellman equation for this problem and derive the Euler equation.
+
+\definecolor{formalred}{RGB}{178,34,34} 
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\singlespacing
+\textbf{Assumptions}
+
+\textbf{Objective:}
+\[
+\max_{\{C_t\}} \sum_{t=0}^{\infty} \beta^t u(C_t)
+\]
+
+\textbf{Constraint:}
+\[
+C_t + K_{t+1} = f(K_t), 
+\qquad K_0>0 \ \text{given}
+\]
+\[
+0<\beta<1,\quad f'(K)>0,\quad f''(K)<0
+\]
+\[
+u'(C)>0,\quad u''(C)<0,\quad u'(0)=+\infty
+\]
+
+
+\textbf{Bellman Equation}
+
+\[
+V(k_t) = \max_{c_t} \left\{ u(c_t) + \beta V(k_{t+1}) \right\}
+\]
+
+Subject to:
+\[
+c_t + k_{t+1} = f(k_t)
+\]
+
+Solve constraint for $c_t$:
+\[
+c_t = f(k_t) - k_{t+1}
+\]
+
+Substitute into Bellman:
+\[
+V(k_t) = \max_{k_{t+1}} \left\{ u(f(k_t) - k_{t+1}) + \beta V(k_{t+1}) \right\}
+\]
+
+\vspace{0.5cm}
+\textbf{First-Order Condition (FOC)}
+
+Define:
+\[
+\mathcal{L}(k_{t+1}) = u(f(k_t) - k_{t+1}) + \beta V(k_{t+1})
+\]
+
+Differentiate:
+\[
+\frac{d}{dk_{t+1}} \left[ u(f(k_t) - k_{t+1}) + \beta V(k_{t+1}) \right]
+\]
+
+\[
+= \frac{du}{dc_t} \cdot \frac{dc_t}{dk_{t+1}} + \beta \cdot \frac{dV}{dk_{t+1}}
+\]
+
+\[
+= u'(f(k_t) - k_{t+1}) \cdot (-1) + \beta V'(k_{t+1})
+\]
+
+\[
+= -u'(c_t) + \beta V'(k_{t+1})
+\]
+
+Set equal to zero:
+\[
+-u'(c_t) + \beta V'(k_{t+1}) = 0
+\]
+
+\[
+u'(c_t) = \beta V'(k_{t+1})
+\]
+
+\vspace{0.5cm}
+\textbf{Envelope Condition}
+
+From:
+\[
+V(k_t) = u(f(k_t) - k_{t+1}) + \beta V(k_{t+1})
+\]
+
+Differentiate w.r.t. $k_t$:
+
+Use chain rule:
+
+\[
+\frac{dV}{dk_t} = u'(f(k_t) - k_{t+1}) \cdot f'(k_t)
+\]
+
+\[
+V'(k_t) = u'(c_t) \cdot f'(k_t)
+\]
+
+\vspace{0.5cm}
+\textbf{Euler Equation}
+
+From FOC:
+\[
+u'(c_t) = \beta V'(k_{t+1})
+\]
+
+From envelope:
+\[
+V'(k_{t+1}) = u'(c_{t+1}) \cdot f'(k_{t+1})
+\]
+
+Substitute:
+\[
+u'(c_t) = \beta u'(c_{t+1}) f'(k_{t+1})
+\]
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle u'(C_t)=\beta\,u'(C_{t+1})\,f'(K_{t+1})
+$}
+\]
+
+\subsection*{\textbf{b)}}
+\addcontentsline{toc}{subsection}{b)}
+
+Now suppose that \( u(C_t) = \log(C_t) \) and \( f(K_t) = A K_t^{\alpha} \), where \( A > 0 \) and \( 0 < \alpha < 1 \).
+
+Using these particular functional forms again solve for the Euler equation.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Assumptions:}
+
+Utility:
+\[
+u(C_t) = \log(C_t)
+\]
+
+Production:
+\[
+f(K_t) = A K_t^{\alpha}, \quad A>0, \quad 0<\alpha<1
+\]
+
+Resource constraint:
+\[
+C_t + K_{t+1} = A K_t^{\alpha}
+\]
+
+\vspace{0.5em}
+\textbf{Derivation}
+
+\textbf{Bellman equation:}
+\[
+V(K_t)=\max_{K_{t+1}} \{ \log(C_t)+\beta V(K_{t+1}) \}
+\]
+
+Substitute constraint:
+\[
+C_t = A K_t^{\alpha} - K_{t+1}
+\]
+\[
+V(K_t)=\max_{K_{t+1}} \{ \log(AK_t^{\alpha}-K_{t+1})+\beta V(K_{t+1}) \}
+\]
+
+\vspace{0.5em}
+\textbf{First-order condition:}
+
+Define objective:
+\[
+L(K_{t+1}) = \log(AK_t^{\alpha}-K_{t+1})+\beta V(K_{t+1})
+\]
+
+Differentiate w.r.t. \(K_{t+1}\):
+\[
+\frac{d}{dK_{t+1}} \log(AK_t^{\alpha}-K_{t+1})
+= -\frac{1}{AK_t^{\alpha}-K_{t+1}} = -\frac{1}{C_t}
+\]
+\[
+\frac{d}{dK_{t+1}} \beta V(K_{t+1}) = \beta V'(K_{t+1})
+\]
+
+Set FOC:
+\[
+-\frac{1}{C_t} + \beta V'(K_{t+1})=0
+\quad \Rightarrow \quad \frac{1}{C_t}=\beta V'(K_{t+1}) \tag{1}
+\]
+
+\vspace{0.5em}
+\textbf{Envelope condition:}
+
+Recall:
+\[
+C_t = A K_t^{\alpha} - K_{t+1}
+\]
+
+Differentiate Bellman w.r.t. \(K_t\):
+\[
+\frac{dV}{dK_t}=\frac{d}{dK_t}\log(AK_t^{\alpha}-K_{t+1})
+= \frac{1}{C_t} \cdot \frac{d}{dK_t}(AK_t^{\alpha})
+= \frac{1}{C_t} \cdot A\alpha K_t^{\alpha-1}
+\]
+\[
+V'(K_t)=\frac{A\alpha K_t^{\alpha-1}}{C_t} \tag{2}
+\]
+
+Advance one period in (2):
+\[
+V'(K_{t+1})=\frac{A\alpha K_{t+1}^{\alpha-1}}{C_{t+1}} \tag{3}
+\]
+
+Substitute (3) into (1):
+\[
+\frac{1}{C_t} = \beta \cdot \frac{A\alpha K_{t+1}^{\alpha-1}}{C_{t+1}}
+\]
+
+Multiply both sides by \(C_{t+1}\):
+\[
+\frac{C_{t+1}}{C_t} = \beta A\alpha K_{t+1}^{\alpha-1}
+\]
+
+\vspace{0.5em}
+\textbf{Final Euler Equation:}
+\[
+\fcolorbox{red}{white}{$
+\displaystyle \frac{C_{t+1}}{C_t} = \beta A \alpha K_{t+1}^{\alpha-1}
+$}
+\]
+
+
+\subsection*{\textbf{c)}}
+\addcontentsline{toc}{subsection}{c)}
+
+Using the method of value function iteration show that the optimal policy is to have capital move according to the difference equation
+\[
+K_{t+1} = A \beta \alpha K_t^{\alpha}.
+\]
+
+\noindent [Hint: as a starting point set \( V_0 = 0 \).]
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Assumptions}
+
+\[
+u(C_t) = \log(C_t) \quad (A1)
+\]
+
+\[
+f(K_t) = A K_t^{\alpha}, \quad A>0, \; 0<\alpha<1 \quad (A2)
+\]
+
+\[
+C_t + K_{t+1} = f(K_t) = A K_t^{\alpha}
+\;\;\Rightarrow\;\;
+C_t = A K_t^{\alpha} - K_{t+1} \quad (A3)
+\]
+
+\[
+V_0(k)=0 \quad (A4)
+\]
+
+\[
+\boxed{\,K' \;\equiv\; K_{t+1}\,}
+\]
+
+\textbf{First Iteration: \(V_1(k)\)}
+
+\[
+V_1(k)=\max_{K'}\{\log(Ak^{\alpha}-K')+\beta V_0(K')\} \quad (1)
+\]
+
+Substitute \(V_0(K')=0\):
+\[
+V_1(k)=\max_{K'} \log(Ak^{\alpha}-K') \quad (2)
+\]
+
+Differentiate:
+\[
+\frac{d}{dK'}\log(Ak^{\alpha}-K')=-\frac{1}{Ak^{\alpha}-K'} \quad (3)
+\]
+
+Always negative \(\Rightarrow\) maximum at \(K'=0\) \quad (4)
+
+Substitute:
+\[
+V_1(k)=\log(Ak^{\alpha}) \quad (5)
+\]
+
+Use log rules:
+\[
+\log(Ak^{\alpha})=\log A + \alpha \log k \quad (6)
+\]
+\[
+V_1(k)=\log A + \alpha \log k \quad (7)
+\]
+
+\textbf{Second Iteration: \(V_2(k)\)}
+
+\[
+V_2(k)=\max_{K'}\{\log(Ak^{\alpha}-K')+\beta V_1(K')\} \quad (8)
+\]
+
+Substitute \(V_1(K')=\log A + \alpha \log K'\):
+\[
+V_2(k)=\max_{K'}\{\log(Ak^{\alpha}-K')+\beta\alpha \log K' + \beta \log A\} \quad (9)
+\]
+
+Differentiate:
+\[
+\frac{d}{dK'}[\log(Ak^{\alpha}-K')+\beta\alpha \log K']=-\frac{1}{Ak^{\alpha}-K'}+\frac{\beta\alpha}{K'} \quad (10)
+\]
+
+Set (10)=0:
+\[
+-\frac{1}{Ak^{\alpha}-K'}+\frac{\beta\alpha}{K'}=0 \quad (11)
+\]
+
+Rearrange:
+\[
+\beta\alpha K'=\frac{1}{Ak^{\alpha}-K'} \quad (12)
+\]
+
+Cross-multiply:
+\[
+\beta\alpha(Ak^{\alpha}-K')=K' \quad (13)
+\]
+
+Distribute:
+\[
+\beta\alpha Ak^{\alpha}-\beta\alpha K'=K' \quad (14)
+\]
+
+Group:
+\[
+\beta\alpha Ak^{\alpha}=K'(1+\beta\alpha) \quad (15)
+\]
+
+Solve:
+\[
+K'=\frac{\beta\alpha}{1+\beta\alpha}Ak^{\alpha} \quad (16)
+\]
+
+Define:
+\[
+\theta_2:=\frac{\beta\alpha}{1+\beta\alpha} \;\;\Rightarrow\;\; K'=\theta_2 Ak^{\alpha} \quad (17)
+\]
+
+Substitute back:
+\[
+V_2(k)=\log(Ak^{\alpha}-\theta_2 Ak^{\alpha})+\beta\alpha\log(\theta_2 Ak^{\alpha})+\beta\log A \quad (18)
+\]
+
+Simplify first log:
+\[
+Ak^{\alpha}(1-\theta_2) \;\;\Rightarrow\;\; \log(A(1-\theta_2)k^{\alpha}) \quad (19)
+\]
+
+\[
+\log(A(1-\theta_2)k^{\alpha})=\log A+\log(1-\theta_2)+\alpha\log k \quad (20)
+\]
+
+\[
+\log(\theta_2 Ak^{\alpha})=\log \theta_2+\log A+\alpha\log k \quad (21)
+\]
+
+So:
+\[
+V_2(k)=\log A+\log(1-\theta_2)+\alpha\log k \quad (22)
+\]
+\[
++ \beta\alpha(\log \theta_2+\log A+\alpha\log k)+\beta\log A \quad (23)
+\]
+
+Group terms in \(\log k\):
+\[
+\alpha\log k+\beta\alpha^2\log k=\alpha(1+\beta\alpha)\log k \quad (24)
+\]
+
+Define constants:
+\[
+\delta_2=\log A+\log(1-\theta_2)+\beta\alpha\log \theta_2+\beta\alpha\log A+\beta\log A \quad (25)
+\]
+
+Final expression:
+\[
+V_2(k)=\alpha(1+\beta\alpha)\log k+\delta_2 \quad (26)
+\]
+
+\textbf{General Form}
+
+From (7) and (26):
+\[
+V_n(k)=\alpha\Big(\sum_{i=0}^{n-1}(\beta\alpha)^i\Big)\log k+\delta_n \quad (27)
+\]
+
+As \(n\to\infty\):
+\[
+\sum_{i=0}^{\infty}(\beta\alpha)^i=\frac{1}{1-\beta\alpha} \quad (28)
+\]
+
+Therefore:
+\[
+V(k)=\frac{\alpha}{1-\beta\alpha}\log k+\delta \quad (29)
+\]
+
+\textbf{Optimal Policy Function}
+
+Bellman:
+\[
+V(k)=\max_{K'}\{\log(Ak^{\alpha}-K')+\beta V(K')\} \quad (30)
+\]
+
+Substitute (29):
+\[
+V(K')=\frac{\alpha}{1-\beta\alpha}\log K'+\delta \;\;\Rightarrow\;\; \text{ignore constants} \quad (31)
+\]
+
+\[
+V(k)=\max_{K'}\{\log(Ak^{\alpha}-K')+\beta \tfrac{\alpha}{1-\beta\alpha}\log K'\} \quad (32)
+\]
+
+Differentiate:
+\[
+\frac{d}{dK'}=-\frac{1}{Ak^{\alpha}-K'}+\frac{\beta\alpha}{(1-\beta\alpha)K'} \quad (33)
+\]
+
+Set (33)=0:
+\[
+-\frac{1}{Ak^{\alpha}-K'}+\frac{\beta\alpha}{(1-\beta\alpha)K'}=0 \quad (34)
+\]
+
+Rearrange:
+\[
+\frac{\beta\alpha}{1-\beta\alpha}K'=\frac{1}{Ak^{\alpha}-K'} \quad (35)
+\]
+
+Cross-multiply:
+\[
+\beta\alpha(Ak^{\alpha}-K')=(1-\beta\alpha)K' \quad (36)
+\]
+
+Expand:
+\[
+\beta\alpha Ak^{\alpha}-\beta\alpha K'=(1-\beta\alpha)K' \quad (37)
+\]
+
+Group:
+\[
+\beta\alpha Ak^{\alpha}=K'(1-\beta\alpha+\beta\alpha)=K' \quad (38)
+\]
+
+Solve:
+\[
+K'=\beta\alpha Ak^{\alpha} \quad (39)
+\]
+
+\textbf{Final Result:}
+\[
+\fcolorbox{red}{white}{$
+K_{t+1}=\beta\alpha A K_t^{\alpha}
+$}
+\quad \text{[Optimal Policy Function]} \quad (40)
+\]
+
+
+\subsection*{\textbf{d)}}
+\addcontentsline{toc}{subsection}{d)}
+
+Now solve the problem using the guess-and-verify method. Guess that 
+\[
+V(K) = E + F \log(K)
+\]
+and verify this guess using the Bellman equation.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+
+\textbf{Assumptions}
+
+\[
+u(C_t)=\log(C_t) \quad (A1)
+\]
+
+\[
+f(K_t)=A K_t^{\alpha}, \quad A>0, \; 0<\alpha<1 \quad (A2)
+\]
+
+\[
+C_t+K_{t+1}=A K_t^{\alpha} \;\;\Rightarrow\;\; C_t=A K_t^{\alpha}-K_{t+1} \quad (A3)
+\]
+
+\[
+\text{Guess: } V(K)=E+F\log(K) \quad (A4)
+\]
+
+\textbf{Bellman Equation}
+
+\[
+V(k)=\max_{K'}\{\log(Ak^{\alpha}-K')+\beta V(K')\} \quad (1)
+\]
+
+\textbf{First-order condition (FOC)}
+
+Differentiate objective:
+\[
+\frac{d}{dK'}[\log(Ak^{\alpha}-K')+\beta V(K')]=0 \quad (2)
+\]
+
+Substitute \(V(K')=E+F\log(K')\):
+\[
+\frac{d}{dK'}[\log(Ak^{\alpha}-K')+\beta(E+F\log K')]=0 \quad (3)
+\]
+
+Differentiate:
+\[
+-\frac{1}{Ak^{\alpha}-K'}+\frac{\beta F}{K'}=0 \quad (4)
+\]
+
+Rearrange:
+\[
+\beta F K'=\frac{1}{Ak^{\alpha}-K'} \quad (5)
+\]
+
+Cross-multiply:
+\[
+\beta F(Ak^{\alpha}-K')=K' \quad (6)
+\]
+
+Distribute:
+\[
+\beta F Ak^{\alpha}-\beta F K'=K' \quad (7)
+\]
+
+Group:
+\[
+\beta F Ak^{\alpha}=K'(1+\beta F) \quad (8)
+\]
+
+Solve for \(K'\):
+\[
+K'=\frac{\beta F}{1+\beta F}Ak^{\alpha} \quad (9)
+\]
+
+\textbf{Substitute \(K'\) into Bellman Equation}
+
+\[
+V(k)=\log\!\Big(Ak^{\alpha}-\tfrac{\beta F}{1+\beta F}Ak^{\alpha}\Big)+\beta V\!\Big(\tfrac{\beta F}{1+\beta F}Ak^{\alpha}\Big) \quad (10)
+\]
+
+Factor first log:
+\[
+Ak^{\alpha}\Big(\tfrac{1}{1+\beta F}\Big) \quad (11)
+\]
+
+So:
+\[
+\log(Ak^{\alpha}-K')=\log A+\log(k^{\alpha})-\log(1+\beta F) \quad (12)
+\]
+
+\[
+\log(k^{\alpha})=\alpha \log k \quad (13)
+\]
+
+Now compute:
+\[
+\beta V(K')=\beta[E+F\log(\tfrac{\beta F}{1+\beta F}Ak^{\alpha})] \quad (14)
+\]
+
+Expand:
+\[
+\beta E+\beta F\log(\beta F)+\beta F\log A+\beta F\log(k^{\alpha})-\beta F\log(1+\beta F) \quad (15)
+\]
+
+\[
+\beta F\log(k^{\alpha})=\beta F\alpha \log k \quad (16)
+\]
+
+\textbf{Group Terms in Bellman}
+
+From (12) and (15):
+\[
+V(k)=[\log A-\log(1+\beta F)]+\alpha \log k \quad (17)
+\]
+\[
++\beta E+\beta F\log(\beta F)+\beta F\log A-\beta F\log(1+\beta F)+\beta F\alpha \log k \quad (18)
+\]
+
+Group log terms:
+\[
+\alpha \log k+\beta F \alpha \log k=\alpha(1+\beta F)\log k \quad (19)
+\]
+
+Group constants:
+\[
+\delta=\log A-\log(1+\beta F)+\beta E+\beta F\log(\beta F)+\beta F\log A-\beta F\log(1+\beta F) \quad (20)
+\]
+
+\textbf{Verify the Guess}
+
+From guess (A4):
+\[
+V(k)=E+F\log k \quad (21)
+\]
+
+Compare with (19)–(20):
+\[
+E+F\log k=\alpha(1+\beta F)\log k+\delta \quad (22)
+\]
+
+Match coefficients:
+\[
+F=\alpha(1+\beta F) \quad (23)
+\]
+
+Solve:
+\[
+F=\alpha+\alpha\beta F \;\;\Rightarrow\;\; F-\alpha\beta F=\alpha \;\;\Rightarrow\;\; F(1-\alpha\beta)=\alpha
+\]
+\[
+F=\frac{\alpha}{1-\alpha\beta} \quad (24)
+\]
+
+\textbf{Recover Policy Function}
+
+Substitute (24) into (9):
+\[
+K'=\frac{\beta F}{1+\beta F}Ak^{\alpha}=\frac{\beta \cdot \tfrac{\alpha}{1-\alpha\beta}}{1+\beta \cdot \tfrac{\alpha}{1-\alpha\beta}}Ak^{\alpha} \quad (25)
+\]
+
+\textbf{Simplify numerator:}
+
+\[
+\frac{\beta \cdot \alpha}{1-\alpha\beta}\, A k^{\alpha}
+= \frac{\beta \alpha A k^{\alpha}}{1-\alpha\beta} 
+\quad (26)
+\]
+
+\textbf{Simplify denominator:}
+
+\[
+1+\frac{\beta \cdot \alpha}{1-\alpha\beta}
+= \frac{1\cdot(1-\alpha\beta)}{1-\alpha\beta}+\frac{\beta \alpha}{1-\alpha\beta}
+\quad (27)
+\]
+
+\[
+=\frac{(1-\alpha\beta)+\beta\alpha}{1-\alpha\beta}
+\quad (28)
+\]
+
+\[
+=\frac{1-\alpha\beta+\alpha\beta}{1-\alpha\beta}
+=\frac{1}{1-\alpha\beta}
+\quad (29)
+\]
+
+\textbf{Now simplify entire expression:}
+
+From (26) and (29), we have:
+\[
+K'=\frac{\tfrac{\beta\alpha A k^{\alpha}}{1-\alpha\beta}}{\tfrac{1}{1-\alpha\beta}}
+\quad (30)
+\]
+
+\textbf{Use rule: } 
+\(\frac{a/b}{c/b}=\frac{a}{c}\)
+
+\[
+K'=\frac{\beta \alpha A k^{\alpha}}{1}
+\quad (31)
+\]
+
+\textbf{Final Result:}
+\[
+\fcolorbox{red}{white}{$
+K'=\beta \alpha A k^{\alpha}
+$}
+\quad (32)
+\]
+
+\section*{\noindent\textbf{Problem 2}}
+\addcontentsline{toc}{section}{Problem 2}
+
+\noindent\textbf{[The Cake-Eating Problem]}  
+
+Consider the following cake-eating problem. A consumer is initially endowed with a cake of size \( W_0 > 0 \) and wants to decide how much of the cake should be eaten each period:  
+
+\[
+\sum_{t=0}^{\infty} \beta^t u(C_t),
+\]
+
+where the transition law is given by:  
+
+\[
+C_t + W_{t+1} = W_t,
+\]
+
+and 
+\[
+0<\beta<1, \quad u'(C)>0, \quad u''(C)<0, \quad u'(0)=+\infty.
+\]
+
+\subsection*{\textbf{a)}}
+\addcontentsline{toc}{subsection}{a)}
+
+Set up the Bellman equation for this problem.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Assumptions}
+
+\[
+\begin{aligned}
+u(C_t) & \text{ is strictly increasing: } u'(C) > 0 \quad & (A1) \\
+u(C_t) & \text{ is strictly concave: } u''(C) < 0 \quad & (A2) \\
+u'(0) &= +\infty \quad & (A3) \\
+0 < \beta &< 1 \quad & (A4) \\
+W_0 &> 0 \quad \text{(initial cake stock)} \quad & (A5) \\
+\text{Law of motion: } \; C_t + W_{t+1} &= W_t \;\;\; \Leftrightarrow \;\; C_t = W_t - W_{t+1} \quad & (A6)
+\end{aligned}
+\]
+
+\textbf{Objective:}
+
+Maximize lifetime utility
+\[
+\sum_{t=0}^{\infty} \beta^t u(C_t) \quad (A7)
+\]
+
+\textbf{Bellman Equation}
+
+Let the value function \( V(W_t) \) denote the maximum lifetime utility from starting with cake stock \( W_t \).
+
+\[
+C_t = W_t - W_{t+1} \tag{1}
+\]
+
+The Bellman equation is:
+\[
+V(W_t) = \max_{W_{t+1} \in [0, W_t]} \Big\{ u(W_t - W_{t+1}) + \beta V(W_{t+1}) \Big\} \tag{2}
+\]
+
+This equation captures the trade-off between: Consuming \( C_t = W_t - W_{t+1} \) today (instant utility); Saving \( W_{t+1} \) to generate future utility (discounted by \( \beta \)).
+
+\subsection*{\textbf{b)}}
+\addcontentsline{toc}{subsection}{b)}
+
+Find the Euler equation for this problem.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+
+\textbf{Restate Bellman Equation (from part a)}
+
+\[
+V(W_t) = \max_{W_{t+1} \in [0, W_t]} \Big\{ u(W_t - W_{t+1}) + \beta V(W_{t+1}) \Big\} \tag{1}
+\]
+
+Let
+\[
+C_t = W_t - W_{t+1} \tag{2}
+\]
+
+\textbf{First-Order Condition (FOC)}
+
+Differentiate (1) with respect to \( W_{t+1} \):
+\[
+\frac{d}{dW_{t+1}} \Big[ u(W_t - W_{t+1}) + \beta V(W_{t+1}) \Big] = 0 \tag{3}
+\]
+
+Chain rule:
+\[
+- u'(W_t - W_{t+1}) + \beta V'(W_{t+1}) = 0 \tag{4}
+\]
+
+Substitute from (2):
+\[
+- u'(C_t) + \beta V'(W_{t+1}) = 0 
+\quad \Rightarrow \quad
+u'(C_t) = \beta V'(W_{t+1}) \tag{5}
+\]
+
+\textbf{Envelope Condition}
+
+Differentiate (1) with respect to \( W_t \):
+\[
+\frac{dV}{dW_t} 
+= u'(W_t - W_{t+1}) \cdot \frac{d(W_t - W_{t+1})}{dW_t} + \beta V'(W_{t+1}) \cdot \frac{dW_{t+1}}{dW_t} \tag{6}
+\]
+
+Since 
+\(\frac{d(W_t - W_{t+1})}{dW_t} = 1\) 
+and 
+\(\frac{dW_{t+1}}{dW_t} = 0\):
+\[
+V'(W_t) = u'(C_t) \tag{7}
+\]
+
+Advance one period:
+\[
+V'(W_{t+1}) = u'(C_{t+1}) \tag{8}
+\]
+
+\textbf{Substitute into FOC (5)}
+
+\[
+u'(C_t) = \beta V'(W_{t+1}) \tag{5 repeated}
+\]
+\[
+V'(W_{t+1}) = u'(C_{t+1}) \tag{8 repeated}
+\]
+
+Thus:
+\[
+u'(C_t) = \beta u'(C_{t+1}) \tag{9}
+\]
+
+\[
+\fcolorbox{red}{white}{$
+u'(C_t) = \beta u'(C_{t+1})
+$} \quad \text{(Euler Equation)} \tag{10}
+\]
+
+\subsection*{\textbf{c)}}
+\addcontentsline{toc}{subsection}{c)}
+
+Suppose that \( u(C) = \log(C) \). Using a solution method of your choice find the optimal policy functions.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Euler Equation}  
+
+From utility:  
+\[
+u(C_t) = \log(C_t) 
+\quad \Rightarrow \quad 
+u'(C_t) = \frac{1}{C_t}
+\]
+
+Euler equation:  
+\[
+u'(C_t) = \beta u'(C_{t+1}) 
+\quad \Rightarrow \quad 
+\frac{1}{C_t} = \beta \cdot \frac{1}{C_{t+1}} 
+\tag{1}
+\]
+
+Multiplying both sides by \( C_t \cdot C_{t+1} \):  
+\[
+C_{t+1} = \beta C_t \tag{2}
+\]
+
+\textbf{Law of Motion}  
+
+Budget constraint:  
+\[
+C_t + W_{t+1} = W_t \tag{3}
+\]
+
+Solving for \( W_{t+1} \):  
+\[
+W_{t+1} = W_t - C_t \tag{4}
+\]
+
+Substitute (2) into (4):  
+\[
+W_{t+1} = W_t - C_t 
+= W_t - \frac{1}{\beta} C_{t+1} \tag{5}
+\]
+
+\textbf{Recursive Consumption Path}  
+
+From (2):  
+\[
+C_{t+1} = \beta C_t, 
+\quad C_{t+2} = \beta^2 C_t, 
+\quad C_{t+3} = \beta^3 C_t
+\]
+
+In general:  
+\[
+C_{t+j} = \beta^j C_t, 
+\quad \forall j \geq 0 
+\tag{6}
+\]
+
+
+\textbf{Total Resources Consumed}  
+
+Entire cake is consumed:  
+\[
+W_t = \sum_{j=0}^\infty C_{t+j} \tag{7}
+\]
+
+Substitute (6):  
+\[
+W_t = \sum_{j=0}^\infty \beta^j C_t 
+= C_t \cdot \Big( \sum_{j=0}^\infty \beta^j \Big) 
+\tag{8}
+\]
+
+Geometric series:  
+\[
+\sum_{j=0}^\infty \beta^j = \frac{1}{1-\beta}, 
+\quad 0<\beta<1 
+\tag{9}
+\]
+
+So:  
+\[
+W_t = \frac{C_t}{1-\beta} \tag{10}
+\]
+
+Solve for \( C_t \):  
+\[
+C_t = (1-\beta) W_t \tag{11}
+\]
+
+
+\textbf{Back to Law of Motion}  
+
+From (4):  
+\[
+W_{t+1} = W_t - C_t \tag{12}
+\]
+
+Substitute (11):  
+\[
+W_{t+1} = W_t - (1-\beta) W_t 
+= \beta W_t 
+\tag{13}
+\]
+
+
+\textbf{Final Policy Functions}  
+
+\[
+\fcolorbox{red}{white}{$
+C_t = (1-\beta) W_t
+$} \tag{14}
+\]
+
+\[
+\fcolorbox{red}{white}{$
+W_{t+1} = \beta W_t
+$} \tag{15}
+\]
+
+\subsection*{\textbf{d)}}
+\addcontentsline{toc}{subsection}{d)}
+
+Now suppose that 
+\[
+u(C) = \frac{C^{1-\sigma}}{1-\sigma} \quad \text{where } \sigma > 0.
+\]  
+
+Guess that the value function and policy function \( W_{t+1} = g(W_t) \) have the forms:  
+
+\[
+V(W) = \frac{\alpha W^{1-\sigma}}{1-\sigma}, 
+\qquad 
+g(W) = \mu W
+\]
+
+for some unknown coefficients \( \alpha > 0 \) and \( 0 < \mu < 1 \).  
+Derive the first-order condition and envelope condition. Solve for these unknown coefficients.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Assumptions:}
+
+\[
+u(C) = \frac{C^{1-\sigma}}{1-\sigma}, \quad \sigma > 0
+\]
+\[
+V(W) = \frac{\alpha W^{1-\sigma}}{1-\sigma}, \quad \alpha > 0
+\]
+\[
+W_{t+1} = \mu W_t, \quad 0 < \mu < 1
+\]
+\[
+C_t + W_{t+1} = W_t \quad \text{(resource constraint)}
+\]
+\[
+0 < \beta < 1 \quad \text{(discount factor)}
+\]
+
+
+\textbf{Bellman Equation}
+
+\[
+V(W_t) = \max_{W_{t+1}} \Bigg\{ \frac{(W_t - W_{t+1})^{1-\sigma}}{1-\sigma} + \beta \cdot \frac{\alpha W_{t+1}^{1-\sigma}}{1-\sigma} \Bigg\} \tag{1}
+\]
+
+\textbf{First Order Condition (FOC)}
+
+Differentiate (1) w.r.t. \( W_{t+1} \):
+
+\[
+-(W_t - W_{t+1})^{-\sigma} + \beta \alpha W_{t+1}^{-\sigma} = 0
+\]
+
+\[
+(W_t - W_{t+1})^{-\sigma} = \beta \alpha W_{t+1}^{-\sigma} \tag{2}
+\]
+
+Raise both sides to power \(-1/\sigma\):
+
+\[
+W_t - W_{t+1} = (\beta \alpha)^{-1/\sigma} W_{t+1}
+\]
+
+\[
+\frac{W_{t+1}}{W_t} = \frac{1}{1 + (\beta \alpha)^{-1/\sigma}} = \mu \tag{3}
+\]
+
+
+\textbf{Envelope Condition}
+
+From guess:
+
+\[
+V(W_t) = \frac{\alpha W_t^{1-\sigma}}{1-\sigma} 
+\quad \Rightarrow \quad
+V'(W_t) = \alpha W_t^{-\sigma}
+\]
+
+From Bellman RHS:
+
+\[
+V'(W_t) = (W_t - W_{t+1})^{-\sigma}
+\]
+
+Equating:
+
+\[
+\alpha W_t^{-\sigma} = (W_t - W_{t+1})^{-\sigma}
+\]
+
+\[
+\alpha = (1 - \mu)^{-\sigma} \tag{4}
+\]
+
+
+\textbf{Plug into Policy Ratio (Eq. 3)}
+
+\[
+\mu = \frac{1}{1 + (\beta \alpha)^{-1/\sigma}} \tag{3 revisited}
+\]
+
+Substitute (4):
+
+\[
+\mu = \frac{1}{1 + \big[ \beta (1-\mu)^{-\sigma} \big]^{-1/\sigma}}
+= \frac{1}{1 + \beta^{1/\sigma}(1-\mu)^{-1}}
+\]
+
+\[
+\mu \big(1 - \mu + \beta^{1/\sigma} \big) = 1 - \mu
+\]
+
+Solution:
+
+\[
+\mu = \beta^{1/\sigma} \tag{5}
+\]
+
+From (4):
+
+\[
+\alpha = (1 - \beta^{1/\sigma})^{-\sigma} \tag{6}
+\]
+
+\textbf{Final Answer:}
+
+\[
+\fcolorbox{red}{white}{\(
+V(W_t) = \frac{(1 - \beta^{1/\sigma})^{-\sigma} \, W_t^{1-\sigma}}{1-\sigma}
+\)}
+\]
+
+\[
+\fcolorbox{red}{white}{\(
+W_{t+1} = \beta^{1/\sigma} W_t
+\)}
+\]
+
+\[
+\fcolorbox{red}{white}{\(
+C_t = (1 - \beta^{1/\sigma}) W_t
+\)}
+\]
+
+\section*{\noindent\textbf{Problem 3}}
+\addcontentsline{toc}{section}{Problem 3}
+
+\textbf{[The Hanson Real Business Cycle Closed-Economy Model]}
+
+Suppose that the representative agent wants to maximize lifetime utility subject to a given value of the capital stock \(K_0 > 0\):
+
+\[
+\sum_{t=0}^{\infty} \beta^t u(C_t, L_t),
+\]
+
+where \(L_t\) is time \(t\) leisure and \(L_t = 1 - H_t\), where \(H_t\) is labor. The period utility function is given by:
+
+\[
+u(C_t, 1 - H_t) = \ln C_t + A \ln (1 - H_t),
+\]
+
+with \(A > 0\). The production technology is assumed to be Cobb-Douglas:
+
+\[
+Y_t = K_t^{\alpha} H_t^{1-\alpha},
+\]
+
+and capital accumulation follows the process:
+
+\[
+K_{t+1} = (1-\delta)K_t + I_t,
+\]
+
+where \(0 < \delta < 1\) is the depreciation rate of capital. Finally, market clearing requires that
+
+\[
+Y_t = C_t + I_t.
+\]
+
+\subsection*{\noindent\textbf{a)}}
+\addcontentsline{toc}{subsection}{a)}
+
+Set up the Bellman equation for this problem with \(K_t\) as the state variable and \(K_{t+1}\) and \(H_t\) as the control variables.
+
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\noindent \textbf{Assumptions:}
+
+\begin{itemize}
+    \item State variable: \(K_t\) (capital at time \(t\)).
+    \item Control variables: \(H_t\) (labor at time \(t\)), \(K_{t+1}\) (capital chosen for next period).
+    \item Consumption: \(C_t\).
+    \item Investment: \(I_t\).
+    \item Output: \(Y_t\).
+    \item Leisure: \(L_t = 1 - H_t\).
+\end{itemize}
+
+\noindent \textbf{Utility function:}
+\[
+u(C_t, 1 - H_t) = \ln C_t + A \ln (1 - H_t).
+\]
+
+\noindent \textbf{Production function:}
+\[
+Y_t = K_t^{\alpha} H_t^{1-\alpha}.
+\]
+
+\noindent \textbf{Capital accumulation:}
+\[
+K_{t+1} = (1 - \delta)K_t + I_t 
+\quad \Longleftrightarrow \quad 
+I_t = K_{t+1} - (1 - \delta)K_t.
+\]
+
+\noindent \textbf{Market clearing:}
+\[
+Y_t = C_t + I_t 
+\quad \Longleftrightarrow \quad 
+C_t = Y_t - I_t.
+\]
+
+\noindent Substituting production and investment:
+\[
+C_t = K_t^{\alpha} H_t^{1-\alpha} - \big( K_{t+1} - (1 - \delta)K_t \big).
+\]
+
+\noindent Rewriting:
+\[
+C_t = K_t^{\alpha} H_t^{1-\alpha} - K_{t+1} + (1 - \delta)K_t.
+\tag{1}
+\]
+
+\noindent \textbf{Bellman Equation:}
+
+The representative agent maximizes lifetime utility:
+\[
+V(K_t) 
+= \max_{K_{t+1}, H_t} 
+\Big\{ \ln C_t + A \ln (1 - H_t) + \beta V(K_{t+1}) \Big\},
+\tag{2}
+\]
+
+\noindent subject to the transition constraint \((1)\):
+\[
+C_t = K_t^{\alpha} H_t^{1-\alpha} - K_{t+1} + (1 - \delta)K_t.
+\]
+
+\subsection*{\noindent\textbf{b)}}
+\addcontentsline{toc}{subsection}{b)}
+
+Derive the Intertemporal Budget Constraint (IBC)
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+
+\noindent \textbf{Assumptions:}
+\begin{align*}
+Y_t &= K_t^{\alpha} H_t^{1-\alpha} \tag{A1} \\
+K_{t+1} &= (1-\delta)K_t + I_t \tag{A2} \\
+Y_t &= C_t + I_t \tag{A3} \\
+u(C_t,1-H_t) &= \ln(C_t) + A\ln(1-H_t) \tag{A4}
+\end{align*}
+
+\noindent \textbf{Intertemporal Budget Constraint:} From (A2) and (A3),
+\[
+C_t = K_t^{\alpha} H_t^{1-\alpha} - K_{t+1} + (1-\delta)K_t. \tag{1}
+\]
+
+\noindent \textbf{Bellman Equation:}
+\[
+V(K_t) = \max_{K_{t+1},H_t} \Big\{ \ln(C_t) + A\ln(1-H_t) + \beta V(K_{t+1}) \Big\},
+\tag{2}
+\]
+subject to (1). Substituting (1):
+\[
+V(K_t) = \max_{K_{t+1},H_t} \Big\{ 
+\ln\!\big( K_t^{\alpha} H_t^{1-\alpha} - K_{t+1} + (1-\delta)K_t \big)
++ A\ln(1-H_t) + \beta V(K_{t+1}) \Big\}.
+\tag{3}
+\]
+
+\noindent \textbf{FOC w.r.t. \(K_{t+1}\):}
+\[
+\frac{\partial}{\partial K_{t+1}}
+\Big[ \ln(C_t) + A\ln(1-H_t) + \beta V(K_{t+1}) \Big] = 0.
+\]
+
+Since \(\tfrac{\partial C_t}{\partial K_{t+1}} = -1\):
+\[
+-\frac{1}{C_t} + \beta V'(K_{t+1}) = 0
+\quad \Longrightarrow \quad
+\fcolorbox{red}{white}{$ \displaystyle \frac{1}{C_t} = \beta V'(K_{t+1}) $}.
+\tag{4}
+\]
+
+\noindent \textbf{FOC w.r.t. \(H_t\):}
+\[
+\frac{1}{C_t} \cdot \frac{\partial C_t}{\partial H_t} - \frac{A}{1-H_t} = 0.
+\]
+
+Since \(\tfrac{\partial C_t}{\partial H_t} = K_t^{\alpha}(1-\alpha)H_t^{-\alpha}\):
+\[
+\fcolorbox{red}{white}{$
+\displaystyle \frac{1}{C_t} \, K_t^{\alpha}(1-\alpha)H_t^{-\alpha} = \frac{A}{1-H_t}
+$}.
+\tag{5}
+\]
+
+\noindent \textbf{Envelope Condition:}
+\[
+V'(K_t) = \frac{1}{C_t}\Big( \alpha K_t^{\alpha-1} H_t^{1-\alpha} + (1-\delta) \Big).
+\]
+
+\[
+\fcolorbox{red}{white}{$
+\displaystyle V'(K_t) = \frac{1}{C_t}\left( \alpha K_t^{\alpha-1} H_t^{1-\alpha} + (1-\delta) \right)
+$}.
+\tag{6}
+\]
+
+\noindent \textbf{Final Results:}
+\[
+\fcolorbox{red}{white}{$
+\begin{aligned}
+\frac{1}{C_t} &= \beta V'(K_{t+1}) \quad &(4) \\
+\frac{1}{C_t} K_t^{\alpha}(1-\alpha)H_t^{-\alpha} &= \frac{A}{1-H_t} \quad &(5) \\
+V'(K_t) &= \frac{1}{C_t}\left( \alpha K_t^{\alpha-1} H_t^{1-\alpha} + (1-\delta) \right) \quad &(6)
+\end{aligned}
+$}
+\]
+
+\subsection*{\noindent\textbf{c)}}
+\addcontentsline{toc}{subsection}{c)}
+
+Obtain the optimality conditions for the representative agent
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\noindent \textbf{Assumptions:}
+\begin{align*}
+u(C_t,1-H_t) &= \ln(C_t) + A\ln(1-H_t), \\
+Y_t &= K_t^{\alpha} H_t^{1-\alpha}, \\
+K_{t+1} &= (1-\delta)K_t + I_t, \\
+Y_t &= C_t + I_t.
+\end{align*}
+
+\noindent \textbf{Bellman Equation:}
+\[
+V(K_t) = \max_{K_{t+1},H_t} 
+\Big\{ \ln(C_t) + A\ln(1-H_t) + \beta V(K_{t+1}) \Big\},
+\]
+subject to
+\[
+C_t = K_t^{\alpha} H_t^{1-\alpha} - K_{t+1} + (1-\delta)K_t. \tag{1}
+\]
+
+\noindent \textbf{FOC w.r.t. \(K_{t+1}\):}
+\[
+-\frac{1}{C_t} + \beta V'(K_{t+1}) = 0 
+\quad \Longrightarrow \quad
+\fcolorbox{red}{white}{$ \displaystyle \frac{1}{C_t} = \beta V'(K_{t+1}) $}. \tag{2}
+\]
+
+\noindent \textbf{FOC w.r.t. \(H_t\):}
+\[
+\frac{1}{C_t}(1-\alpha)K_t^{\alpha} H_t^{-\alpha} = \frac{A}{1-H_t}.
+\]
+\[
+\fcolorbox{red}{white}{$
+\displaystyle 
+\frac{(1-\alpha)K_t^{\alpha} H_t^{-\alpha}}{C_t} = \frac{A}{1-H_t}
+$}. \tag{3}
+\]
+
+\noindent \textbf{Envelope Condition:}
+\[
+V'(K_t) = \frac{1}{C_t}\Big(\alpha K_t^{\alpha-1}H_t^{1-\alpha} + (1-\delta)\Big).
+\]
+\[
+\fcolorbox{red}{white}{$
+\displaystyle 
+V'(K_t) = \frac{1}{C_t}\Big(\alpha K_t^{\alpha-1}H_t^{1-\alpha} + (1-\delta)\Big)
+$}. \tag{4}
+\]
+
+\noindent Shift one period forward:
+\[
+V'(K_{t+1}) = \frac{1}{C_{t+1}}
+\Big(\alpha K_{t+1}^{\alpha-1}H_{t+1}^{1-\alpha} + (1-\delta)\Big). \tag{5}
+\]
+
+\noindent \textbf{Euler Equation:}
+
+Substitute (5) into (2):
+\[
+\frac{1}{C_t} = \beta \cdot \frac{1}{C_{t+1}}
+\Big(\alpha K_{t+1}^{\alpha-1}H_{t+1}^{1-\alpha} + (1-\delta)\Big).
+\]
+
+Multiply through by \(C_{t+1}\):
+\[
+\fcolorbox{red}{white}{$
+\displaystyle 
+\frac{C_{t+1}}{C_t} = \beta \Big(\alpha K_{t+1}^{\alpha-1}H_{t+1}^{1-\alpha} + (1-\delta)\Big)
+$}. \tag{6}
+\]
+
+\noindent \textbf{Final Optimality Conditions:}
+
+\[
+\fcolorbox{red}{white}{$
+\begin{aligned}
+\frac{1}{C_t} &= \beta V'(K_{t+1}) \quad &(2) \\
+\frac{(1-\alpha)K_t^{\alpha}H_t^{-\alpha}}{C_t} &= \frac{A}{1-H_t} \quad &(3) \\
+\frac{C_{t+1}}{C_t} &= \beta\Big(\alpha K_{t+1}^{\alpha-1}H_{t+1}^{1-\alpha} + (1-\delta)\Big) \quad &(6)
+\end{aligned}
+$}
+\]
+
+\section*{\noindent\textbf{Problem 4}}
+\addcontentsline{toc}{section}{Problem 4}
+
+\textbf{The Small Open Economy Infinite-Horizon Model}
+
+\noindent
+Consider the small-open economy model of \textit{Topic 2} (with no government spending and no investment). The representative agent has to maximize lifetime utility:
+\[
+\sum_{t=0}^{\infty} \beta^t u(C_t)
+\]
+subject to the sequence of budget constraints:
+\[
+B_{t+1} = (1 + r)B_t + Y_t - C_t,
+\]
+where $B$ is net foreign assets, $r$ is the exogenously given world interest rate, $Y$ is output and $C$ is consumption. Suppose throughout that the period utility function is isoelastic:
+
+\[
+u(C) = \frac{C^{\frac{\sigma - 1}{\sigma}}}{\frac{\sigma - 1}{\sigma}}.
+\]
+
+
+\vspace{1em}
+
+First, solve this dynamic optimization problem using the direct (or sequence) approach.
+
+\subsection*{\noindent\textbf{a)}}
+\addcontentsline{toc}{subsection}{a)}
+
+Set up the optimization problem and derive the Euler equation.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Assumptions}
+
+\[
+u(C)=\frac{C^{\tfrac{\sigma-1}{\sigma}}}{\tfrac{\sigma-1}{\sigma}},\quad \sigma>0,\ \sigma\neq 1
+\quad (A1)
+\]
+\[
+B_{t+1}=(1+r)B_t+Y_t-C_t 
+\quad (A2)
+\]
+
+\textbf{Objective}
+\[
+\max_{\{C_t\}_{t=0}^{\infty}} \sum_{t=0}^{\infty} \beta^t u(C_t)
+\quad (A3)
+\]
+\[
+\max_{\{C_t\}_{t=0}^{\infty}} \sum_{t=0}^{\infty} \beta^t u(C_t)
+\quad \text{s.t. } B_{t+1}=(1+r)B_t+Y_t-C_t
+\quad (1)
+\]
+
+\textbf{Lagrangian}
+\[
+\mathcal{L}=\sum_{t=0}^{\infty}\beta^t 
+\Big[u(C_t)+\lambda_t\big((1+r)B_t+Y_t-C_t-B_{t+1}\big)\Big]
+\quad (2)
+\]
+
+\textbf{FOC w.r.t. \(C_t\)}
+\[
+\frac{\partial \mathcal{L}}{\partial C_t}
+=\beta^t\big(u'(C_t)-\lambda_t\big)=0
+\ \Rightarrow\ 
+u'(C_t)=\lambda_t
+\quad (3)
+\]
+
+\textbf{FOC w.r.t. \(B_{t+1}\)}
+\[
+\frac{\partial \mathcal{L}}{\partial B_{t+1}}
+=-\beta^t\lambda_t+\beta^{t+1}\lambda_{t+1}(1+r)=0
+\ \Rightarrow\ 
+\lambda_t=\beta(1+r)\lambda_{t+1}
+\quad (4)
+\]
+
+\textbf{Euler Equation}
+\[
+u'(C_t)=\beta(1+r)u'(C_{t+1})
+\quad (5)
+\]
+
+\textbf{Derivative of Utility}
+\[
+u'(C)=C^{-1/\sigma}
+\quad (6)
+\]
+
+Substitute (6) into (5):
+\[
+C_t^{-1/\sigma}=\beta(1+r)\,C_{t+1}^{-1/\sigma}
+\quad (7)
+\]
+
+\textbf{Solve for \(C_{t+1}\)}
+\[
+(C_{t+1}/C_t)^{-1/\sigma}=\frac{1}{\beta(1+r)}
+\ \Rightarrow\
+\left(\frac{C_{t+1}}{C_t}\right)^{1/\sigma}=\beta(1+r)
+\ \Rightarrow\
+C_{t+1}=\big[\beta(1+r)\big]^{\sigma} C_t
+\quad (8)
+\]
+
+\[
+\fcolorbox{red}{white}{$\displaystyle C_{t+1}=\big[\beta(1+r)\big]^{\sigma}\,C_t$}
+\]
+
+\subsection*{\noindent\textbf{b)}}
+\addcontentsline{toc}{subsection}{b)}
+
+Derive the intertemporal budget constraint.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Per-period budget}
+\[
+B_{t+1}=(1+r)B_t+Y_t-C_t, \qquad t=0,1,2,\dots \tag{1}
+\]
+
+\textbf{Discount and sum}
+\[
+\frac{B_{t+1}}{(1+r)^{t+1}}=\frac{B_t}{(1+r)^t}+\frac{Y_t-C_t}{(1+r)^t} \tag{2}
+\]
+Sum \(t=0\) to \(T\):
+\[
+\sum_{t=0}^{T}\frac{B_{t+1}}{(1+r)^{t+1}}
+=\sum_{t=0}^{T}\frac{B_t}{(1+r)^t}
++\sum_{t=0}^{T}\frac{Y_t-C_t}{(1+r)^t} \tag{3}
+\]
+
+\textbf{Telescoping}
+\[
+\frac{B_{T+1}}{(1+r)^{T+1}}-B_0
+=\sum_{t=0}^{T}\frac{Y_t-C_t}{(1+r)^t} \tag{4}
+\]
+
+\textbf{Rearrange}
+\[
+\sum_{t=0}^{T}\frac{C_t}{(1+r)^t}
+= B_0+\sum_{t=0}^{T}\frac{Y_t}{(1+r)^t}
+-\frac{B_{T+1}}{(1+r)^{T+1}} \tag{5}
+\]
+
+\textbf{No-Ponzi / TVC}
+\[
+\lim_{T\to\infty}\frac{B_{T+1}}{(1+r)^{T+1}}=0 \tag{6}
+\]
+
+\textbf{Intertemporal budget constraint (date 0)}
+\[
+\fcolorbox{red}{white}{$\displaystyle
+\sum_{t=0}^{\infty}\frac{C_t}{(1+r)^t}
+= B_0+\sum_{t=0}^{\infty}\frac{Y_t}{(1+r)^t}
+$} \tag{IBC-0}
+\]
+
+\textbf{Equivalent, any date \(t\)}
+\[
+\fcolorbox{red}{white}{$\displaystyle
+\sum_{j=0}^{\infty}\frac{C_{t+j}}{(1+r)^j}
+=(1+r)B_t+\sum_{j=0}^{\infty}\frac{Y_{t+j}}{(1+r)^j}
+$} \tag{IBC-}t
+\]
+
+\subsection*{\noindent\textbf{c)}}
+\addcontentsline{toc}{subsection}{c)}
+
+Using the intertemporal budget constraint and the Euler equation, show that the optimal consumption path is:
+\[
+C_t = \frac{r+v}{1+r} W_t
+\]
+where 
+\[
+v \equiv 1 - \beta^{\tfrac{1}{\sigma}} (1+r)^{\tfrac{1}{\sigma}}
+\]
+and wealth is defined as:
+\[
+W_t \equiv (1+r)B_t + \sum_{s=t}^{\infty} \left(\frac{1}{1+r}\right)^{s-t} Y_s.
+\]
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Utility and derivative:}
+\[
+u(C)=\frac{C^{\tfrac{\sigma-1}{\sigma}}}{\tfrac{\sigma-1}{\sigma}},\qquad
+u'(C)=C^{-1/\sigma}
+\]
+
+\textbf{Euler:}
+\[
+u'(C_t)=\beta(1+r)\,u'(C_{t+1})
+\Rightarrow
+C_t^{-1/\sigma}=\beta(1+r)\,C_{t+1}^{-1/\sigma}
+\Rightarrow
+\frac{C_{t+1}}{C_t}=\big[\beta(1+r)\big]^{\sigma}\equiv 1-v
+\]
+\[
+\boxed{\,v \equiv 1-\beta^{\sigma}(1+r)^{\sigma}\,}
+\]
+
+\textbf{Wealth (date $t$):}
+\[
+\boxed{\,W_t \equiv (1+r)B_t+\sum_{s=t}^{\infty}\Big(\tfrac{1}{1+r}\Big)^{s-t}Y_s\,}
+\]
+
+\textbf{IBC (with TVC):}
+\[
+\sum_{j=0}^{\infty}\frac{C_{t+j}}{(1+r)^j}=W_t
+\]
+
+\textbf{Path from Euler:}
+\[
+C_{t+j}=(1-v)^j\,C_t
+\]
+
+\textbf{Plug and sum (geometric):}
+\[
+C_t\sum_{j=0}^{\infty}\left(\frac{1-v}{1+r}\right)^j=W_t
+\quad\Rightarrow\quad
+C_t\cdot\frac{1}{1-\frac{1-v}{1+r}}=W_t
+\quad\Rightarrow\quad
+C_t\cdot\frac{1+r}{r+v}=W_t
+\]
+
+\textbf{Optimal consumption rule (matches prompt):}
+\[
+\fcolorbox{red}{white}{$\displaystyle
+C_t=\frac{r+v}{1+r}\,W_t,\qquad
+v=1-\beta^{\sigma}(1+r)^{\sigma}
+$}
+\]
+
+\textbf{Second}, solve the model using dynamic programming. Suppose the transition law is given by:
+\[
+W_{t+1} = (1+r)\,(W_t - C_t).
+\]
+
+\subsection*{\noindent\textbf{d)}}
+\addcontentsline{toc}{subsection}{d)}
+
+Set up the Bellman equation for this problem.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+\textbf{Objects}
+
+State:
+\[
+W_t \in \mathcal{W}\subseteq \mathbb{R}_+ 
+\]
+
+Control (version 1):
+\[
+C_t \in [0,W_t]
+\]
+
+Transition:
+\[
+W_{t+1}=(1+r)(W_t-C_t)
+\]
+
+\vspace{0.5em}
+\textbf{Bellman (control \(C_t\))} 
+\[
+V(W_t)=\max_{\,0\le C_t\le W_t}
+\Big\{\, u(C_t)+\beta\,V\big((1+r)(W_t-C_t)\big)\,\Big\}
+\]
+
+\vspace{0.5em}
+\textbf{Equivalent form (control \(W_{t+1}\))} 
+
+Solve transition for \(C_t\):
+\[
+C_t=W_t-\frac{W_{t+1}}{1+r}
+\]
+
+Then:
+\[
+V(W_t)=\max_{\,W_{t+1}\ge 0}
+\Big\{\, u\!\left(W_t-\frac{W_{t+1}}{1+r}\right)+\beta\,V(W_{t+1}) \Big\}
+\]
+
+
+\subsection*{\noindent\textbf{e)}}
+\addcontentsline{toc}{subsection}{e)}
+
+Using the Euler equation method, show that the policy function for consumption 
+is exactly the same as what you found under the direct approach in part (c) above.
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+Euler method $\Rightarrow$ policy equals part (c)}
+
+\textbf{Bellman (control $W_{t+1}$):}
+\[
+V(W_t)=\max_{W_{t+1}\ge 0}\Big\{u\!\left(W_t-\frac{W_{t+1}}{1+r}\right)+\beta V(W_{t+1})\Big\},
+\qquad
+C_t\equiv W_t-\frac{W_{t+1}}{1+r}
+\]
+
+\textbf{FOC:}
+\[
+\frac{\partial}{\partial W_{t+1}}:
+\quad
+u'(C_t)\!\left(-\frac{1}{1+r}\right)+\beta V'(W_{t+1})=0
+\quad\Longrightarrow\quad
+u'(C_t)=\beta(1+r)\,V'(W_{t+1})
+\]
+
+\textbf{Envelope:}
+\[
+V'(W_t)=u'(C_t)\cdot\frac{\partial C_t}{\partial W_t}=u'(C_t)
+\quad\Longrightarrow\quad
+V'(W_{t+1})=u'(C_{t+1})
+\]
+
+\textbf{Euler:}
+\[
+u'(C_t)=\beta(1+r)\,u'(C_{t+1})
+\]
+
+\textbf{CRRA: } \(u(C)=\frac{C^{1-\sigma}}{1-\sigma}\)
+\[
+\left(\frac{C_{t+1}}{C_t}\right)^{-\sigma}=\beta(1+r)
+\quad\Longrightarrow\quad
+\frac{C_{t+1}}{C_t}=\big[\beta(1+r)\big]^{1/\sigma}\equiv 1-v
+\]
+\[
+v\equiv 1-\big[\beta(1+r)\big]^{1/\sigma},\qquad 0<v<1
+\]
+
+\textbf{Path:}
+\[
+C_{t+s}=(1-v)^s C_t
+\]
+
+\textbf{IBC (equality by TVC):}
+\[
+\sum_{s=0}^{\infty}\frac{C_{t+s}}{(1+r)^s}=W_t
+\]
+
+\textbf{Substitute path:}
+\[
+C_t\sum_{s=0}^{\infty}\left(\frac{1-v}{1+r}\right)^s=W_t
+\]
+
+\textbf{Geometric series:}
+\[
+\sum_{s=0}^{\infty}\left(\frac{1-v}{1+r}\right)^s
+=\frac{1}{1-\frac{1-v}{1+r}}
+=\frac{1+r}{r+v}
+\]
+
+\textbf{Solve $C_t$:}
+\[
+C_t\cdot\frac{1+r}{r+v}=W_t
+\quad\Longrightarrow\quad
+\fcolorbox{red}{white}{$\displaystyle C_t=\frac{r+v}{1+r}\,W_t$}
+\]
+
+
+\subsection*{\noindent\textbf{f)}}
+\addcontentsline{toc}{subsection}{f)}
+
+Now solve the problem using the guess-and-verify method. Hint: guess that
+\[
+V(W)=\frac{F}{\tfrac{\sigma-1}{\sigma}}\,W^{\tfrac{\sigma-1}{\sigma}},
+\]
+where \(F\) is an undetermined coefficient.
+
+
+
+\vspace{0.5em}
+\noindent\textcolor{formalred}{\textbf{ANSWER:}}
+
+
+\textbf{Bellman (control $W'$):}
+\[
+V(W)=\max_{W'\ge0}\Big\{u\!\Big(W-\frac{W'}{1+r}\Big)+\beta V(W')\Big\},
+\qquad C\equiv W-\frac{W'}{1+r}
+\]
+
+\textbf{Utility (problem’s notation):}
+\[
+u(C)=\frac{C^{\tfrac{\sigma-1}{\sigma}}}{\tfrac{\sigma-1}{\sigma}},
+\qquad
+u'(C)=C^{-1/\sigma}
+\]
+
+\textbf{Guess:}
+\[
+V(W)=\frac{F}{\tfrac{\sigma-1}{\sigma}}\,W^{\tfrac{\sigma-1}{\sigma}}
+\qquad\Rightarrow\qquad
+V'(W)=F\,W^{-1/\sigma}
+\]
+
+\textbf{FOC wrt $W'$:}
+\[
+-\frac{1}{1+r}\,C^{-1/\sigma}+\beta F\,(W')^{-1/\sigma}=0
+\quad\Rightarrow\quad
+\Big(\frac{C}{W'}\Big)^{\!1/\sigma}=\frac{1}{\beta F(1+r)}
+\tag{A}
+\]
+
+\textbf{Shares:} let \(C=\kappa W,\; W'=(1+r)(1-\kappa)W\).
+\[
+\left(\frac{\kappa}{(1+r)(1-\kappa)}\right)^{\!1/\sigma}=\frac{1}{\beta F(1+r)}
+\tag{B}
+\]
+
+\textbf{Envelope \& Euler:}
+\[
+u'(C_t)=\beta(1+r)u'(C_{t+1})
+\ \Rightarrow\
+\left(\frac{C_{t+1}}{C_t}\right)^{1/\sigma}=\beta(1+r)
+\ \Rightarrow\
+\frac{C_{t+1}}{C_t}=g,\quad g\equiv[\beta(1+r)]^{\sigma}
+\]
+\[
+\frac{W_{t+1}}{W_t}=(1+r)(1-\kappa)=g
+\ \Rightarrow\
+\boxed{\ \kappa=1-\frac{g}{1+r}=1-\frac{[\beta(1+r)]^{\sigma}}{1+r}\ }
+\tag{C}
+\]
+
+\textbf{Value matching:}
+\[
+\frac{F}{\tfrac{\sigma-1}{\sigma}}W^{\tfrac{\sigma-1}{\sigma}}
+=\frac{(\kappa W)^{\tfrac{\sigma-1}{\sigma}}}{\tfrac{\sigma-1}{\sigma}}
++\beta\frac{F}{\tfrac{\sigma-1}{\sigma}}\big((1+r)(1-\kappa)W\big)^{\tfrac{\sigma-1}{\sigma}}
+\]
+\[
+F=\kappa^{\tfrac{\sigma-1}{\sigma}}
++\beta F\big((1+r)(1-\kappa)\big)^{\tfrac{\sigma-1}{\sigma}}
+\ \Rightarrow\
+\boxed{\ F=\frac{\kappa^{\tfrac{\sigma-1}{\sigma}}}{1-\beta g^{\tfrac{\sigma-1}{\sigma}}}\ }
+\tag{D}
+\]
+
+\textbf{Plug (C):} \(g=[\beta(1+r)]^{\sigma}\), \(\kappa=1-\dfrac{g}{1+r}=
+1-\beta^{\sigma}(1+r)^{\sigma-1}\).
+\[
+\boxed{\ 
+F=\frac{\Big(1-\beta^{\sigma}(1+r)^{\sigma-1}\Big)^{\tfrac{\sigma-1}{\sigma}}}
+{\,1-\beta^{\sigma}(1+r)^{\sigma-1}\,}
+=\Big(1-\beta^{\sigma}(1+r)^{\sigma-1}\Big)^{-\tfrac{1}{\sigma}}
+}
+\]
+
+\textbf{Value function (verified):}
+\[
+\fcolorbox{red}{white}{$\displaystyle
+V(W)=\frac{F}{\tfrac{\sigma-1}{\sigma}}\,W^{\tfrac{\sigma-1}{\sigma}},
+\qquad
+F=\Big(1-\beta^{\sigma}(1+r)^{\sigma-1}\Big)^{-\tfrac{1}{\sigma}}
+$}
+\]
+
+\textbf{Implied policy (matches part (c)):}
+\[
+C=\kappa W
+=\left(1-\frac{[\beta(1+r)]^{\sigma}}{1+r}\right)W
+=\frac{r+v}{1+r}\,W,\quad v\equiv 1-\beta^{\sigma}(1+r)^{\sigma}.
+\]
+
+
+
+\end{document}
