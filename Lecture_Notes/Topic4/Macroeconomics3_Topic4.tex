@@ -1,0 +1,2350 @@
+\documentclass[12pt]{article}
+
+% --- Paquetes ---
+\usepackage{pifont} 
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\usepackage[spanish,es-tabla]{babel}   % español
+\usepackage[utf8]{inputenc}            % acentos
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{lastpage}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[table]{xcolor} % para \cellcolor y \rowcolor
+\usepackage{colortbl}      % colores en tablas
+\usepackage{float}         % para usar [H] si quieres fijar la tabla
+\usepackage{array}         % mejor control de columnas
+\usepackage{amssymb}       % para palomita
+\usepackage{graphicx}      % para logo github
+\usepackage{hyperref}
+\usepackage{setspace} % para hipervinculo
+\usepackage[normalem]{ulem}
+\usepackage{siunitx}       % Asegúrate de tener este paquete en el preámbulo
+\usepackage{booktabs}
+\sisetup{
+    output-decimal-marker = {.},
+    group-separator = {,},
+    group-minimum-digits = 4,
+    detect-all
+}
+
+% Etiqueta en el caption (en la tabla misma)
+\usepackage{caption}
+\captionsetup[table]{name=Tabla, labelfont=bf, labelsep=period}
+
+% Prefijo en la *Lista de tablas*
+\usepackage{tocloft}
+\renewcommand{\cfttabpresnum}{Tabla~} % texto antes del número
+\renewcommand{\cfttabaftersnum}{.}    % punto después del número
+\setlength{\cfttabnumwidth}{5em}      % ancho para "Tabla 10." ajusta si hace falta
+
+
+
+% --- Márgenes y encabezado ---
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+% Alturas del encabezado (un poco más por las 2–3 líneas del header)
+\setlength{\headheight}{32pt}
+\setlength{\headsep}{20pt}
+
+\definecolor{maroon}{RGB}{128, 0, 0}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+% Regla del encabezado (opcional)
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Encabezado izquierdo
+\fancyhead[L]{%
+  \textcolor{maroon}{\textbf{El Colegio de México}}\\
+  \textbf{Macroeconomics 3}
+}
+
+% Encabezado derecho
+\fancyhead[R]{%
+  Topic 4: Uncertainty and International Financial
+Markets
+
+\\
+  \textbf{Jose Daniel Fuentes García}\\
+  Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+}
+
+% Número de página al centro del pie
+\fancyfoot[C]{\thepage}
+
+% --- APLICAR EL MISMO ESTILO A PÁGINAS "PLAIN" (TOC, LOT, LOF) ---
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \fancyhead[L]{%
+    \textcolor{maroon}{\textbf{El Colegio de México}}\\
+    \textbf{Macroeconomics 3}
+  }
+  \fancyhead[R]{%
+    Topic 4: Uncertainty and International Financial
+Markets
+\\
+    \textbf{Jose Daniel Fuentes García}\\
+    Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+  }
+  \fancyfoot[C]{\thepage}
+}
+
+% Pie de página centrado
+\fancyfoot[C]{\thepage\ de \pageref{LastPage}}
+
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Color principal ---
+\definecolor{formalblue}{RGB}{0,51,102} % azul marino sobrio
+
+% --- Estilo de títulos ---
+\titleformat{\section}[hang]{\bfseries\Large\color{formalblue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\bfseries\large\color{formalblue}}{\thesubsection}{1em}{}
+
+
+% --- Listas ---
+\setlist[itemize]{leftmargin=1.2em}
+
+% --- Sin portada ---
+\title{}
+\author{}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{-1cm}
+    \noindent
+    \begin{minipage}[t]{0.49\textwidth}
+        \includegraphics[height=2.2cm]{colmex.jpg}
+    \end{minipage}%
+    \begin{minipage}[t]{0.49\textwidth}
+        \raggedleft
+        \includegraphics[height=2.2cm]{cee.jpg}
+    \end{minipage}
+
+    \vspace*{2cm}
+
+    \begin{center}
+        \Huge \textbf{CENTRO DE ESTUDIOS ECONÓMICOS} \\[1.5em]
+        \Large Maestría en Economía 2024--2026 \\[2em]
+        \Large Macroeconomics 3 \\[3em]
+        \LARGE \textbf{Topic 4: Uncertainty and International Financial
+Markets
+} \\[6em]
+        \large \textbf{Disclaimer:} I AM NOT the original intellectual author of the material presented in these notes. The content is STRONGLY based on a combination of lecture notes (Stephen McKnight), textbook references, and personal annotations for learning purposes. Any errors or omissions are entirely my own responsibility.\\[0.9em]
+        
+    \end{center}
+
+    \vfill
+\end{titlepage}
+
+\newpage
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+\newpage
+
+\section*{\noindent\textbf{4.1 Introduction and Aims}}
+\addcontentsline{toc}{section}{4.1 Introduction and Aims}
+
+\begin{itemize}
+\item \textbf{International financial markets} offer a wide variety of assets for trade.
+
+\item So far in this course, we’ve only focused on a \textbf{single foreign riskless asset} and how it helps countries \textit{smooth consumption} over time.
+
+\item The models we’ve studied have \textit{ignored uncertainty and risk}.
+
+\item In reality, there are many different assets, and people often trade them to \textbf{protect themselves against future economic shocks}.
+
+\item One way to manage risk is to buy assets with \textit{uncertain payoffs}—which may perform well when the individual faces \textbf{bad luck elsewhere}.
+
+\item \textbf{International trade in risky assets} can change how economies respond to \textbf{unexpected shocks} in terms of consumption, investment, and the current account.
+
+\item We'll begin by assuming a world with \textit{no restrictions on insurance contracts}, meaning any type of risk can be insured.
+
+\item This strong assumption helps us clearly analyze the \textbf{economic effects of risk and risk markets}.
+
+\item Then, we’ll move beyond the full-insurance (Arrow-Debreu) setting and consider \textbf{portfolio diversification with limited asset trade}.
+
+\item Specifically, countries will only be able to trade \textbf{risky assets linked to their output uncertainty}.
+
+\item We now introduce a \textbf{third key role} of international financial markets:
+  \begin{enumerate}
+    \item Smooth consumption
+    \item Finance investment needs
+    \item \textbf{Insurance against risk}
+  \end{enumerate}
+
+The main questions we’ll explore are:
+  \begin{enumerate}
+    \item Is full insurance optimal under uncertainty?
+    \item How do \textbf{country-specific} vs. \textbf{global shocks} affect outcomes?
+    \item What happens in \textbf{complete vs. incomplete markets}?
+    \item Are there \textbf{cross-country correlations in consumption}, and why?
+  \end{enumerate}
+
+\item \textbf{Intuition:} Until now, we’ve used safe assets to stabilize consumption. Now, we look at how \textbf{risky asset trade helps countries insure against uncertainty}, and why full insurance may not always occur in practice.
+\end{itemize}
+
+\newpage
+
+\underline{\textbf{Reading}}
+
+\begin{itemize}
+\item \textbf{Obstfeld and Rogoff (1996)}: Chapter 5, Sections 5.1–5.1.6, Sections 5.2–5.2.1, and Section 5.3.
+
+\item \textbf{Végh (2013)}: Chapter 2, Section 2.3.
+
+\item \textbf{Obstfeld and Rogoff (2001)}: “\textit{The Six Major Puzzles in International Macroeconomics. Is There a Common Cause?}” \textit{NBER Macroeconomics Annual 2000}, pp. 359–372.
+
+\item \textbf{Lewis (1999)}: “\textit{Trying to Explain the Home Bias in Equities and Consumption}”, \textit{Journal of Economic Literature}, 37, pp. 571–608.
+\end{itemize}
+
+\section*{\noindent\textbf{4.2 Arrow-Debreu Securities and Complete Asset Markets}}
+\addcontentsline{toc}{section}{4.2 Arrow-Debreu Securities and Complete Asset Markets}
+
+\begin{itemize}
+\item In \textbf{complete asset markets}, a \textbf{state-contingent} asset exists for every possible risk. These are called \textbf{Arrow-Debreu securities}.
+
+\item This is a strong assumption—real-world issues like \textit{moral hazard} and \textit{incomplete contracts} make full insurance against all risks impossible.
+
+\item Still, the Arrow-Debreu setup helps us think clearly about \textbf{macroeconomic uncertainty and risk}.
+
+\item When uncertainty is present, we assume there are multiple \textbf{“states of nature”} (or \textit{states of the world}) that can occur.
+
+\item In simple models, a “state of nature” is just a possible outcome for an economic variable—for example, income might be \textit{“high”} or \textit{“low”}, or an individual might be \textit{“lucky”} or \textit{“unlucky”}.
+
+\item By introducing uncertainty into the model, we uncover a key role of international capital markets: \textbf{insurance against risk}.
+
+\item Under a complete markets framework, we assume there’s a market for \textbf{every possible state of nature}.
+
+\item To model risky asset trade, we use a simple setting: a \textbf{small open endowment economy} that lasts for two periods (labeled 1 and 2), and produces/consumes a \textbf{single traded good}.
+
+\item For simplicity, we assume that in period 2 there are only \textbf{two possible states of nature}. These states occur randomly based on a known probability and differ only in their \textbf{output levels}.
+
+\item \textbf{Intuition:} Arrow-Debreu assets let countries insure perfectly against all possible future events. Though unrealistic, this ideal case helps us understand how risk, uncertainty, and asset markets interact—and why real-world outcomes differ when markets are incomplete.
+\end{itemize}
+
+\section*{\noindent\textbf{4.3 A Two-Period Small-Open Economy Model}}
+\addcontentsline{toc}{section}{4.3 A Two-Period Small-Open Economy Model}
+
+\begin{itemize}
+\item We now extend the \textbf{deterministic} (without uncertainty) 2-period small-open economy endowment model from Topic 1 to a \textbf{stochastic} (with uncertainty) version.
+
+\item There are \textbf{two key differences} in this setup:
+  \begin{enumerate}
+    \item We now allow for \textbf{two possible states of nature} at date 2, where the realization is \textit{uncertain} from the perspective of date 1. These two states:
+    \begin{itemize}
+      \item \textbf{Occur randomly}, according to a known probability distribution. We assume state $s$ occurs with probability $\pi(s)$, for $s = 1, 2$.
+      \item Differ only in their \textbf{endowment levels} in period 2: $Y_2(1)$ and $Y_2(2)$.
+    \end{itemize}
+
+    \item We assume economic agents can \textbf{prearrange trades}—through explicit or implicit contracts—in assets that offer at least partial insurance against future uncertainty.
+  \end{enumerate}
+
+\item As before, we assume a \textbf{constant population size} of 1, so the representative individual’s endowment and consumption match the national aggregates.
+
+\item The representative individual:
+  \begin{itemize}
+    \item Has a known (certain) endowment $Y_1$ in period 1.
+    \item Starts with \textbf{zero net foreign assets}.
+  \end{itemize}
+
+\item All of this information is summarized using a \textbf{time-event tree}, a standard tool to represent economies under uncertainty (shown in the next figure).
+
+\item \textbf{Intuition:} Compared to the earlier model, this version adds \textbf{uncertainty about future outcomes}. With only two future states and known probabilities, we can now explore how agents insure against risk and prepare for different possible endowment levels.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    {\captionsetup{font=small}
+    \caption{Time Event Tree}  % ← afuera del grupo
+    \vspace{0.3em}
+    
+    \includegraphics[width=0.90\textwidth]{grafi2.jpg}
+    \end{figure}
+
+\begin{itemize}
+\item It is helpful to \textbf{compare the two-period endowment model with uncertainty} to the previous version \textbf{without uncertainty}.
+
+\item From the time-event diagram, we can clearly see both the differences and the shared underlying structure.
+
+\item While both models have two periods, the version with uncertainty is more complex: \textbf{period 2 is split into two states}, $s = 1, 2$, each with a known probability $\pi(s)$.
+
+\item In \textbf{state 1 of period 2}, the second-period endowment $Y_2(1)$ is assumed to be \textit{less than} the first-period endowment $Y_1$.
+
+\item In \textbf{state 2}, the endowment $Y_2(2)$ is \textit{greater than} $Y_1$.
+
+\item In other words, agents understand that their future income will depend on which state occurs, and they \textbf{know the probabilities} of each state.
+
+\item Formally, we write:
+\[
+Y_2 = 
+\begin{cases}
+Y_2(1) \quad \text{with probability } \pi(1) \\
+Y_2(2) \quad \text{with probability } \pi(2)
+\end{cases}
+\]
+
+\item \textbf{Intuition:} Compared to the previous model, this version adds \textbf{uncertainty in future income}. The economy faces two possible outcomes, and agents plan ahead based on the likelihood of each one.
+\end{itemize}
+
+\begin{itemize}
+\item When income is uncertain, an individual cannot predict her exact future consumption. Instead, she forms \textbf{state-contingent plans}, each tied to a possible future state.
+
+\item To analyze her behavior, we focus on these \textit{contingent consumption plans} across possible outcomes.
+
+\item Which consumption plan is realized depends on the actual state that occurs and the economic path up to that point.
+
+\item Let $C_2(s)$ denote the consumption on date 2 if state $s = 1, 2$ occurs.
+
+\item Lifetime utility is measured on date 1 as the \textbf{expected value} of future utility from these plans.
+
+\item Let $C_1$ be consumption on date 1 — it is not state-contingent.
+
+\item Then, the individual’s lifetime expected utility on date 1 is:
+\[
+U_1 = \pi(1)\{u(C_1) + \beta u[C_2(1)]\} + \pi(2)\{u(C_1) + \beta u[C_2(2)]\}
+\]
+\item Since $\pi(1) + \pi(2) = 1$, we simplify to:
+\[
+U_1 = u(C_1) + \pi(1)\beta u[C_2(1)] + \pi(2)\beta u[C_2(2)] \tag{1}
+\]
+
+\item \textbf{Intuition:} Individuals can’t know their exact future income, but they can plan for different outcomes. Expected utility weighs each plan by the probability of the state that triggers it.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\underline{\textbf{Arrow-Debreu Securities and Complete Asset Markets: Assumptions}}
+
+\begin{itemize}
+\item The concept of complete markets implies several important assumptions:
+
+\begin{enumerate}
+  \item There is a \textbf{global market} where people can trade \textit{contingent claims} (assets that pay based on future states).
+
+  \item These claims are \textbf{risky assets} with payoffs in period 2 that \textit{depend on the state of nature}.
+
+  \item An \textbf{Arrow-Debreu security} (A-D security) is defined as:
+    \begin{itemize}
+      \item A contract that pays 1 unit of output at date 2 if a specific state $s$ occurs, and pays 0 otherwise.
+    \end{itemize}
+
+  \item We assume \textbf{competitive markets} for A-D securities in all states.
+
+  \item Saying that markets are \textbf{complete} means agents can trade one A-D security for \textbf{every possible future state}.
+\end{enumerate}
+
+\item In addition, people can trade \textbf{non-contingent riskless assets} (bonds), which pay $1 + r$ on date 2 regardless of the state — where $r$ is the real interest rate.
+
+\item \textbf{Intuition:} Arrow-Debreu securities let individuals insure against specific future outcomes. With a complete set of these assets, it's possible to fully hedge future consumption risks.
+\end{itemize}
+
+\begin{itemize}
+\item If a complete set of \textbf{Arrow-Debreu (A-D) securities} exists, the bond market becomes \textbf{redundant}—its removal doesn’t change the equilibrium.
+
+\item This is because a portfolio of A-D securities can \textbf{replicate the same payoff} as a risk-free bond.
+
+\item For example, buying $1 + r$ units of state 1 A-D securities and $1 + r$ units of state 2 A-D securities guarantees a payoff of $1 + r$ units on date 2—regardless of which state occurs.
+
+\item Hence, bonds do not provide any additional trading opportunities beyond what A-D securities already offer.
+
+\item Let’s now analyze the \textbf{country’s budget constraint} under uncertainty and complete markets.
+
+\item Let $B_2(s)$ be the representative agent’s net purchase (or holding) of A-D securities for state $s$, made at the end of date 1.
+
+\item Let $\frac{p(s)}{1 + r}$ be the \textbf{world price} of one unit of a claim that pays 1 unit of output in date 2 \textit{if and only if} state $s$ occurs.
+
+\item This price is expressed in date 1 consumption units and is \textbf{exogenously given} from the perspective of a small open economy.
+
+\item \textbf{Intuition:} When all states can be insured using A-D securities, there's no need for a separate risk-free bond—the bond's return can be perfectly replicated by holding the right combination of state-contingent claims.
+\end{itemize}
+
+\begin{itemize}
+\item Note that prices $p(1)$ and $p(2)$ are \textbf{deflated} by the gross risk-free rate $1 + r$ to express them in date 1 consumption terms.
+
+\item The \textbf{asset accumulation identity} for period 1 is:
+\[
+\frac{p(1)}{1 + r} B_2(1) + \frac{p(2)}{1 + r} B_2(2) = Y_1 - C_1 \tag{2}
+\]
+
+\item As we’ve discussed, bonds are not needed in this setup—they are redundant given the presence of A-D securities.
+
+\item When period 2 arrives, the state of nature $s$ is revealed, and uncertainty disappears.
+
+\item From that point on, we’re back to a deterministic world. But now, \textbf{previously signed contracts must be honored}.
+
+\item The economy consumes both its period-2 endowment and the returns from the A-D securities held:
+\[
+C_2(s) = Y_2(s) + B_2(s) \tag{3}
+\]
+
+\item Combining equations (2) and (3), we can eliminate $B_2(1)$ and $B_2(2)$ to derive the \textbf{intertemporal budget constraint}:
+\[
+C_1 + \frac{p(1)C_2(1) + p(2)C_2(2)}{1 + r} = Y_1 + \frac{p(1)Y_2(1) + p(2)Y_2(2)}{1 + r} \tag{4}
+\]
+
+\item Equation (4) is a standard \textbf{present value constraint}: the present value of consumption equals the present value of income, both evaluated at world A-D prices.
+
+\item In this framework, international markets allow for \textbf{smoothing consumption across time and across states of nature}.
+
+\item Let’s define what we mean by \textbf{complete (full) insurance}.
+
+\item Suppose the country expects \textbf{low income in state 1} and \textbf{high income in state 2}. It can insure by:
+  \begin{itemize}
+    \item Selling A-D securities for state 2: $B_2(2) < 0$ (i.e., the country pays out when rich)
+    \item Buying A-D securities for state 1: $B_2(1) > 0$ (i.e., the country receives income when poor)
+  \end{itemize}
+
+\item This lets the country \textbf{stabilize consumption} across states.
+
+\item With this strategy, the agent creates a guaranteed income on date 2:
+\[
+C_2 = p(1)Y_2(1) + p(2)Y_2(2)
+\]
+
+\item For example, by selling both state 1 and state 2 endowments at world market prices:
+\[
+\text{Total assets} = \frac{p(1)Y_2(1) + p(2)Y_2(2)}{1 + r}
+\]
+
+\item This yields a risk-free income of $1 + r$ in period 2, and thus consumption of:
+\[
+C_2 = p(1)Y_2(1) + p(2)Y_2(2)
+\]
+
+\item \textbf{Intuition:} Full insurance allows the country to lock in a stable consumption path—even when future income is uncertain. This is the core purpose of \textbf{financial hedging}.
+
+\item However, an important question remains: \textbf{Is full insurance always optimal?}
+
+\item As we’ll see, the answer is \textbf{not necessarily}—which may come as a surprise!
+\end{itemize}
+
+
+-----------------------------------
+\vspace{.3cm}
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Period 1 Budget Constraint:}
+\[
+\frac{p(1)}{1 + r} B_2(1) + \frac{p(2)}{1 + r} B_2(2) = Y_1 - C_1 \tag{2}
+\]
+
+\textbf{Period 2 Budget Constraint (per state):}
+\[
+C_2(s) = Y_2(s) + B_2(s) \quad \text{for } s = 1, 2 \tag{3}
+\]
+
+\textbf{Substitute (3) into (2):}
+\[
+\frac{p(1)}{1 + r} [C_2(1) - Y_2(1)] + \frac{p(2)}{1 + r} [C_2(2) - Y_2(2)] = Y_1 - C_1
+\]
+
+\textbf{Expand and rearrange:}
+\[
+\frac{p(1)}{1 + r} C_2(1) + \frac{p(2)}{1 + r} C_2(2) = Y_1 - C_1 + \frac{p(1)}{1 + r} Y_2(1) + \frac{p(2)}{1 + r} Y_2(2)
+\]
+
+\textbf{Move all terms to one side:}
+\[
+C_1 + \frac{p(1)}{1 + r} C_2(1) + \frac{p(2)}{1 + r} C_2(2) = Y_1 + \frac{p(1)}{1 + r} Y_2(1) + \frac{p(2)}{1 + r} Y_2(2) \tag{4}
+\]
+
+\textbf{Interpretation:}
+\[
+\text{PV of consumption} = \text{PV of endowment income} \quad \text{at A-D world prices}
+\]
+
+\vspace{0.3cm}
+
+\textbf{Full insurance strategy:}
+
+\textit{Goal: make consumption equal across states} $\Rightarrow C_2(1) = C_2(2) = C_2$
+
+\textbf{From (4):}
+\[
+C_1 + \frac{p(1) + p(2)}{1 + r} C_2 = Y_1 + \frac{p(1)}{1 + r} Y_2(1) + \frac{p(2)}{1 + r} Y_2(2)
+\]
+
+\textbf{Solve for } \( C_2 \):
+
+\[
+C_2 = \frac{p(1)Y_2(1) + p(2)Y_2(2)}{p(1) + p(2)}
+\]
+
+\textbf{Alternative expression:}  
+Since $C_2 = p(1)Y_2(1) + p(2)Y_2(2)$ is income sold at world prices:
+
+\[
+\Rightarrow \text{Agent guarantees a safe consumption level on date 2} \tag{5}
+\]
+
+\textbf{Agent’s strategy:}
+\begin{itemize}
+\item Buy A-D securities for state 1 if poor: $B_2(1) > 0$
+\item Sell A-D securities for state 2 if rich: $B_2(2) < 0$
+\end{itemize}
+
+\textbf{This implies:}
+\[
+\text{Consumption smoothing across states of nature via trade in contingent claims}
+\]
+
+\vspace{0.3cm}
+
+\textbf{Intuition:}  
+Full insurance allows the agent to transform risky future endowments into a flat, predictable consumption path—using market prices as weights.
+}
+
+\vspace{.5cm}
+{\color{blue}
+\textbf{Alternative strategy: sell all future endowments and hedge completely}
+
+\textbf{Sell state-contingent endowments at world A-D prices:}
+
+\[
+\text{Proceeds on date 1} = \frac{p(1)}{1 + r} Y_2(1) + \frac{p(2)}{1 + r} Y_2(2)
+\]
+
+\textbf{Invest all proceeds in a risk-free bond yielding} \( 1 + r \) at date 2:
+
+\[
+C_2 = \left( \frac{p(1)}{1 + r} Y_2(1) + \frac{p(2)}{1 + r} Y_2(2) \right) (1 + r)
+\]
+
+\textbf{Simplify} — cancel out \( 1 + r \):
+
+\[
+C_2 = p(1)Y_2(1) + p(2)Y_2(2)
+\]
+
+\textbf{Conclusion:}  
+With this strategy, the agent \textbf{locks in a deterministic consumption level} in period 2, fully hedging against uncertainty.
+
+}
+----------------------------------------------------------
+\begin{itemize}
+\item The agent chooses savings and portfolio allocations to maximize the \textbf{expected lifetime utility} subject to the intertemporal budget constraint.
+
+\item By substituting equations (2) and (3) into the utility function (1), the problem becomes a maximization over the Arrow-Debreu securities:
+\[
+\max_{B_2(1), B_2(2)} U_1 = u\left[ Y_1 - \frac{p(1)}{1 + r} B_2(1) - \frac{p(2)}{1 + r} B_2(2) \right] + \sum_{s = 1}^{2} \pi(s) \beta u[Y_2(s) + B_2(s)]
+\]
+
+\item The \textbf{first-order conditions (FOCs)} with respect to each A-D security are:
+\[
+\frac{p(s)}{1 + r} u'(C_1) = \pi(s) \beta u'[C_2(s)] \tag{5}
+\]
+
+\item These conditions hold for each state \( s = 1, 2 \).
+
+\item Equation (5) is the \textbf{Euler equation} for optimal portfolio choice using A-D securities. It compares the marginal cost of acquiring a security today with the expected marginal benefit in the future.
+
+\item The left-hand side is the cost today, measured in marginal utility units. The right-hand side is the expected, discounted marginal utility of consumption in state \( s \).
+
+\item Rearranging gives us the marginal rate of substitution between current and future consumption in state \( s \):
+\[
+\frac{\pi(s) \beta u'[C_2(s)]}{u'(C_1)} = \frac{p(s)}{1 + r} \tag{6}
+\]
+
+\item This shows how the agent allocates consumption optimally across time and across states of nature.
+  
+\item \textbf{Intuition:} The agent weighs the benefit of consuming an extra unit today against the discounted, probabilistic benefit of consuming in each possible future state. Optimal allocation occurs when the marginal utilities, adjusted for price and probability, are equalized.
+
+\end{itemize}
+
+--------------------------------------
+
+\textcolor{blue}{\textbf{\uline{Solving for the Optimal Portfolio Allocation}}}
+
+{\color{blue}
+\textbf{Objective:}
+\[
+\max_{B_2(1), B_2(2)} \quad U_1 = u\left[ Y_1 - \frac{p(1)}{1 + r} B_2(1) - \frac{p(2)}{1 + r} B_2(2) \right] + \sum_{s=1}^2 \pi(s) \beta u[Y_2(s) + B_2(s)]
+\]
+
+\textbf{Define:}
+\[
+C_1 = Y_1 - \frac{p(1)}{1 + r} B_2(1) - \frac{p(2)}{1 + r} B_2(2)
+\quad ; \quad
+C_2(s) = Y_2(s) + B_2(s)
+\]
+
+\textbf{Take FOCs w.r.t. } \( B_2(s) \), for \( s = 1, 2 \):
+
+\[
+\frac{\partial U_1}{\partial B_2(s)} =
+- \frac{p(s)}{1 + r} u'(C_1) + \pi(s) \beta u'[C_2(s)] = 0
+\]
+
+\textbf{Rearranged Euler equation:}
+\[
+\frac{p(s)}{1 + r} u'(C_1) = \pi(s) \beta u'[C_2(s)] \tag{5}
+\]
+
+\textbf{Divide both sides by } \( u'(C_1) \):
+
+\[
+\frac{\pi(s) \beta u'[C_2(s)]}{u'(C_1)} = \frac{p(s)}{1 + r} \tag{6}
+\]
+
+\textbf{Interpretation:}
+\[
+\text{MRS between } C_1 \text{ and } C_2(s) = \text{Relative price of state } s \text{ consumption}
+\]
+
+\textbf{This is the Arrow-Debreu intertemporal Euler equation under uncertainty.}
+}
+
+\subsection*{\noindent\textbf{Creating Synthetic Assets from Arrow-Debreu Securities}}
+\addcontentsline{toc}{subsection}{Creating Synthetic Assets from Arrow-Debreu Securities}
+
+\begin{itemize}
+\item Building on the intertemporal Euler conditions from equation (5), we can analyze more complex securities with payoffs across multiple states.
+
+\item A common example is a \textbf{riskless bond} that pays \( 1 + r \) units of output in period 2 for every unit invested in period 1.
+
+\item Such a bond can be \textbf{synthetically created} using Arrow-Debreu (A-D) securities:
+  \begin{itemize}
+    \item Buy \( 1 + r \) units of the A-D security for state 1.
+    \item Buy \( 1 + r \) units of the A-D security for state 2.
+  \end{itemize}
+
+\item This portfolio delivers \( 1 + r \) units in period 2 regardless of which state occurs — replicating a riskless bond.
+
+\item Therefore, the price of this synthetic bond must equal the price of an actual bond:
+\[
+\frac{(1 + r)p(1)}{1 + r} + \frac{(1 + r)p(2)}{1 + r} = 1 \quad \Rightarrow \quad p(1) + p(2) = 1 \tag{7}
+\]
+
+\item More generally, with \( X \) states of nature:
+\[
+\sum_{s = 1}^{X} \frac{(1 + r)p(s)}{1 + r} = \sum_{s = 1}^{X} p(s) = 1
+\]
+
+\item Now, summing the Euler equations (5) across all states:
+\[
+[p(1) + p(2)] u'(C_1) = (1 + r) \beta [\pi(1) u'[C_2(1)] + \pi(2) u'[C_2(2)]]
+\]
+
+\item Using equation (7), we get the \textbf{stochastic Euler equation for a riskless bond}:
+\[
+u'(C_1) = (1 + r) \beta E_1\{u'(C_2)\} \tag{8}
+\]
+
+\item Here, \( E_1\{ \cdot \} \) denotes the expectation taken at date 1 over future marginal utility.
+
+\item Rewriting equation (8), we obtain the \textbf{expected MRS form}:
+\[
+\frac{\beta E_1\{u'(C_2)\}}{u'(C_1)} = \frac{1}{1 + r}
+\]
+
+\item This final expression equates the expected marginal utility tradeoff between current and future consumption to the price of certain future consumption.
+
+\item \textbf{Intuition:} The agent values current consumption against a weighted average of future marginal utilities. When markets are complete, the price of transferring one unit of consumption into the future is exactly \( \frac{1}{1 + r} \)—the inverse of the real interest rate.
+\end{itemize}
+
+----------------------------------
+\textcolor{blue}{\textbf{\uline{Synthetic AD: Full procedure}}}
+
+{\color{blue}
+\textbf{Synthetic bond construction:}
+
+\textbf{Step 1:} Buy \( 1 + r \) units of A-D security for state 1  
+\textbf{Step 2:} Buy \( 1 + r \) units of A-D security for state 2
+
+\textbf{Payoff at date 2:}
+\begin{itemize}
+\item If state 1 occurs: receive \( 1 + r \)
+\item If state 2 occurs: receive \( 1 + r \)
+\end{itemize}
+
+\textbf{Total payoff:}  
+\[
+\text{Riskless payoff} = 1 + r \quad \text{(regardless of state)}
+\]
+
+\textbf{Cost of this portfolio at date 1:}
+\[
+\frac{(1 + r)p(1)}{1 + r} + \frac{(1 + r)p(2)}{1 + r}
+= p(1) + p(2)
+\]
+
+\textbf{Equating to bond price:}
+\[
+p(1) + p(2) = 1 \tag{7}
+\]
+
+\textbf{Generalization:} For \( X \) possible states,
+\[
+\sum_{s = 1}^{X} p(s) = 1
+\]
+
+\textbf{Stochastic Euler derivation (summation of state-specific Euler eqs):}
+\[
+\sum_{s=1}^{2} \frac{p(s)}{1 + r} u'(C_1) = \sum_{s=1}^{2} \pi(s) \beta u'[C_2(s)]
+\]
+
+\textbf{Factor out } \( u'(C_1) \) and use \( p(1) + p(2) = 1 \):
+
+\[
+\frac{u'(C_1)}{1 + r} = \beta E_1\{u'(C_2)\}
+\quad \Rightarrow \quad
+u'(C_1) = (1 + r) \beta E_1\{u'(C_2)\} \tag{8}
+\]
+
+\textbf{Rearranged form:}
+\[
+\frac{\beta E_1\{u'(C_2)\}}{u'(C_1)} = \frac{1}{1 + r}
+\]
+
+\textbf{Interpretation:}
+\[
+\text{Expected MRS} = \text{Price of one unit of future consumption}
+\]
+}
+
+-------------------------------------
+
+\subsection*{\noindent\textbf{Actuarially Fair A-D Securities Prices: More on Optimal Insurance}}
+\addcontentsline{toc}{subsection}{Actuarially Fair A-D Securities Prices: More on Optimal Insurance}
+
+\begin{itemize}
+\item A key implication of the Euler condition (equation 5) is:
+\[
+\frac{\pi(1) u'[C_2(1)]}{\pi(2) u'[C_2(2)]} = \frac{p(1)}{p(2)} \tag{9}
+\]
+
+\item This says that the \textbf{marginal rate of substitution} between state-2 and state-1 consumption must equal the \textbf{relative price} of consumption in those states.
+
+\item But this only leads to equal consumption across states — that is, \( C_2(1) = C_2(2) \) — when:
+\[
+\frac{\pi(1)}{\pi(2)} = \frac{p(1)}{p(2)}
+\]
+
+\item When this condition holds, we say that the A-D prices are \textbf{actuarially fair}.
+
+\item At actuarially fair prices, a country in complete markets will fully insure against all future consumption fluctuations — consumption will be the same no matter which state occurs.
+
+\item If A-D prices are not actuarially fair, then the country will choose to \textbf{tilt consumption across states} — consuming more in some states than in others.
+
+\item Full consumption smoothing across states is actually a \textbf{special case}, not the general outcome.
+
+\item So, \textbf{full insurance is optimal only if}:
+\[
+\frac{\pi(1)}{\pi(2)} = \frac{p(1)}{p(2)}
+\]
+
+\item If this doesn't hold, the optimal plan is to insure partially and \textbf{tilt consumption} depending on the cost of insuring each state.
+
+\item For example, if both states are equally likely (\( \pi(1) = \pi(2) = \frac{1}{2} \)), but state 1 is more expensive to insure (\( p(1) > p(2) \)), then the country will plan to consume \textbf{less in state 1} — it's just too expensive to insure fully.
+
+\item This is just like in real life: if car insurance is expensive, people insure less. Here, the country is doing the same thing across states of nature.
+
+\item Last week we discussed \textbf{consumption tilting across time}. Now, we see \textbf{consumption tilting across states}.
+
+\item \textbf{Intuition:} Think of it like buying travel insurance for two trips — one to a stormy place and one to a sunny place. If insurance for the stormy place is super expensive, you'll buy less of it and just "risk it." That’s what countries do here: they insure more in cheap states and less in expensive ones. Full coverage only happens when insurance is perfectly priced.
+\end{itemize}
+
+\subsection*{The Role of Risk Aversion}
+\addcontentsline{toc}{subsection}{The Role of Risk Aversion}
+
+It is the \textbf{strict concavity} of the period utility function $u(C)$ that makes the expected utility maximizer \textbf{risk averse}, and thus, induces her to be interested in buying insurance.
+
+\bigskip
+
+Look at equation (9):
+\[
+\frac{\pi(1)u'[C_2(1)]}{\pi(2)u'[C_2(2)]} = \frac{p(1)}{p(2)}.
+\]
+
+\textbf{Taking logs of both sides:}
+\[
+\log \left( \frac{\pi(1)}{\pi(2)} \right) + \log u'[C_2(1)] - \log u'[C_2(2)] = \log \left( \frac{p(1)}{p(2)} \right).
+\]
+
+\textbf{Then differentiate totally (treating $\pi(s)$ as fixed):}
+\[
+\frac{1}{u'[C_2(1)]} u''[C_2(1)] dC_2(1) - \frac{1}{u'[C_2(2)]} u''[C_2(2)] dC_2(2) = d \log \left( \frac{p(1)}{p(2)} \right).
+\]
+
+\textbf{Using:} $dx = x d\log(x)$, we can rewrite this as:
+\begin{equation}
+d \log \left( \frac{p(1)}{p(2)} \right) = \frac{C_2(1) u''[C_2(1)]}{u'[C_2(1)]} d \log C_2(1) - \frac{C_2(2) u''[C_2(2)]}{u'[C_2(2)]} d \log C_2(2).
+\tag{10}
+\end{equation}
+
+\textbf{Define the Arrow-Pratt coefficient of relative risk aversion:}
+\[
+\rho(C) = - \frac{C u''(C)}{u'(C)}.
+\]
+
+Assume $\rho(C)$ is constant and equal to $\rho$ for all $C$ (CRRA case). Then equation (10) simplifies to:
+\[
+d \log \left( \frac{C_2(2)}{C_2(1)} \right) = \frac{1}{\rho} \, d \log \left( \frac{p(1)}{p(2)} \right).
+\]
+
+\bigskip
+
+This means that the \textbf{inverse of risk aversion} $1/\rho$ tells us how sensitive the consumption ratio is to changes in relative Arrow-Debreu prices:
+\begin{itemize}
+    \item If $\rho$ is high (very risk averse), the consumer won't shift consumption much even if prices change — \textbf{they prefer insurance}.
+    \item If $\rho$ is low (less risk averse), consumption tilts more aggressively across states when relative prices shift.
+\end{itemize}
+
+\bigskip
+
+\textbf{CRRA utility:}
+\[
+u(C) =
+\begin{cases}
+\frac{C^{1 - \rho}}{1 - \rho} & (\rho > 0,\ \rho \neq 1) \\
+\log(C) & (\rho = 1)
+\end{cases}
+\]
+
+In this class of utility functions, the \textbf{elasticity of intertemporal substitution} is:
+\[
+\sigma = \frac{1}{\rho}.
+\]
+
+\textbf{Key implication:} The CRRA framework links two concepts tightly:
+\begin{itemize}
+    \item Risk aversion,
+    \item Intertemporal (or inter-state) substitution.
+\end{itemize}
+
+So we can't separately adjust how a person reacts to \textit{risk} vs. how they shift consumption across \textit{time or states} — a known limitation of the CRRA form.
+
+\bigskip
+
+\textcolor{blue}{\textbf{Intuition:}}
+
+Imagine you're facing two possible future worlds: one sunny and one stormy. You don’t know which one will come, but you have to plan your spending today. Risk aversion means: \textit{you hate surprises}. You prefer smooth and predictable outcomes. 
+
+Now — insurance (via A-D securities) lets you transfer money between those future worlds. But how much you do that depends on your level of risk aversion:
+
+\begin{itemize}
+    \item If you’re very risk averse (high $\rho$): you want to \textbf{smooth things out}. Even if it's a bit expensive, you’ll move money into the stormy world to make sure you're okay no matter what. That means $C_2(1) \approx C_2(2)$.
+    
+    \item If you're not so risk averse (low $\rho$): you’re okay with risk — so you’ll tilt consumption toward the cheaper state (the one with lower A-D price). You “buy less insurance” and just live with the ups and downs.
+\end{itemize}
+
+And CRRA utility keeps all of this neat and tractable. The math tells us that risk aversion controls how responsive you are to these price differences — high $\rho$ means small changes in consumption even if prices change a lot.
+
+It’s like choosing between buying insurance for every small thing in life vs. just crossing your fingers and hoping for the best!
+
+\subsection*{A Log Utility Example}
+\addcontentsline{toc}{subsection}{A Log Utility Example.}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Utility maximization:}
+\[
+U_1 = \log(C_1) + \pi(1)\beta \log[C_2(1)] + \pi(2)\beta \log[C_2(2)]
+\]
+
+\textbf{Subject to the lifetime budget constraint:}
+\[
+C_1 + \frac{p(1)C_2(1) + p(2)C_2(2)}{1 + r} = W_1
+\]
+
+\textbf{Define present value of lifetime wealth:}
+\[
+W_1 = Y_1 + \frac{p(1)Y_2(1) + p(2)Y_2(2)}{1 + r}
+\]
+
+\textbf{Euler equations (from previous section):}
+\begin{align*}
+C_2(1) &= \frac{\pi(1)\beta(1 + r)}{p(1)}C_1 \\
+C_2(2) &= \frac{\pi(2)\beta(1 + r)}{p(2)}C_1
+\end{align*}
+
+\textbf{Substitute $C_2(1)$ and $C_2(2)$ into budget constraint:}
+\[
+C_1 + \frac{p(1)C_2(1) + p(2)C_2(2)}{1 + r} = W_1
+\]
+
+\[
+C_1 + \frac{p(1) \cdot \frac{\pi(1)\beta(1 + r)}{p(1)}C_1 + p(2) \cdot \frac{\pi(2)\beta(1 + r)}{p(2)}C_1}{1 + r} = W_1
+\]
+
+\textbf{Simplify:}
+\[
+C_1 + \frac{(1 + r)\beta[\pi(1) + \pi(2)]C_1}{1 + r} = W_1
+\Rightarrow C_1 + \beta C_1 = W_1
+\Rightarrow C_1 = \frac{W_1}{1 + \beta}
+\]
+
+\textbf{So:}
+\[
+C_1 = \frac{1}{1 + \beta} \left[Y_1 + \frac{p(1)Y_2(1) + p(2)Y_2(2)}{1 + r} \right] \tag{11}
+\]
+
+\textbf{Now substitute back into the Euler equations:}
+\[
+C_2(s) = \frac{\pi(s)\beta(1 + r)}{p(s)}C_1
+\Rightarrow
+C_2(s) = \frac{\pi(s)\beta}{1 + \beta} \left[Y_1 + \frac{p(1)Y_2(1) + p(2)Y_2(2)}{1 + r} \right]
+\]
+
+\textbf{Current account balance:}
+\[
+CA_1 = rB_1 + Y_1 - C_1
+\]
+
+(Assuming \( B_1 = 0 \)):
+
+\[
+CA_1 = Y_1 - C_1 = Y_1 - \frac{1}{1 + \beta}\left[Y_1 + \frac{p(1)Y_2(1) + p(2)Y_2(2)}{1 + r} \right]
+\]
+
+\textbf{Final result:}
+\[
+CA_1 = \frac{\beta}{1 + \beta}Y_1 - \frac{1}{1 + \beta} \left[\frac{p(1)}{1 + r}Y_2(1) + \frac{p(2)}{1 + r}Y_2(2) \right] \tag{12}
+\]
+
+}
+
+\textbf{Intuition:} \\
+With \textbf{log utility}, the representative agent's choices become much easier to characterize. \textbf{Consumption} across time and states is determined by the trade-off between \textbf{current income} ($Y_1$) and the \textbf{expected future income} ($Y_2(s)$), taking into account the \textbf{world prices} $p(s)$ and the agent’s \textbf{impatience} (captured by $\beta$).
+
+The Euler equations tell us how to allocate consumption between today and uncertain future states. Because utility is logarithmic, the agent allocates resources in a way that keeps the \textbf{marginal utility per unit of expenditure} equalized across time and states, adjusted by prices and probabilities.
+
+The resulting \textbf{current account balance} simply reflects whether the country is saving or borrowing to smooth consumption across periods and across states. It all comes down to making the best use of \textbf{lifetime resources}.
+
+
+\section*{\noindent\textbf{4.4 Global Two-Country Model}}
+\addcontentsline{toc}{section}{4.4 Global Two-Country Model}
+
+We’ve seen how a small open economy allocates consumption across time and across different possible future states, using world prices of Arrow-Debreu securities. 
+
+But some deeper insights of the complete markets approach only become visible when we zoom out and look at the whole world economy — in general equilibrium.
+So, now we’re extending the model: from one small country to a global two-country setup.
+
+\vspace{0.5cm}
+\textbf{Assumptions:}
+\begin{enumerate}
+    \item There are two countries: \textbf{Home (H)} and \textbf{Foreign (F)}. Foreign variables are denoted with an asterisk (*).
+    
+    \item The setup is similar to the small-open economy: two periods, with uncertainty about output in the second period.
+    
+    \item But now we generalize to $S$ possible future states of nature, indexed by $s = 1, \dots, S$.
+    
+    \item For each state $s$, there’s an Arrow-Debreu security that pays off only in that state.
+    
+    \item Both countries have CRRA utility and the \textbf{same level of risk aversion}.
+\end{enumerate}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+\textbf{Problem setup (Home country)}
+
+The representative agent in the Home country maximizes:
+
+\[
+\max U_1 = u(C_1) + \beta \sum_{s=1}^{S} \pi(s) u(C_2(s))
+\]
+
+Subject to:
+
+\[
+\sum_{s=1}^S \frac{p(s)}{1 + r} B_2(s) = Y_1 - C_1 \tag{14}
+\]
+\[
+C_2(s) = Y_2(s) + B_2(s)
+\]
+
+\textbf{Substituting budget constraints into utility}
+
+Plugging budget into the utility function:
+
+\[
+\max_{B_2(s)} u\left( Y_1 - \sum_{s=1}^{S} \frac{p(s)}{1 + r} B_2(s) \right) + \beta \sum_{s=1}^{S} \pi(s) u\left[ Y_2(s) + B_2(s) \right]
+\]
+
+\textbf{First-order conditions (Euler equations)}
+
+The FOC for each $s = 1, 2, \dots, S$ is:
+
+\[
+\frac{p(s)}{1 + r} u'(C_1) = \pi(s) \beta u'\left[ C_2(s) \right] \tag{15}
+\]
+
+\textbf{Foreign country has symmetric problem}
+
+Same FOC holds for the Foreign country:
+
+\[
+\frac{p(s)}{1 + r} u'(C_1^*) = \pi(s) \beta u'\left[ C_2^*(s) \right]
+\]
+
+\textbf{Global market clearing}
+
+For each period and state:
+
+\[
+C_1 + C_1^* = Y_1 + Y_1^* \tag{16a}
+\]
+\[
+C_2(s) + C_2^*(s) = Y_2(s) + Y_2^*(s) \tag{16b}
+\]
+
+Let total world output be:
+
+\[
+Y_1^w \equiv Y_1 + Y_1^*, \quad Y_2^w(s) \equiv Y_2(s) + Y_2^*(s)
+\]
+
+\textbf{Use CRRA utility}
+
+\[
+u(C) = \frac{C^{1 - \rho}}{1 - \rho}, \quad u'(C) = C^{-\rho}
+\]
+
+Using Euler equations:
+
+\[
+C_2(s) = \left( \frac{\pi(s)\beta(1 + r)}{p(s)} \right)^{\frac{1}{\rho}} C_1 \tag{17a}
+\]
+\[
+C_2^*(s) = \left( \frac{\pi(s)\beta(1 + r)}{p(s)} \right)^{\frac{1}{\rho}} C_1^* \tag{17b}
+\]
+
+\textbf{Add up total consumption in period 2}
+
+Using market clearing:
+
+\[
+Y_2^w(s) = \left( \frac{\pi(s)\beta(1 + r)}{p(s)} \right)^{\frac{1}{\rho}} Y_1^w \tag{18}
+\]
+
+\textbf{Rearranging to find $p(s)$}
+
+Solving for $p(s)$:
+
+\[
+\frac{p(s)}{1 + r} = \pi(s) \beta \left( \frac{Y_2^w(s)}{Y_1^w} \right)^{-\rho} \tag{19}
+\]
+
+\textbf{Actuarially fair condition}
+
+Pick another state $s'$, then:
+
+\[
+\frac{p(s)}{p(s')} = \frac{\pi(s)}{\pi(s')} \left( \frac{Y_2^w(s)}{Y_2^w(s')} \right)^{-\rho} \tag{21}
+\]
+
+Prices will be \textbf{actuarially fair} if world output is constant across states:
+
+\[
+\frac{Y_2^w(s)}{Y_2^w(s')} = 1 \quad \Rightarrow \quad \frac{p(s)}{p(s')} = \frac{\pi(s)}{\pi(s')}
+\]
+
+\vspace{0.5cm}
+
+{\textbf{Intuition:}}We’re modeling a world with two countries that face uncertainty about the future, but they can insure perfectly through complete markets. \textbf{The Arrow-Debreu prices} reflect how much people are willing to pay today for consumption tomorrow in each state. The key insight is that if the countries share the same preferences and have access to the same financial instruments, then prices adjust to ensure markets clear globally. The \textbf{risk aversion} $\rho$ tells us how much future uncertainty matters: the higher it is, the more people value insurance, and this gets baked into the prices.
+
+Thus, \textbf{actuarially fair prices} are obtained if there is no aggregate output uncertainty — that is, for the world economy as a whole.
+
+\begin{itemize}
+    \item In that case, there are no world-wide (or global) shocks affecting the two countries.
+    \item Therefore, both countries can trade Arrow–Debreu securities to hedge their consumption \textbf{only against idiosyncratic (country-specific)} shocks.
+    \item These trades smooth consumption \textit{across states} without needing changes in equilibrium prices.
+\end{itemize}
+
+However, things change when we introduce \textbf{aggregate shocks} — events that affect both countries at the same time.
+
+\begin{itemize}
+    \item Suppose total world output in some state $s'$ is higher than in state $s$. 
+    \item Then, prices must adjust to make sure countries consume relatively more in state $s'$ — the “good” state.
+    \item This means prices will tilt consumption \textbf{toward states where global output is abundant}.
+\end{itemize}
+
+If we look again at Equation (21), we see this more clearly:
+\[
+\frac{p(s)}{p(s')} = \frac{\pi(s)}{\pi(s')} \left[ \frac{Y_2^W(s)}{Y_2^W(s')} \right]^{-\rho}
+\]
+
+\begin{itemize}
+    \item If $Y_2^W(s) < Y_2^W(s')$, then $p(s)/p(s')$ becomes \textbf{higher} than $\pi(s)/\pi(s')$.
+    \item This implies a \textbf{premium} on consuming in the scarce state $s$ and a \textbf{discount} in the abundant state $s'$.
+    \item In plain terms: \textit{you’ll “pay more” to shift consumption into the bad times, and “pay less” to consume in the good times}.
+\end{itemize}
+
+\vspace{0.5em}
+
+\textbf{Bottom line:} Only if there are \textit{no aggregate shocks} will both countries have flat consumption across states (i.e., full insurance). 
+
+\begin{itemize}
+    \item But when $p(s)/p(s') \neq \pi(s)/\pi(s')$, it means that $Y_2^W(s) \neq Y_2^W(s')$ — confirming the presence of global risk.
+    \item And \textbf{global risk cannot be diversified away}, even with complete Arrow–Debreu markets.
+\end{itemize}
+
+\textit{Real-world example:} Countries cannot fully insure themselves against global recessions or disasters — even if the theoretical markets (A–D securities) exist. These events affect everyone, so there’s no one to “trade” risk with.
+
+
+To compute the \textbf{equilibrium real interest rate} \( r \), which is \textbf{endogenous} in this two-country model, we first solve for the equilibrium prices of the Arrow-Debreu securities \( p(s) \).
+
+We start from the \textbf{arbitrage condition}:
+\[
+\sum_{s=1}^S p(s) = 1
+\]
+
+Using equation (21), for any specific state \( s' \), we substitute:
+\[
+p(s) = p(s') \left[ \frac{Y_2^W(s)}{Y_2^W(s')} \right]^{-\rho} \frac{\pi(s)}{\pi(s')} \quad \text{for all } s \neq s'
+\]
+
+Substitute into the arbitrage condition:
+\[
+p(s') + \sum_{s \neq s'} p(s) = 1
+\]
+\[
+p(s') + \sum_{s \neq s'} p(s') \left[ \frac{Y_2^W(s)}{Y_2^W(s')} \right]^{-\rho} \frac{\pi(s)}{\pi(s')} = 1
+\]
+
+Factor out \( p(s') \):
+\[
+p(s') \left[ 1 + \sum_{s \neq s'} \left( \left[ \frac{Y_2^W(s)}{Y_2^W(s')} \right]^{-\rho} \frac{\pi(s)}{\pi(s')} \right) \right] = 1
+\]
+
+Add the \( s = s' \) term to the sum:
+\[
+p(s') \left[ \sum_{s=1}^S \left[ \frac{Y_2^W(s)}{Y_2^W(s')} \right]^{-\rho} \frac{\pi(s)}{\pi(s')} \right] = 1
+\]
+
+Solve for \( p(s') \):
+\[
+p(s') = \frac{1}{\sum_{s=1}^S \left[ \frac{Y_2^W(s)}{Y_2^W(s')} \right]^{-\rho} \frac{\pi(s)}{\pi(s')}}
+\]
+
+Simplify:
+\[
+p(s') = \frac{\pi(s') \left[ Y_2^W(s') \right]^{-\rho}}{\sum_{s=1}^S \pi(s) \left[ Y_2^W(s) \right]^{-\rho}}
+\]
+
+Now plug this into equation (20):
+\[
+p(s') = (1 + r) \pi(s') \beta \left[ \frac{Y_2^W(s')}{Y_1^W} \right]^{-\rho}
+\]
+
+Equating both expressions for \( p(s') \):
+\[
+\frac{\pi(s') \left[ Y_2^W(s') \right]^{-\rho}}{\sum_{s=1}^S \pi(s) \left[ Y_2^W(s) \right]^{-\rho}} = (1 + r) \pi(s') \beta \left[ \frac{Y_2^W(s')}{Y_1^W} \right]^{-\rho}
+\]
+
+Cancel terms:
+\[
+\frac{1}{\sum_{s=1}^S \pi(s) \left[ Y_2^W(s) \right]^{-\rho}} = (1 + r) \beta \left[ \frac{1}{Y_1^W} \right]^{-\rho}
+\]
+
+Solve for \( 1 + r \):
+\[
+1 + r = \frac{(Y_1^W)^{-\rho}}{\beta \sum_{s=1}^S \pi(s) \left[ Y_2^W(s) \right]^{-\rho}}
+\]
+
+\textbf{Intuition} 
+
+\begin{itemize}
+    \item \textbf{If current world output \( Y_1^W \) is high}, people want to save more — this pushes down \textbf{interest rates}.
+    \item \textbf{If expected future output \( Y_2^W(s) \) is high}, future consumption is abundant — this pushes up \textbf{interest rates}.
+    \item So, \textit{interest rates adjust to balance consumption over time}, ensuring that agents want to smooth consumption across periods and across states.
+    \item The world interest rate captures the \textbf{intertemporal price of consumption} at the global level.
+\end{itemize}
+
+\subsection*{Equilibrium Consumption Levels}
+\addcontentsline{toc}{subsection}{Equilibrium Consumption Levels}
+
+\begin{itemize}
+    \item The complete-markets model has strong implications for \textbf{correlations in international consumption} — across time and across states of nature.
+    
+    \item These predictions are so strong that they’ve led to the \textbf{international consumption correlation puzzle} in macroeconomics.
+    
+    \item Why? Because both Home and Foreign agents face the same state-contingent security prices and equate their \textbf{marginal rates of substitution (MRS)} across states to those prices.
+    
+    \item Rearranging the Euler equations for both countries gives:
+\end{itemize}
+
+\begin{equation}
+    \frac{\pi(s) \beta u'[C_2(s)]}{u'(C_1)} = \frac{p(s)}{1+r} = \frac{\pi(s) \beta u'[C_2^*(s)]}{u'(C_1^*)}
+    \tag{22}
+\end{equation}
+
+\begin{equation}
+    \frac{\pi(s) u'[C_2(s)]}{\pi(s') u'[C_2(s')]} = \frac{p(s)}{p(s')} = \frac{\pi(s) u'[C_2^*(s)]}{\pi(s') u'[C_2^*(s')]}
+    \tag{23}
+\end{equation}
+
+\textit{Intuition:} \textbf{All agents face the same prices}, so everyone adjusts consumption the same way across different states. This leads to strong international comovement in consumption.
+
+\vspace{0.5em}
+
+Now using the CRRA utility function: \( u'(C) = C^{-\rho} \), and combining with equation (19), we get:
+
+\begin{equation}
+    \frac{\pi(s)[C_2(s)]^{-\rho}}{\pi(s')[C_2(s')]^{-\rho}} = 
+    \frac{\pi(s)}{\pi(s')} \left( \frac{Y_2^W(s)}{Y_2^W(s')} \right)^{-\rho}
+    = \frac{\pi(s)[C_2^*(s)]^{-\rho}}{\pi(s')[C_2^*(s')]^{-\rho}}
+\end{equation}
+
+\[
+\Rightarrow \frac{C_2(s)}{C_2(s')} = \frac{Y_2^W(s)}{Y_2^W(s')} = \frac{C_2^*(s)}{C_2^*(s')}
+\tag{24}
+\]
+
+\textit{Intuition:} \textbf{Consumption tracks global output.} If global output is high in some state, both countries consume more in that state.
+
+\vspace{0.5em}
+
+Equation (24) implies consumption in each country is proportional to world output. That is:
+
+\begin{equation}
+    \frac{C_2(s)}{Y_2^W(s)} = \mu, \qquad 
+    \frac{C_2^*(s)}{Y_2^W(s)} = 1 - \mu
+\end{equation}
+
+\textit{Intuition:} \textbf{Each country consumes a fixed share of global output}, regardless of which state occurs.
+
+\vspace{0.5em}
+
+From equation (22) and (19):
+
+\begin{equation}
+    \frac{\pi(s)\beta[C_2(s)]^{-\rho}}{C_1^{-\rho}} = 
+    \pi(s)\beta \left( \frac{Y_2^W(s)}{Y_1^W} \right)^{-\rho}
+    = \frac{\pi(s)\beta[C_2^*(s)]^{-\rho}}{(C_1^*)^{-\rho}}
+\end{equation}
+
+\[
+\Rightarrow \frac{C_2(s)}{C_1} = \frac{Y_2^W(s)}{Y_1^W} = \frac{C_2^*(s)}{C_1^*}
+\tag{25}
+\]
+
+\textit{Intuition:} \textbf{Growth in consumption equals growth in world output.} Both Home and Foreign follow the same path.
+
+\vspace{0.5em}
+
+Equation (25) implies that consumption shares stay constant over time:
+
+\[
+\frac{C_2(s)}{Y_2^W(s)} = \mu = \frac{C_1}{Y_1^W}, \qquad 
+\frac{C_2^*(s)}{Y_2^W(s)} = 1 - \mu = \frac{C_1^*}{Y_1^W}
+\]
+
+\textit{Intuition:} Countries’ share of world output in \textbf{period 1 equals their share in period 2} — total smoothing over time and states.
+
+\vspace{1em}
+
+\begin{itemize}
+    \item Thus, when world output is uncertain in period 2, equilibrium prices \textbf{do not} imply constant consumption across states.
+    
+    \item However, consumption is still \textbf{internationally diversified}: any risk a country bears is entirely due to global output shocks — not country-specific ones.
+\end{itemize}
+
+
+\begin{itemize}
+    \item A convenient way to summarize the conclusions from the two-country model is to use an \textbf{Edgeworth box diagram} for the case of \( S = 2 \).
+    
+    \item The two axes of the graph correspond to the \textbf{endowment available to the world economy} in each state of nature \textbf{in period 2}.
+    
+    \item The diagram is drawn with a horizontal axis longer than the vertical axis — meaning that the world economy has a higher endowment in \textbf{state 1} than in \textbf{state 2}.
+    
+    \item The origin for the Home representative consumer is placed at the \textbf{bottom-left} corner, denoted \( O^H \), as usual.
+    
+    \item For the Foreign consumer, the diagram is perceived \textbf{upside down}, with their origin at the \textbf{top-right} corner, denoted \( O^F \). This creates a standard Edgeworth box setup.
+    
+    \item Suppose nature draws a specific endowment point \( A \). In this example:
+    \begin{itemize}
+        \item Home has more output than Foreign in both states.
+        \item However, Home is \textbf{relatively better} endowed with output in \textbf{state 1}.
+        \item Foreign is \textbf{relatively better} endowed with output in \textbf{state 2}.
+    \end{itemize}
+    
+    \item \textbf{Equilibrium point \( E \)} is determined by trade: Home sells state 1 claims to Foreign and buys state 2 claims.
+    
+    \item The relative price of the contingent securities, \( \frac{p(1)}{p(2)} \), is equal to the \textbf{absolute slope of the line} \( EA \) in the Edgeworth box.
+\end{itemize}
+
+\vspace{0.5em}
+
+\textit{Intuition:} The Edgeworth box is a \textbf{visual tool} that helps us see how countries \textbf{reallocate risk} through contingent claims. Home has more to lose in state 1, so it insures by selling part of that endowment and buying insurance (via claims) on state 2 — where it's worse off. The slope of the line between the endowment and the equilibrium tells you the \textbf{relative value of insurance} across states.
+
+\begin{figure}[H]
+    \centering
+    {\captionsetup{font=small}
+    \caption{Edgeworth Box}  % ← afuera del grupo
+    \vspace{0.3em}
+    
+    \includegraphics[width=0.90\textwidth]{grafi3.jpg}
+    \end{figure}
+
+    \begin{itemize}
+    \item In other words, the initial endowment point \( A \) is \textbf{not Pareto efficient}. Through the trade of Arrow-Debreu securities, both countries are able to reach the \textbf{efficient point \( E \)}.
+    
+    \item Point \( E \) is a \textbf{Pareto optimum} for both countries: it is not possible to make one country better off without making the other country worse off. All mutually beneficial trading opportunities are exhausted at this point.
+\end{itemize}
+
+\vspace{0.5em}
+
+\textit{Intuition:} Think of point \( A \) as nature's draw — it tells us how much each country has in each state. But that’s not the end! Through trading A-D securities, both countries shift toward point \( E \), where their \textbf{risk preferences and endowments are aligned optimally}. No more insurance gains are left — they’ve squeezed all the value out of trade, and that's what makes point \( E \) \textbf{Pareto efficient}.
+
+
+\section*{\noindent\textbf{4.5 Puzzle 2: The International Consumption Correlations Puzzle}}
+\addcontentsline{toc}{section}{4.5 Puzzle 2: The International Consumption Correlations Puzzle}
+
+A powerful prediction of our two-country, complete asset market model is that Home and Foreign consumption growth rates are equalized:
+
+\begin{equation}
+    \frac{C_2(s)}{C_1} = \frac{C_2^*(s)}{C_1^*}
+    \tag{26}
+\end{equation}
+
+Hence, a key prediction of the model is the following:
+
+\textbf{Prediction 1:} \textit{The (per capita) consumption growth rates for different countries should be highly correlated.}
+
+Indeed, in our simplified model, consumption growth rates across countries should be \textbf{perfectly correlated}.
+
+\bigskip
+
+A second powerful prediction of the model is that a country’s consumption share of world consumption is \textbf{constant over time}:
+
+\[
+    \frac{C_2(s)}{Y_2^w(s)} = \mu = \frac{C_1}{Y_1^w}
+\]
+
+\begin{itemize}
+    \item Hence, domestic and world consumption growth is perfectly correlated.
+    \item However, if countries experience different \textbf{output shocks}, then output may have low correlations across countries.
+    \item Individuals in different countries should optimally \textbf{diversify their domestic output risk} by purchasing claims on other countries’ output.
+    \item In this case, consumption growth rates should still have a high correlation, even if output growth rates do not.
+\end{itemize}
+
+\textbf{Prediction 2:} \textit{Domestic and world (per capita) consumption growth rates should be highly correlated even when domestic and world (per capita) output growth rates are not.}
+
+\bigskip
+
+However, the predictions of our model do not match what is observed in the data:
+
+\begin{itemize}
+    \item The following table presents estimates of consumption growth rate correlations for the G7, for the period 1973--1992.
+    \item By inspection, the consumption correlations between these countries are \textbf{nowhere near 1}.
+    \item Hence, \textbf{cross-country consumption correlations are too low!}
+\end{itemize}
+
+\paragraph{Intuition.}
+\textbf{If markets are complete}, then people in different countries can use state-contingent claims (Arrow-Debreu securities) to fully insure themselves against any idiosyncratic (country-specific) output risk.
+
+This means that:
+\begin{itemize}
+    \item Consumption does not have to follow local output. People can smooth consumption by trading claims internationally.
+    \item As a result, \textbf{consumption growth rates across countries should move together}, regardless of differences in output paths.
+    \item Also, each country's share of global consumption stays constant over time, so consumption is diversified \textit{globally}, not just locally.
+\end{itemize}
+
+\textbf{But...} in the data, this prediction fails: consumption growth rates across countries are not highly correlated. This mismatch between theory and evidence is called the \textbf{International Consumption Correlations Puzzle}.
+
+\begin{table}[H]
+\centering
+\caption{Correlations in per capita private consumption growth: 1973--1992}
+\begin{tabular}{lcccccc}
+\toprule
+         & France & Germany & Italy & Japan & UK & USA \\
+\midrule
+Canada  & 0.25   & 0.31    & 0.44  & 0.05  & 0.40 & 0.64 \\
+France  &        & 0.52    & 0.27  & 0.68  & 0.43 & 0.51 \\
+Germany &        &         & 0.27  & 0.40  & 0.33 & 0.51 \\
+Italy   &        &         &       & 0.21  & 0.30 & 0.13 \\
+Japan   &        &         &       &       & 0.59 & 0.50 \\
+UK      &        &         &       &       &      & 0.65 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item The next table presents estimates of \textbf{correlation coefficients} between national \textit{per capita consumption growth} and world per capita consumption growth.
+    
+    \item These are compared with correlation coefficients between national per capita \textit{output growth} and world per capita output growth.
+    
+    \item The theory predicts that \textbf{consumption growth rates} should be more highly correlated than \textbf{output growth rates}. In fact, the evidence shows the \textit{opposite} pattern!
+    
+    \item For the \textbf{seven largest industrial countries}, with the exception of the UK, the correlation between \textbf{domestic and world consumption growth} is \textit{lower} than the correlation between \textbf{domestic and world output growth}.
+    
+    \item There are numerous studies that have analyzed the \textbf{consumption correlations puzzle}.
+    
+    \item The overall conclusion is that the degree of \textbf{international consumption risk sharing} is generally low, indeed much lower than that predicted by theory.
+    
+    \item Since these findings are difficult to reconcile with risk-sharing, this has become known as the \textit{International Consumption Correlations Puzzle}.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Country} & \textbf{Corr ($\hat{c}, \hat{c}^w$)} & \textbf{Corr ($\hat{y}, \hat{y}^w$)} \\
+\midrule
+Canada & 0.56 & 0.70 \\
+France & 0.45 & 0.60 \\
+Germany & 0.63 & 0.70 \\
+Italy & 0.27 & 0.51 \\
+Japan & 0.38 & 0.46 \\
+United Kingdom & 0.63 & 0.62 \\
+United States & 0.52 & 0.68 \\
+\midrule
+OECD average & 0.43 & 0.52 \\
+Developing country average & $-0.10$ & 0.05 \\
+\bottomrule
+\end{tabular}
+\caption{Consumption and Output: Correlations between Domestic and World Growth Rates, 1973--1992}
+\end{table}
+
+\begin{itemize}
+    \item The table compares the correlation between \textbf{domestic and world consumption growth} \textit{vs.} \textbf{domestic and world output growth} for various countries.
+    \item According to theory, consumption growth correlations should be \textbf{higher} than output growth correlations due to \textbf{international risk sharing}.
+    \item However, the data shows that in many cases (e.g., France, Italy, Japan), output is \textit{more} correlated with world output than consumption is with world consumption.
+    \item This contradicts theoretical predictions and highlights the \textbf{International Consumption Correlations Puzzle}.
+    \item The low correlation of consumption growth with the world, especially in developing countries (even negative on average), indicates \textbf{limited international consumption risk sharing}.
+\end{itemize}
+
+Some possible explanations for the \textbf{international consumption correlations puzzle} are:
+
+\begin{enumerate}
+    \item \textbf{Non-Tradable Goods:} Including non-traded goods in the model lowers cross-country consumption correlations because consumers can’t fully smooth consumption across countries if some goods can’t be traded.\\
+    \textit{Intuition:} If you can’t trade everything, you can’t insure against all shocks — consumption becomes more country-specific.\\
+    \textbf{Limitation:} These models often suffer from another inconsistency known as the \textit{Backus-Smith puzzle}.
+    
+    \item \textbf{Incomplete Asset Markets:} In reality, countries cannot insure against all possible future states of the world. Incomplete markets generate higher consumption correlations than full markets, but still fall short of matching observed data.\\
+    \textit{Intuition:} With fewer insurance options, consumers can't fully hedge risks — but some partial smoothing still occurs.\\
+    \textbf{Limitation:} Not enough to explain how low the real-world correlations actually are.
+    
+    \item \textbf{Trade Costs:} Barriers to trade (like tariffs, transportation, or frictions in financial markets) make it harder to share risk across countries, reducing the correlation of consumption growth.\\
+    \textit{Intuition:} If trading is costly, you won’t do as much of it — and you’ll be stuck consuming more of what your own country produces.\\
+    \textbf{Limitation:} Models with trade costs also struggle with the Backus-Smith puzzle.
+\end{enumerate}
+
+\section*{\noindent\textbf{4.6 Puzzle 3: The Backus-Smith Puzzle}}
+\addcontentsline{toc}{section}{4.6 Puzzle 3: The Backus-Smith Puzzle}
+
+\begin{itemize}
+    \item A related puzzle to the one discussed above is the so-called \textbf{Backus-Smith puzzle}.
+    \item In the models we have discussed so far, we assume that there is only one good, and this good can be traded internationally.
+    \item Hence, the price of this good is the same across all countries and differences in prices (i.e., deviations from \textbf{Purchasing Power Parity}) can be ignored when analyzing contingent consumption plans.
+    \item However, if there are \textbf{non-tradable goods} (or trade costs), price levels of the consumption baskets will differ between different countries.
+    \item In that case, \textbf{efficient risk-sharing} implies that the rate of consumption growth should be higher for countries that experience a drop in the real price of consumption.
+    \item That is, consumption growth should be higher for countries that experience a real exchange rate depreciation.
+\end{itemize}
+
+\vspace{1em}
+Equation (26) from our model implies:
+\[
+\frac{C_2(s)}{C_1} = \frac{C_2^*(s)}{C_1^*}
+\]
+
+This can be rewritten more generally as:
+\begin{equation}
+\frac{C_{t+1}}{C_t} = \frac{C_{t+1}^*}{C_t^*} \tag{27}
+\end{equation}
+
+Backus and Smith (1993) show that with \textbf{non-tradable goods}, this relationship becomes:
+\begin{equation}
+\frac{C_{t+1}^{-\rho}/P_{t+1}}{C_t^{-\rho}/P_t} = \frac{(C_{t+1}^*)^{-\rho}/P_{t+1}^*}{(C_t^*)^{-\rho}/P_t^*} \tag{28}
+\end{equation}
+
+\noindent
+In the absence of trade frictions, \( P = P^* \), so equation (27) = equation (28). But when there are trade frictions, we must introduce the \textbf{real exchange rate}:
+
+\[
+R = \frac{P^*}{P}
+\]
+
+Hence, equation (28) becomes:
+\begin{equation}
+\frac{C_{t+1}/C_t}{C_{t+1}^*/C_t^*} = \left( \frac{R_{t+1}}{R_t} \right)^{1/\rho} \tag{29}
+\end{equation}
+
+\begin{itemize}
+    \item Equation (29) shows that consumption growth in the two countries is \textbf{not} perfectly correlated once the real exchange rate is taken into account.
+    \item Instead, it suggests that \textbf{relative consumption growth} should be \textbf{positively correlated} with changes in the \textbf{real exchange rate}.
+    \item However, the \textbf{puzzling empirical result} in Backus-Smith is that this correlation is often \textbf{very low or even negative}.
+    \item Furthermore, countries with volatile real exchange rates \textbf{do not} tend to have volatile relative consumption growth.
+    \item So, while adding non-traded goods can help solve the low international consumption correlation puzzle, it generates a \textbf{new problem}: the data reject the strong theoretical prediction that consumption growth is closely tied to real exchange rate changes.
+\end{itemize}
+
+\vspace{1em}
+\textbf{Intuition:} \textit{If consumption is internationally diversified and people can buy insurance using Arrow-Debreu securities, then only global factors should drive differences in consumption growth. But once prices differ due to non-tradable goods or trade frictions, consumption should respond to local price changes (real exchange rate). The puzzle is that in real-world data, this doesn’t happen—the connection between exchange rate changes and consumption growth is surprisingly weak.}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\textbf{Country} & \textbf{Corr}\((\hat{c}, \hat{c}^w)\) & \textbf{Corr}\((\hat{y}, \hat{y}^w)\) \\
+\hline
+Canada         & 0.56 & 0.70 \\
+France         & 0.45 & 0.60 \\
+Germany        & 0.63 & 0.70 \\
+Italy          & 0.27 & 0.51 \\
+Japan          & 0.38 & 0.46 \\
+United Kingdom & 0.63 & 0.62 \\
+United States  & 0.52 & 0.68 \\
+\hline
+OECD average           & 0.43 & 0.52 \\
+Developing country average & -0.10 & 0.05 \\
+\end{tabular}
+\caption{Correlations between Domestic and World Growth Rates, 1973--92}
+\end{table}
+
+\begin{itemize}
+    \item The Backus-Smith condition predicts that \textbf{relative consumption growth} across countries should be \textbf{positively correlated} with \textbf{real exchange rate changes}.
+    
+    \item Specifically, if the \textit{real exchange rate depreciates}, then the \textit{relative consumption of that country should increase}, reflecting efficient international risk-sharing.
+
+    \item This would show up in the graph as a clear \textbf{positive relationship} between changes in the real exchange rate and relative consumption growth.
+
+    \item \textbf{However}, the empirical graph shows \textbf{no significant correlation} --- and in some cases even \textit{negative} correlations.
+
+    \item This means that in reality, relative consumption does \textbf{not move} with the real exchange rate as predicted. In other words, \textbf{international risk-sharing fails}.
+
+    \item This disconnect is the core of the \textbf{Backus-Smith Puzzle}: data reject the strong theoretical link between consumption and prices implied by complete markets.
+\end{itemize}
+
+\section*{\noindent\textbf{4.7 Incomplete Capital Markets}}
+\addcontentsline{toc}{section}{4.7 Incomplete Capital Markets}
+
+\begin{itemize}
+    \item So far, we have studied a world economy that trades a complete set of A-D securities.
+    \item Since developing countries tend to have access to a more limited menu of financial instruments than developed countries, we ask: what are the implications for the economy?
+    \item As in Section 4.3, we consider a two-period small open endowment economy under uncertainty.
+    \item The first-period endowment $Y_1$ is known with certainty.
+    \item The second-period endowment $Y_2$ is stochastic:
+    \[
+    Y_2 = 
+    \begin{cases}
+    Y_2(H) & \text{with probability } p \\
+    Y_2(L) & \text{with probability } 1 - p
+    \end{cases}
+    \]
+    with $Y_2(H) > Y_2(L)$.
+    \item Assume $\mathbb{E}[Y_2] = pY_2(H) + (1-p)Y_2(L) > Y_1$.
+    \item Under perfect foresight, consumers would borrow in period 1 to smooth consumption, running a current account deficit.
+\end{itemize}
+
+\begin{itemize}
+    \item Now assume the country only has access to a riskless bond with return $1 + r$.
+    \item The representative agent chooses $C_1, C_2(H), C_2(L)$ to:
+    \[
+    \max \quad u(C_1) + \beta \left[ pu(C_2(H)) + (1-p)u(C_2(L)) \right]
+    \]
+    \item subject to:
+    \[
+    Y_1 + \frac{Y_2(H)}{1+r} = C_1 + \frac{C_2(H)}{1+r}
+    \]
+    \[
+    Y_1 + \frac{Y_2(L)}{1+r} = C_1 + \frac{C_2(L)}{1+r}
+    \]
+    \item Assuming $\beta(1+r) = 1$, the stochastic Euler equation is:
+    \[
+    u'(C_1) = pu'(C_2(H)) + (1-p)u'(C_2(L)) = \mathbb{E}[u'(C_2)]
+    \]
+    \item The solution will depend critically on the sign of $u'''(C)$.
+\end{itemize}
+
+\vspace{1em}
+\textbf{Intuition:}
+\begin{itemize}
+    \item \textbf{Incomplete markets} mean consumers can’t fully insure against future uncertainty — only average over outcomes using a riskless bond.
+    \item Since $Y_2$ is uncertain, optimal consumption must trade off between expected utility and the lack of contingent assets.
+    \item \textbf{Precautionary savings} behavior may arise: if consumers are risk-averse and future income is uncertain, they save more today to protect against bad outcomes tomorrow.
+    \item Whether this happens depends on the \textbf{prudence} of the utility function — captured by $u'''(C)$.
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Incomplete Capital Markets: Full procedure}}}
+
+{\color{blue}
+\textbf{Environment:}
+
+\textbf{Two-period small open economy with uncertainty.}
+
+\begin{itemize}
+\item Period 1 endowment $Y_1$ is known.
+\item Period 2 endowment $Y_2$ is stochastic:
+\[
+Y_2 = 
+\begin{cases}
+Y_2(H) & \text{with prob } p \\
+Y_2(L) & \text{with prob } 1 - p
+\end{cases}
+\]
+\item Assume: \( \mathbb{E}[Y_2] = pY_2(H) + (1 - p)Y_2(L) > Y_1 \)
+\item Financial market: access to a riskless bond with return \( 1 + r \)
+\end{itemize}
+
+\textbf{Consumer problem:}
+
+Maximize expected lifetime utility:
+\[
+U = u(C_1) + \beta \left[ p u(C_2(H)) + (1 - p) u(C_2(L)) \right]
+\]
+
+\textbf{Subject to budget constraints:}
+\[
+C_1 + \frac{C_2(H)}{1 + r} = Y_1 + \frac{Y_2(H)}{1 + r} \tag{BC-H}
+\]
+\[
+C_1 + \frac{C_2(L)}{1 + r} = Y_1 + \frac{Y_2(L)}{1 + r} \tag{BC-L}
+\]
+
+These constraints ensure solvency in both states.
+
+\textbf{Assume:} \( \beta (1 + r) = 1 \) (simplifies Euler condition)
+
+\textbf{State-specific Euler equations:}
+\[
+u'(C_1) = \beta (1 + r) \cdot \mathbb{E}[u'(C_2)]
+\Rightarrow u'(C_1) = \mathbb{E}[u'(C_2)] \tag{SE}
+\]
+
+\textbf{Expanded:}
+\[
+u'(C_1) = p \cdot u'(C_2(H)) + (1 - p) \cdot u'(C_2(L)) \tag{29}
+\]
+
+\textbf{Key insight:}
+
+\begin{itemize}
+\item Consumption is smoothed \textit{over time}, but not necessarily \textit{across states}.
+\item No contingent markets $\Rightarrow$ no full insurance.
+\item Households self-insure through saving, depending on curvature of utility.
+\end{itemize}
+
+\textbf{Precautionary savings:}
+
+\[
+\text{Intensity of saving depends on } u'''(C) > 0
+\]
+
+\textbf{If } \( u'''(C) > 0 \): marginal utility is convex $\Rightarrow$ agent saves more today to hedge against risk tomorrow.
+
+\textbf{Interpretation:}
+
+\begin{itemize}
+\item Incomplete markets restrict inter-state smoothing.
+\item But intertemporal smoothing still possible via bonds.
+\item Expected consumption is aligned with expected endowment:
+\[
+\Rightarrow C_2(H) > C_2(L)
+\]
+\item Consumption volatility mirrors output volatility.
+\end{itemize}
+}
+
+
+\subsection*{\noindent\textbf{Case 1 (Certainty Equivalence): $u'''(C) = 0$}}
+\addcontentsline{toc}{subsection}{Case 1 (Certainty Equivalence)}
+
+\textbf{Assumption:} Quadratic utility implies $u'(C)$ is linear.
+
+\textbf{Stochastic Euler equation:}
+\[
+u'(C_1) = p u'[C_2(H)] + (1 - p) u'[C_2(L)]
+\]
+
+\textbf{Linearity of marginal utility:}
+\[
+u'[C_2(H)] = a - b C_2(H) \Rightarrow 
+u'(C_1) = a - b \left( p C_2(H) + (1 - p) C_2(L) \right)
+\]
+
+\textbf{Define expectation:}
+\[
+C_1 = \mathbb{E}\{C_2\}
+\Rightarrow \text{consumption follows a random walk}
+\]
+
+\textbf{Intertemporal budget constraint:}
+\[
+C_1 + \frac{\mathbb{E}\{C_2\}}{1 + r} = Y_1 + \frac{\mathbb{E}\{Y_2\}}{1 + r}
+\Rightarrow
+C_1 = \frac{1 + r}{2 + r} \left[Y_1 + \frac{\mathbb{E}\{Y_2\}}{1 + r} \right]
+\]
+
+\textbf{Asset demand (bond position):}
+\[
+b_1 = Y_1 - C_1 = \frac{1}{2 + r}[Y_1 - \mathbb{E}\{Y_2\}] < 0 \Rightarrow \text{borrowing}
+\]
+
+\textbf{Period 2 consumption:}
+\[
+C_2(H) = Y_2(H) + (1 + r) b_1 = Y_2(H) + \frac{1}{2 + r}[Y_1 - \mathbb{E}\{Y_2\}] < Y_2(H)
+\]
+\[
+C_2(L) = Y_2(L) + (1 + r) b_1 = Y_2(L) + \frac{1}{2 + r}[Y_1 - \mathbb{E}\{Y_2\}] < Y_2(L)
+\]
+
+\textbf{Conclusion:}
+\begin{itemize}
+    \item $C_2(H) > C_2(L)$ — consumption depends on realized output
+    \item Incomplete markets $\Rightarrow$ positive correlation between $C_2$ and $Y_2$
+    \item Welfare loss due to imperfect smoothing
+\end{itemize}
+
+\textbf{Benchmark: complete markets}
+\[
+\beta(1 + r) = 1 \Rightarrow C_1 = C_2(H) = C_2(L) \Rightarrow \text{perfect smoothing}
+\Rightarrow \text{correlation}(C_2, Y_2) = 0
+\]
+
+\subsection*{\noindent\textbf{Case 2: Precautionary Savings --- $u'''(C) > 0$}}  
+\addcontentsline{toc}{subsection}{Case 2: Precautionary Savings}
+
+\begin{itemize}
+    \item In this case, utility is strictly convex: $u''(C) < 0$ and $u'''(C) > 0$.
+    \item This implies that the marginal utility is convex: $u'(C)$ responds more strongly to risk.
+    
+    \item The stochastic Euler equation becomes:
+    \[
+    u'(C_1) = pu'\big(C_2(H)\big) + (1 - p)u'\big(C_2(L)\big) > u'\big(\mathbb{E}[C_2]\big)
+    \]
+    
+    \item This inequality arises because of **Jensen's Inequality**, given $u'(C)$ is convex.
+
+    \item Therefore, since $u'(C_1) > u'(\mathbb{E}[C_2])$ and $u'$ is decreasing:
+    \[
+    C_1 < \mathbb{E}[C_2]
+    \]
+    
+    \item Plugging into the intertemporal budget constraint:
+    \[
+    C_1 < \frac{1 + r}{2 + r}\left[Y_1 + \frac{\mathbb{E}[Y_2]}{1 + r} \right]
+    \]
+    
+    \item \textbf{Intuition:}  
+    Consumers are more cautious under uncertainty. They anticipate the possibility of low output in the future, so they **consume less today** and save more. This behavior is known as **precautionary savings**.
+    
+    \item The strength of this motive depends on **prudence**, not just risk aversion:
+    \begin{itemize}
+        \item \textbf{Risk aversion:} dislike of uncertain outcomes $\Rightarrow$ measured by concavity of $u(C)$.
+        \item \textbf{Prudence:} willingness to save for uncertain outcomes $\Rightarrow$ measured by convexity of $u'(C)$.
+    \end{itemize}
+    
+    \item \textbf{Important clarification:}  
+    Prudence $\neq$ risk aversion, though they are related. Standard CRRA preferences have both:
+    \[
+    u(C) = \frac{C^{1 - \rho}}{1 - \rho} \Rightarrow u'''(C) > 0
+    \]
+    
+    \item As in the certainty case, incomplete markets prevent full smoothing. But now the gap is larger, since consumers deliberately lower $C_1$.
+    
+    \item This again implies a **positive correlation between output and consumption** in period 2:  
+    \[
+    C_2(H) > C_2(L)
+    \]
+    
+    \item \textbf{Conclusion:}  
+    Incomplete markets with precautionary savings cause consumers to over-save in period 1 and under-consume relative to the perfect-foresight average.  
+    This reinforces the inability to smooth consumption across states and increases pro-cyclicality.
+\end{itemize}
+
+\subsection*{\noindent\textbf{Case 3: Dissavings --- $u'''(C) < 0$}}  
+\addcontentsline{toc}{subsection}{Case 3: Dissavings}
+
+\begin{itemize}
+    \item This case assumes marginal utility is concave: $u'''(C) < 0$.
+    \item Thus, $u'(C)$ is decreasing at a decreasing rate → **imprudence**.
+    
+    \item The Euler equation becomes:
+    \[
+    u'(C_1) = pu'(C_2(H)) + (1 - p)u'(C_2(L)) < u'(\mathbb{E}[C_2])
+    \]
+    
+    \item Since $u'$ is decreasing, this implies:
+    \[
+    C_1 > \mathbb{E}[C_2]
+    \]
+    
+    \item \textbf{Interpretation:} Consumers over-consume in period 1 (relative to expected future consumption) and dis-save.
+    
+    \item Consumption is even less smoothed over time than in the certainty case. This leads to higher intertemporal welfare los.
+
+    \item \textbf{Example of an imprudent utility function:}
+    \[
+    U(c) = aC - bC^3, \quad c < \sqrt{\frac{a}{3b}}
+    \]
+    
+    \begin{itemize}
+        \item $u'(C) > 0$, $u''(C) < 0$, and $u'''(C) < 0$
+        \item Consumers are risk averse but **not prudent**
+        \item Shows that risk aversion $\centernot\Rightarrow$ prudence
+    \end{itemize}
+    
+    \item \textbf{Conclusion:}
+    \begin{itemize}
+        \item Imprudent consumers act over-optimistically, consuming more today.
+        \item This further reduces the correlation between period 2 output and consumption.
+        \item Dis-saving makes the economy more vulnerable to future shocks.
+    \end{itemize}
+\end{itemize}
+
+\section*{\noindent\textbf{4.8 International Portfolio Diversification}}
+\addcontentsline{toc}{section}{4.8 International Portfolio Diversification}
+
+\begin{itemize}
+    \item In the real world, countries mainly trade assets like equities (e.g., company shares), not the full range of Arrow-Debreu (A-D) securities.
+    \item This section investigates how limiting trade to these familiar assets affects international diversification and consumption smoothing.
+    \item We explore a world where only risky assets traded are claims on national outputs (like owning shares in a country's economic performance).
+    \item We compare this limited-market environment to the idealized complete-markets Arrow-Debreu framework.
+    \item The key question: Can familiar real-world assets (like equity) provide the same risk-sharing benefits as A-D securities?
+    \item This leads us to another major puzzle in international macroeconomics:
+    
+    \textbf{The equity home bias puzzle} — Why do investors hold disproportionately large shares of domestic assets, even when international
+
+\textbf{Assumptions:}
+
+\begin{itemize}
+    \item \textbf{Two periods:} Period 1 (initial) and Period 2 (future, uncertain).
+    \item \textbf{Two layers of randomness:}
+    \begin{itemize}
+        \item \( N \) countries in the world.
+        \item \( S \) possible states of nature that may occur in period 2.
+    \end{itemize}
+    \item \textbf{Identical preferences:} All individuals across countries have the same utility function.
+    \item \textbf{Country output as an asset:} 
+    \begin{itemize}
+        \item Let \( V_1^n \) denote the market value in period 1 of a claim to country \( n \)'s output in period 2.
+        \item That is, \( V_1^n \) is the price of a "stock" that pays \( Y_2^n(s) \) in state \( s \).
+        \item \textit{Intuition:} Think of this as owning shares in a country’s GDP.
+    \end{itemize}
+    \item \textbf{Mutual fund idea:} This setup resembles a mutual fund owning all of a country’s productive units.
+    \item \textbf{Fractional ownership:} No single agent can own all output. Instead, individuals hold small fractions of multiple countries' outputs.
+    \item \textbf{Traded assets:}
+    \begin{itemize}
+        \item Only two assets are traded at \( t = 1 \): 
+        \begin{enumerate}
+            \item Ownership claims on each country's output (like equity).
+            \item A risk-free bond offering a real return of \( r \).
+        \end{enumerate}
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+    \item The representative agent \( n \) must divide \textbf{period 1 income} \( Y_1^n \) between \textbf{consumption} \( C_1^n \) and \textbf{saving}.
+    
+    \item Given the available menu of assets, country \( n \)'s \textbf{savings} consist of:
+    \begin{itemize}
+        \item Net bond purchases \( B_2^n \)
+        \item Net purchases of \textbf{fractional shares} \( x_m^n \) in country \( m \)'s future output, where \( m = 1, 2, \dots, N \)
+    \end{itemize}
+    
+    \item The constraint linking \textbf{consumption and saving} in period 1 is:
+    \[
+    Y_1^n + V_1^n = C_1^n + B_2^n + \sum_{m=1}^{N} x_m^n V_1^m
+    \]
+
+    \item Country \( n \)'s \textbf{period 2 consumption} depends on how its assets perform between periods 1 and 2, which in turn depends on the realized \textbf{state of nature} \( s \):
+    \[
+    C_2^n(s) = (1 + r)B_2^n + \sum_{m=1}^{N} x_m^n Y_2^m(s)
+    \]
+
+    \item It is important to emphasize the distinction between the \textbf{country mutual fund shares} used here and the \textbf{Arrow-Debreu (A-D) securities} discussed in Section 4.4.
+    
+    \item A standard A-D claim gives an agent a payoff in \textbf{only one state of nature}.
+    
+    \item In contrast, an investor holding \( x_m^n \) shares of country \( m \)'s mutual fund is entitled to a percentage of \( Y_2^m(s) \) in \textbf{every} state of nature.
+\end{itemize}
+
+\begin{itemize}
+    \item The \textbf{lifetime utility} function of the representative agent is:
+    \[
+    U_1 = u(C_1^n) + \pi(1)\beta u(C_2^n(1)) + \pi(2)\beta u(C_2^n(2)) + \cdots + \pi(S)\beta u(C_2^n(S))
+    \]
+
+    \item The corresponding \textbf{optimization problem} is:
+    \[
+    \max_{B_2^n, x_m^n} \; u(C_1^n) + \beta \sum_{s=1}^{S} \pi(s) u(C_2^n(s))
+    \]
+
+    \item Subject to the constraints:
+    \begin{align}
+        Y_1^n + V_1^n &= C_1^n + B_2^n + \sum_{m=1}^{N} x_m^n V_1^m \tag{30} \\
+        C_2^n(s) &= (1 + r)B_2^n + \sum_{m=1}^{N} x_m^n Y_2^m(s) \tag{31}
+    \end{align}
+\end{itemize}
+
+\begin{itemize}
+    \item Substituting constraints (30) and (31) into the utility function, we get:
+    \begin{align*}
+        U_1 =\; & u \left[ Y_1^n + V_1^n - B_2^n - \sum_{m=1}^{N} x_m^n V_1^m \right] \\
+        &+ \beta \sum_{s=1}^{S} \pi(s) u \left[ (1 + r)B_2^n + \sum_{m=1}^{N} x_m^n Y_2^m(s) \right]
+    \end{align*}
+
+    \item The \textbf{first-order condition} with respect to \( B_2^n \) is:
+    \[
+    u'(C_1^n) = (1 + r)\beta \sum_{s=1}^{S} \pi(s) u'(C_2^n(s)) = (1 + r)\beta \mathbb{E}_1\{ u'(C_2^n) \}
+    \]
+    This is the \textbf{Euler equation for bonds}.
+
+    \item The \textbf{first-order condition} with respect to \( x_m^n \) is:
+    \[
+    V_1^m u'(C_1^n) = \beta \sum_{s=1}^{S} \pi(s) u'(C_2^n(s)) Y_2^m(s) = \beta \mathbb{E}_1 \{ u'(C_2^n) Y_2^m \} \tag{32}
+    \]
+\end{itemize}
+
+\vspace{1em}
+\textbf{Intuition:} \\
+This setup explores how a representative agent in an open economy decides between \textbf{consuming now} and \textbf{investing for the future}, not just domestically but also internationally. Unlike A-D securities that are specific to individual future states, \textbf{mutual funds} provide diversified exposure to every possible outcome. The resulting \textbf{Euler equations} capture the precise trade-offs: how much the agent values today's consumption versus the uncertain but potentially higher rewards from saving and investing across the global economy.
+
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Utility maximization:}
+\[
+U_1 = u(C_1^n) + \beta \sum_{s=1}^{S} \pi(s) u(C_2^n(s))
+\]
+
+\textbf{Subject to budget constraints:}
+\begin{align*}
+Y_1^n + V_1^n &= C_1^n + B_2^n + \sum_{m=1}^{N} x_m^n V_1^m \tag{1} \\
+C_2^n(s) &= (1 + r)B_2^n + \sum_{m=1}^{N} x_m^n Y_2^m(s) \tag{2}
+\end{align*}
+
+\textbf{Substitute constraints (1) and (2) into utility function:}
+\[
+U_1 = u\left( Y_1^n + V_1^n - B_2^n - \sum_{m=1}^{N} x_m^n V_1^m \right)
++ \beta \sum_{s=1}^{S} \pi(s) u\left( (1 + r)B_2^n + \sum_{m=1}^{N} x_m^n Y_2^m(s) \right)
+\]
+
+\textbf{Take FOC with respect to } \( B_2^n \)
+
+Let:
+\[
+C_1^n = Y_1^n + V_1^n - B_2^n - \sum_{m=1}^{N} x_m^n V_1^m
+\quad \text{and} \quad
+C_2^n(s) = (1 + r)B_2^n + \sum_{m=1}^{N} x_m^n Y_2^m(s)
+\]
+
+Then:
+\begin{align*}
+\frac{\partial U_1}{\partial B_2^n}
+&= -u'(C_1^n) + \beta \sum_{s=1}^{S} \pi(s) u'(C_2^n(s)) (1 + r) \\
+&= 0
+\end{align*}
+
+\textbf{Rearrange:}
+\[
+u'(C_1^n) = \beta (1 + r) \sum_{s=1}^{S} \pi(s) u'(C_2^n(s))
+= \beta (1 + r) \mathbb{E}_1 \left\{ u'(C_2^n) \right\}
+\]
+
+\textbf{This is the bond Euler equation.}
+
+\textbf{Take FOC with respect to } \( x_m^n \)
+
+\begin{align*}
+\frac{\partial U_1}{\partial x_m^n}
+&= -u'(C_1^n) V_1^m + \beta \sum_{s=1}^{S} \pi(s) u'(C_2^n(s)) Y_2^m(s) \\
+&= 0
+\end{align*}
+
+\textbf{Rearrange:}
+\[
+u'(C_1^n) V_1^m = \beta \sum_{s=1}^{S} \pi(s) u'(C_2^n(s)) Y_2^m(s)
+= \beta \mathbb{E}_1 \left\{ u'(C_2^n) Y_2^m \right\}
+\]
+
+\textbf{This is the mutual fund Euler equation.}
+}
+
+\begin{itemize}
+    \item The intuition behind equation (32) is similar to other Euler equations we've seen: the left-hand side is the \textbf{marginal utility cost} to a country \( n \) agent purchasing country \( m \)'s risky output; the right-hand side is the \textbf{expected marginal gain}.
+    
+    \item To explore the model further, we assume all countries have identical CRRA utility:
+    \[
+    u(C) = \frac{C^{1 - \rho}}{1 - \rho}
+    \]
+
+    \item We use a \textbf{guess-and-verify} method: assume an equilibrium allocation and solve for prices that support it.
+
+    \item Our guess: the equilibrium is \textbf{Pareto efficient} and takes the same form as under A-D securities — i.e., countries consume a \textbf{constant share of world output}.
+
+    \item Define country \( n \)'s \textbf{share of initial world wealth}:
+    \[
+    \mu^n = \frac{Y_1^n + V_1^n}{\sum_{m=1}^{N}(Y_1^m + V_1^m)} \tag{33}
+    \]
+
+    \item Then we guess that consumption in each period and state is:
+    \begin{align}
+        C_1^n &= \mu^n \sum_{m=1}^{N} Y_1^m = \mu^n Y_1^w \tag{34} \\
+        C_2^n(s) &= \mu^n \sum_{m=1}^{N} Y_2^m(s) = \mu^n Y_2^w(s) \tag{35}
+    \end{align}
+\end{itemize}
+
+\begin{itemize}
+    \item The period 2 budget constraint (31) holds under (35) if:
+    \begin{itemize}
+        \item[(a)] Each agent holds a share \( \mu^n \) of a global mutual fund with payoff from all second-period outputs:
+        \[
+        x_m^n = \mu^n, \quad \forall m
+        \]
+
+        \item[(b)] There are no bond holdings: \( B_2^n = 0 \)
+
+        \item Then:
+        \[
+        C_2^n(s) = \sum_{m=1}^{N} \mu^n Y_2^m(s) = \mu^n Y_2^w(s)
+        \]
+    \end{itemize}
+
+    \item These consumption and portfolio plans are \textbf{feasible globally} if chosen by all countries.
+
+    \item To prove equilibrium: we must verify that these allocations \textbf{maximize each country’s utility}, given prices and budget constraints.
+
+    \item For CRRA utility, the \textbf{bond Euler equation} becomes:
+    \[
+    1 + r = \frac{(C_1^n)^{-\rho}}{\beta \sum_{s=1}^{S} \pi(s) [C_2^n(s)]^{-\rho}} \tag{36}
+    \]
+\end{itemize}
+
+\begin{itemize}
+    \item Plugging in the guess from (34)–(35) into equation (36), we get:
+    \begin{align*}
+        1 + r &= \frac{(\mu^n)^{-\rho} [Y_1^w]^{-\rho}}{\beta \sum_{s=1}^{S} \pi(s)(\mu^n)^{-\rho}[Y_2^w(s)]^{-\rho}} \\
+        &= \frac{[Y_1^w]^{-\rho}}{\beta \sum_{s=1}^{S} \pi(s)[Y_2^w(s)]^{-\rho}} \tag{37}
+    \end{align*}
+
+    \item So the Euler equation is satisfied for all countries \( n \) at the same interest rate.
+
+    \item Now verify the mutual fund Euler equation (32). The CRRA case implies:
+    \[
+    V_1^m = \sum_{s=1}^{S} \pi(s) \beta \left( \frac{C_2^n(s)}{C_1^n} \right)^{-\rho} Y_2^m(s)
+    \]
+
+    \item Using \( C_2^n(s) = \mu^n Y_2^w(s) \) and \( C_1^n = \mu^n Y_1^w \), we get:
+    \begin{align*}
+        V_1^m &= \sum_{s=1}^{S} \pi(s) \beta \left( \frac{Y_2^w(s)}{Y_1^w} \right)^{-\rho} Y_2^m(s) \\
+        &= \beta \mathbb{E}_1 \left\{ \left( \frac{Y_2^w}{Y_1^w} \right)^{-\rho} Y_2^m \right\}
+    \end{align*}
+
+    \item Finally, verify the period 1 budget constraint (30) is satisfied. Each country’s resources \( Y_1^n + V_1^n \) make up \( \mu^n \) of world wealth by definition (equation 33).
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{1. Assume identical CRRA utility across all countries:}
+\[
+u(C) = \frac{C^{1 - \rho}}{1 - \rho}
+\]
+
+\textbf{2. Define initial share of world wealth for country \( n \):}
+\[
+\mu^n = \frac{Y_1^n + V_1^n}{\sum_{m=1}^{N}(Y_1^m + V_1^m)} \tag{33}
+\]
+
+\textbf{3. Guess that each country consumes its share of world output in each period:}
+\begin{align}
+C_1^n &= \mu^n \sum_{m=1}^{N} Y_1^m = \mu^n Y_1^w \tag{34} \\
+C_2^n(s) &= \mu^n \sum_{m=1}^{N} Y_2^m(s) = \mu^n Y_2^w(s) \tag{35}
+\end{align}
+
+\textbf{4. Plug (34) and (35) into the bond Euler equation:}
+\[
+1 + r = \frac{(C_1^n)^{-\rho}}{\beta \sum_{s=1}^{S} \pi(s)[C_2^n(s)]^{-\rho}} \tag{36}
+\]
+
+Substitute:
+\begin{align*}
+C_1^n &= \mu^n Y_1^w \\
+C_2^n(s) &= \mu^n Y_2^w(s)
+\end{align*}
+
+So:
+\[
+(C_1^n)^{-\rho} = (\mu^n)^{-\rho} (Y_1^w)^{-\rho}
+\]
+\[
+[C_2^n(s)]^{-\rho} = (\mu^n)^{-\rho} [Y_2^w(s)]^{-\rho}
+\]
+
+Substitute into (36):
+\[
+1 + r = \frac{(\mu^n)^{-\rho} (Y_1^w)^{-\rho}}{\beta \sum_{s=1}^{S} \pi(s)(\mu^n)^{-\rho} [Y_2^w(s)]^{-\rho}}
+\]
+
+Cancel common term \( (\mu^n)^{-\rho} \):
+\[
+1 + r = \frac{(Y_1^w)^{-\rho}}{\beta \sum_{s=1}^{S} \pi(s)[Y_2^w(s)]^{-\rho}} \tag{37}
+\]
+
+\textbf{5. Verify the mutual fund Euler equation for CRRA:}
+
+\[
+V_1^m = \sum_{s=1}^{S} \pi(s) \beta \left( \frac{C_2^n(s)}{C_1^n} \right)^{-\rho} Y_2^m(s)
+\]
+
+Use:
+\[
+\frac{C_2^n(s)}{C_1^n} = \frac{\mu^n Y_2^w(s)}{\mu^n Y_1^w} = \frac{Y_2^w(s)}{Y_1^w}
+\Rightarrow \left( \frac{C_2^n(s)}{C_1^n} \right)^{-\rho} = \left( \frac{Y_2^w(s)}{Y_1^w} \right)^{-\rho}
+\]
+
+So:
+\[
+V_1^m = \sum_{s=1}^{S} \pi(s) \beta \left( \frac{Y_2^w(s)}{Y_1^w} \right)^{-\rho} Y_2^m(s)
+= \beta \mathbb{E}_1 \left\{ \left( \frac{Y_2^w}{Y_1^w} \right)^{-\rho} Y_2^m \right\}
+\]
+
+\textbf{6. Budget constraint consistency:}
+
+Recall budget constraint (31):
+\[
+C_2^n(s) = (1 + r)B_2^n + \sum_{m=1}^{N} x_m^n Y_2^m(s)
+\]
+
+Assume:
+\[
+B_2^n = 0 \quad \text{and} \quad x_m^n = \mu^n \quad \forall m
+\]
+
+Then:
+\[
+C_2^n(s) = \sum_{m=1}^{N} \mu^n Y_2^m(s) = \mu^n \sum_{m=1}^{N} Y_2^m(s) = \mu^n Y_2^w(s)
+\]
+
+Which matches equation (35). 
+
+\textbf{7. Budget constraint at date 1:}
+
+From equation (30):
+\[
+Y_1^n + V_1^n = C_1^n + B_2^n + \sum_{m=1}^{N} x_m^n V_1^m
+\]
+
+Substitute:
+\begin{align*}
+C_1^n &= \mu^n Y_1^w \\
+B_2^n &= 0 \\
+x_m^n &= \mu^n
+\end{align*}
+
+Then:
+\[
+Y_1^n + V_1^n = \mu^n Y_1^w + \mu^n \sum_{m=1}^{N} V_1^m = \mu^n (Y_1^w + V_1^w)
+\]
+
+But:
+\[
+Y_1^n + V_1^n = \mu^n (Y_1^w + V_1^w) \quad \text{by definition (33)}
+\]
+
+So the constraint holds. 
+
+}
+
+\begin{itemize}
+    \item We now verify that the date 1 \textbf{budget constraint} is satisfied under the hypothesized equilibrium.
+
+    \item Start from:
+    \[
+    Y_1^n + V_1^n = C_1^n + B_2^n + \sum_{m=1}^{N} x_m^n V_1^m
+    \]
+
+    \item Substitute the equilibrium values:
+    \[
+    Y_1^n + V_1^n = \mu^n Y_1^w + 0 + \sum_{m=1}^{N} \mu^n V_1^m
+    \]
+
+    \item Recognize that:
+    \[
+    Y_1^w = \sum_{m=1}^{N} Y_1^m
+    \quad \text{and} \quad
+    \sum_{m=1}^{N} \mu^n V_1^m = \mu^n \sum_{m=1}^{N} V_1^m
+    \]
+
+    \item So:
+    \[
+    Y_1^n + V_1^n = \mu^n \sum_{m=1}^{N} Y_1^m + \mu^n \sum_{m=1}^{N} V_1^m
+    \Rightarrow Y_1^n + V_1^n = \mu^n \sum_{m=1}^{N} (Y_1^m + V_1^m)
+    \]
+
+    \item \textbf{Therefore, the constraint holds} by definition of \( \mu^n \) from equation (33).
+\end{itemize}
+
+\textcolor{blue}{\textbf{\uline{Full procedure}}}
+
+{\color{blue}
+\textbf{Start from the period 1 budget constraint:}
+\[
+Y_1^n + V_1^n = C_1^n + B_2^n + \sum_{m=1}^{N} x_m^n V_1^m
+\]
+
+\textbf{Substitute the equilibrium guesses:}
+\begin{align*}
+C_1^n &= \mu^n Y_1^w \\
+B_2^n &= 0 \\
+x_m^n &= \mu^n
+\end{align*}
+
+\textbf{Plug into the constraint:}
+\[
+Y_1^n + V_1^n = \mu^n Y_1^w + 0 + \sum_{m=1}^{N} \mu^n V_1^m
+\]
+
+\textbf{Factor out \( \mu^n \):}
+\[
+Y_1^n + V_1^n = \mu^n Y_1^w + \mu^n \sum_{m=1}^{N} V_1^m
+\]
+
+\textbf{Express \( Y_1^w \) as a sum:}
+\[
+Y_1^w = \sum_{m=1}^{N} Y_1^m
+\quad \Rightarrow \quad
+\mu^n Y_1^w = \mu^n \sum_{m=1}^{N} Y_1^m
+\]
+
+\textbf{So now:}
+\[
+Y_1^n + V_1^n = \mu^n \sum_{m=1}^{N} Y_1^m + \mu^n \sum_{m=1}^{N} V_1^m
+\]
+
+\textbf{Combine both sums:}
+\[
+Y_1^n + V_1^n = \mu^n \sum_{m=1}^{N} (Y_1^m + V_1^m)
+\]
+
+\textbf{But from the definition of } \( \mu^n \) (equation 33):
+\[
+\mu^n = \frac{Y_1^n + V_1^n}{\sum_{m=1}^{N}(Y_1^m + V_1^m)}
+\quad \Rightarrow \quad
+Y_1^n + V_1^n = \mu^n \sum_{m=1}^{N}(Y_1^m + V_1^m)
+\]
+
+\textbf{Therefore, the constraint holds.} 
+}
+
+\begin{itemize}
+    \item This leads to a \textbf{remarkable result}: Even though only \textbf{risk-free bonds} and \textbf{country-specific equity shares} are traded, the \textbf{equilibrium allocation is still efficient}.
+
+    \item In fact, it is \textbf{identical} to the allocation that would result from trading a full set of \( S \) \textbf{Arrow-Debreu (A-D) securities} under CRRA preferences.
+
+    \item Each country’s \textbf{consumption share} \( \mu^n \) is \textbf{constant across periods and states}, just like under complete markets — it’s the same share of world consumption they would enjoy with full A-D trade.
+
+    \item The \textbf{equilibrium interest rate} is also the same in both settings (this is something you can \textit{verify directly} from the model).
+
+    \item The economy \textbf{mimics complete markets}: every agent ends up choosing the same portfolio share of risky assets, so their \textbf{period 2 consumption moves together}, in proportion to the return on the \textbf{global mutual fund}.
+
+    \item \textbf{Important caveat:} This equivalence relies on CRRA utility and symmetric preferences. With \textbf{different utility functions} or \textbf{preference heterogeneity}, countries could choose \textbf{different portfolios}, and the equilibrium \textbf{would no longer match} the A-D one.
+\end{itemize}
+
+\vspace{1em}
+\textbf{Intuition:} \\
+Even with a limited menu of financial assets — just risk-free bonds and country-specific equity — the model delivers the same outcome we’d get in a fully complete market. Why? Because everyone behaves as if they were sharing risk perfectly: they all hold the same diversified portfolio and consume the same fraction of global resources. It’s like we \textit{recreated} the Arrow-Debreu world with far fewer instruments — a powerful and elegant result that hinges on the symmetry in preferences and the CRRA structure.
+
+\section*{\noindent\textbf{4.9 Puzzle 3: Home Bias in Equity Portfolios Puzzle
+}}
+\addcontentsline{toc}{section}{4.9 Puzzle 3: Home Bias in Equity Portfolios Puzzle
+}
+
+\begin{itemize}
+    \item The model we’ve developed implies that investors around the world should hold the \textbf{same globally diversified portfolio} of stocks.
+
+    \item Even in more complex and realistic frameworks, the basic logic of diversification still suggests that investors ought to hold a significant share of their portfolios in \textbf{foreign equity}.
+
+    \item Yet in practice, \textbf{most investors heavily overweight their own domestic markets}. People in most countries hold a disproportionately large share of their portfolios in domestic equities.
+
+    \item This contradiction between the theoretical benefits of global diversification and the observed behavior is known as the \textbf{equity home bias puzzle}.
+
+    \item A simple way to measure this bias is to compare:
+    \begin{itemize}
+        \item The share of \textbf{domestic holdings} in a country's portfolio
+        \item Versus the share that country represents in \textbf{global market capitalization}
+    \end{itemize}
+
+    \item The \textbf{home bias index} for country \( i \) is defined as:
+    \[
+    HB_i = \frac{\text{domestic holdings}_i}{\text{total holdings}_i} 
+    - \frac{\text{market capitalization}_i}{\text{market capitalization}_{\text{world}}}
+    \]
+
+    \item This measure takes a value of:
+    \begin{itemize}
+        \item \( HB_i = 0 \) if there is \textbf{no home bias}
+        \item \( HB_i = 1 \) if there is \textbf{full home bias}
+    \end{itemize}
+
+    \item The following table (not shown here) reports \( HB_i \) for a range of countries in the years \textbf{2001 and 2007}.
+
+    \item Across all countries, we observe \textbf{high home bias} — particularly in \textbf{emerging markets} like Mexico and Brazil.
+
+    \item Between 2001 and 2007, home bias \textbf{declined slightly} in most countries — except the U.S., which already had the \textbf{lowest bias}.
+
+    \item What’s puzzling is that even after decades of liberalization and lower barriers to international capital mobility, the \textbf{bias remains strong}.
+
+    \item \textbf{So the puzzle is:} If global markets are increasingly integrated, why don’t investors diversify more?
+\end{itemize}
+
+\vspace{1em}
+\textbf{Intuition:} \\
+The theory says “go global” — holding only domestic stocks is like putting all your eggs in one basket. But in reality, people stick close to home. Even when borders are open and data is plentiful, most portfolios still show a strong preference for domestic equities. That’s the heart of the \textbf{home bias puzzle}: we have the tools to diversify globally, but we just... don’t.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccc}
+\textbf{Country} & \textbf{Share in World} & \textbf{Domestic Holdings} & \textbf{Home Bias} \\
+\multicolumn{4}{c}{\textbf{2001}} \\
+Brazil  & 0.69  & 98.08 & 97.38 \\
+Germany & 3.99  & 67.69 & 63.69 \\
+Japan   & 8.44  & 89.25 & 80.81 \\
+Mexico  & 0.46  & 99.51 & 99.05 \\
+Spain   & 2.71  & 87.20 & 84.50 \\
+UK      & 8.07  & 72.22 & 64.15 \\
+USA     & 51.53 & 88.81 & 37.28 \\
+\\
+\multicolumn{4}{c}{\textbf{2007}} \\
+Brazil  & 2.19  & 99.40 & 97.21 \\
+Germany & 3.36  & 54.01 & 50.65 \\
+Japan   & 6.92  & 84.33 & 77.40 \\
+Mexico  & 0.64  & 87.23 & 86.59 \\
+Spain   & 2.85  & 87.27 & 84.42 \\
+UK      & 6.16  & 59.30 & 53.15 \\
+USA     & 31.84 & 76.96 & 45.13 \\
+\end{tabular}
+\caption*{Home Bias Index for Selected Countries (2001 and 2007)}
+\end{table}
+
+\begin{itemize}
+    \item Many studies show that although \textbf{home bias} has declined somewhat in recent years, it still remains \textbf{significantly high}.
+
+    \item The presence of home bias implies that individuals \textbf{do not share risk optimally} with foreign investors. With limited diversification, investors become overly exposed to domestic shocks and miss out on the \textbf{risk-buffering benefits} of international markets.
+
+    \item There’s now a substantial literature trying to explain this persistent phenomenon — often referred to as the \textbf{equity home bias puzzle}. For a deeper exploration, see Lewis (1999).
+
+    \item Some of the main proposed explanations include:
+\end{itemize}
+
+\begin{enumerate}
+    \item \textbf{Transaction Costs and Barriers:} High costs related to purchasing or owning foreign equities can discourage international diversification.
+
+    \item \textbf{Information Asymmetries:} Locals may have \textbf{better information} about domestic firms. The puzzle then becomes: why can’t foreigners just access or purchase that information?
+
+    \item \textbf{Transport / Trade Costs:} When consumption is biased toward domestic goods due to trade frictions, investors may prefer to also hold more domestic equities, reinforcing home bias.
+\end{enumerate}
+
+
+
+\end{document}
