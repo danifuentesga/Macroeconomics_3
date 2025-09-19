@@ -1,0 +1,1916 @@
+\documentclass[12pt]{article}
+
+% --- Paquetes ---
+\usepackage{pifont} 
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\usepackage[spanish,es-tabla]{babel}   % español
+\usepackage[utf8]{inputenc}            % acentos
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{lastpage}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[table]{xcolor} % para \cellcolor y \rowcolor
+\usepackage{colortbl}      % colores en tablas
+\usepackage{float}         % para usar [H] si quieres fijar la tabla
+\usepackage{array}         % mejor control de columnas
+\usepackage{amssymb}       % para palomita
+\usepackage{graphicx}      % para logo github
+\usepackage{hyperref}
+\usepackage{setspace} % para hipervinculo
+\usepackage[normalem]{ulem}
+\usepackage{siunitx}       % Asegúrate de tener este paquete en el preámbulo
+\usepackage{booktabs}
+\sisetup{
+    output-decimal-marker = {.},
+    group-separator = {,},
+    group-minimum-digits = 4,
+    detect-all
+}
+
+% Etiqueta en el caption (en la tabla misma)
+\usepackage{caption}
+\captionsetup[table]{name=Tabla, labelfont=bf, labelsep=period}
+
+% Prefijo en la *Lista de tablas*
+\usepackage{tocloft}
+\renewcommand{\cfttabpresnum}{Tabla~} % texto antes del número
+\renewcommand{\cfttabaftersnum}{.}    % punto después del número
+\setlength{\cfttabnumwidth}{5em}      % ancho para "Tabla 10." ajusta si hace falta
+
+
+
+% --- Márgenes y encabezado ---
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+% Alturas del encabezado (un poco más por las 2–3 líneas del header)
+\setlength{\headheight}{32pt}
+\setlength{\headsep}{20pt}
+
+\definecolor{maroon}{RGB}{128, 0, 0}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+% Regla del encabezado (opcional)
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Encabezado izquierdo
+\fancyhead[L]{%
+  \textcolor{maroon}{\textbf{El Colegio de México}}\\
+  \textbf{Macroeconomics 3}
+}
+
+% Encabezado derecho
+\fancyhead[R]{%
+  Topic 5: Nominal Exchange Rate Regimes
+
+\\
+  \textbf{Jose Daniel Fuentes García}\\
+  Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+}
+
+% Número de página al centro del pie
+\fancyfoot[C]{\thepage}
+
+% --- APLICAR EL MISMO ESTILO A PÁGINAS "PLAIN" (TOC, LOT, LOF) ---
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \fancyhead[L]{%
+    \textcolor{maroon}{\textbf{El Colegio de México}}\\
+    \textbf{Macroeconomics 3}
+  }
+  \fancyhead[R]{%
+    Topic 5: Nominal Exchange Rate Regimes
+\\
+    \textbf{Jose Daniel Fuentes García}\\
+    Github : \includegraphics[height=1em]{github.png}~\href{https://github.com/danifuentesga}{\texttt{danifuentesga}}
+  }
+  \fancyfoot[C]{\thepage}
+}
+
+% Pie de página centrado
+\fancyfoot[C]{\thepage\ de \pageref{LastPage}}
+
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Color principal ---
+\definecolor{formalblue}{RGB}{0,51,102} % azul marino sobrio
+
+% --- Estilo de títulos ---
+\titleformat{\section}[hang]{\bfseries\Large\color{formalblue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\bfseries\large\color{formalblue}}{\thesubsection}{1em}{}
+
+
+% --- Listas ---
+\setlist[itemize]{leftmargin=1.2em}
+
+% --- Sin portada ---
+\title{}
+\author{}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{-1cm}
+    \noindent
+    \begin{minipage}[t]{0.49\textwidth}
+        \includegraphics[height=2.2cm]{colmex.jpg}
+    \end{minipage}%
+    \begin{minipage}[t]{0.49\textwidth}
+        \raggedleft
+        \includegraphics[height=2.2cm]{cee.jpg}
+    \end{minipage}
+
+    \vspace*{2cm}
+
+    \begin{center}
+        \Huge \textbf{CENTRO DE ESTUDIOS ECONÓMICOS} \\[1.5em]
+        \Large Maestría en Economía 2024--2026 \\[2em]
+        \Large Macroeconomics 3 \\[3em]
+        \LARGE \textbf{Topic 5: Nominal Exchange Rate Regimes
+} \\[6em]
+        \large \textbf{Disclaimer:} I AM NOT the original intellectual author of the material presented in these notes. The content is STRONGLY based on a combination of lecture notes (Stephen McKnight), textbook references, and personal annotations for learning purposes. Any errors or omissions are entirely my own responsibility.\\[0.9em]
+        
+    \end{center}
+
+    \vfill
+\end{titlepage}
+
+\newpage
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+\newpage
+
+\section*{\noindent\textbf{5.1 Introduction and Aims}}
+\addcontentsline{toc}{section}{5.1 Introduction and Aims}
+
+\begin{itemize}
+    \item Up to this point in the course, we have largely ignored \textbf{money}. However, many of the most engaging and important issues in \textit{international finance} revolve around money.  
+    \item Today, we will first introduce the \textit{Cagan model} of money and prices.  
+    \item Throughout, we assume that prices are \textbf{perfectly flexible} and adjust instantly to clear goods, factor, and asset markets (an assumption that will later be relaxed).  
+    \item By extending the Cagan model to an open economy, we can begin to analyze the \textbf{nominal exchange rate} (that is, the relative value of different currencies).  
+    \item With a money demand function, and given an exogenous money supply process, the \textbf{price level}, the \textbf{nominal exchange rate}, and the \textbf{nominal interest rate} all adjust to ensure equilibrium in the money market of open economies.  
+\end{itemize}
+
+\textbf{Intuition:} In simple words, this section sets the stage: we bring money into the picture, assume prices can move instantly, and then link money, interest rates, and exchange rates together. Think of it as asking: how does the supply and demand for money ripple through prices and exchange rates in an open economy?
+
+\subsection*{\noindent\textbf{Assumptions on the Nature of Money}}
+\addcontentsline{toc}{subsection}{Assumptions on the Nature of Money}
+
+\begin{itemize}
+    \item In this framework, \textbf{money refers strictly to currency}.  
+    \item Currency must play a \textit{central role} in any theory of money: the \textbf{nominal price level} represents the value of goods in terms of currency, while the \textbf{nominal exchange rate} reflects the value of one currency relative to another.  
+\end{itemize}
+
+\textbf{Intuition:} Here we define money in the simplest possible way—just currency—and stress that both prices and exchange rates are really about how much currency is needed to value goods or other currencies.
+
+\begin{itemize}
+    \item We assume that the desired \textbf{real money balances} at any moment are given by:
+    \[
+        \frac{M_t^d}{P_t} = L(Y_t, i_{t,t+1}).
+    \]
+    \item This corresponds to the conventional \textbf{LM curve} used in Keynesian macroeconomics.  
+    \item The aggregate demand for real money at date $t$ depends on:  
+    \begin{enumerate}
+        \item \textbf{Positively on real income/output $Y$:} when income increases, more goods and services are traded. This raises the volume of transactions and therefore the demand for money.  
+        \item \textbf{Negatively on the nominal interest rate $i$ between $t$ and $t+1$:} a higher interest rate increases the opportunity cost of holding money, reducing money demand.  
+    \end{enumerate}
+    \item Put differently, if the return on an asset rises, individuals shift away from holding money toward other assets, lowering their desired real balances.  
+\end{itemize}
+
+\textbf{Intuition:} People like to hold more money when they have higher income (to transact more), but they cut back on holding money when interest rates rise (since money earns no return).
+
+\begin{itemize}
+    \item The link between the \textbf{nominal interest rate $i$} and the \textbf{real interest rate $r$} is expressed through the \textit{Fisher equation}:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+1 + i_{t+1} &= (1 + r_{t+1}) \frac{E_t P_{t+1}}{P_t} && \text{\textbf{Fisher equation}}
+\end{align}
+
+\begin{itemize}
+    \item Therefore, if the real rate is held constant, both the nominal rate and expected inflation will move together.  
+    \item Using this, we can rewrite the money demand equation (1) as follows:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\frac{M_t^d}{P_t} &= L(Y_t, i_{t,t+1}) && \text{\textbf{Equation (1)}} \\
+                   &= L\left(Y_t, r_{t+1}, \frac{E_t P_{t+1}}{P_t}\right) && \text{\textbf{Substitute Fisher equation}} \\
+                   &= L\left(Y_t, r_{t+1}, \frac{E_t P_{t+1}}{P_t}\right) \quad (2)
+\end{align}
+
+\begin{itemize}
+    \item This captures that higher \textbf{expected inflation} lowers real money demand, since the opportunity cost of holding money rises.  
+    \item In the \textit{Cagan model}, the demand for money is simplified into a direct form:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\frac{M_t^d}{P_t} &= \left(\frac{E_t P_{t+1}}{P_t}\right)^{-\eta} \quad (3)
+\end{align}
+
+\begin{itemize}
+    \item The motivation was that during \textbf{hyperinflations}, expected future inflation dominates all other determinants of money demand.  
+\end{itemize}
+
+\textbf{Intuition:} The Fisher equation shows how interest rates and expected inflation are tied together. When inflation is expected to rise, holding money becomes costly, so people reduce their money balances. Cagan simplified this idea into a neat power-law formula to capture how hyperinflation drives money demand.
+
+\begin{itemize}
+    \item Later in this class, we will instead look at the case where \textbf{monetary policy is used to stabilize the (nominal) exchange rate}. In this setup, monetary policy becomes \textit{endogenized}.  
+    \item A central question in international macroeconomics is whether \textbf{fixed exchange rate systems} can remain sustainable in a world with highly mobile international capital.  
+    \item History shows numerous examples of \textbf{currency crises}, understood as the collapse of fixed exchange rate regimes triggered by speculative attacks.  
+    \item In the academic literature, models that explain such crises are commonly divided into two groups: \textbf{first-generation models} and \textbf{second-generation models}.  
+    \item More recently, a third strand of literature has appeared: \textbf{third-generation models}, which argue that a currency crisis cannot be analyzed independently from a \textit{banking crisis}.  
+\end{itemize}
+
+\textbf{Intuition:} Here the focus shifts to exchange rates. Fixed regimes can collapse when markets lose confidence, often due to speculation. Economists classify these crises into different “generations” of models, with the newest stressing that financial fragility in banks is deeply tied to currency crashes.
+
+\subsection*{\noindent\textbf{First Generation Models}}
+\addcontentsline{toc}{subsection}{First Generation Models}
+
+\begin{itemize}
+    \item In first-generation models, governments adopt fiscal and monetary policies that are \textbf{incompatible with the long-run maintenance} of a fixed exchange rate regime.  
+    \item These models highlight that \textbf{macroeconomic mismanagement} is the key driver of currency crises.  
+    \item The idea is that, compared to a country’s short-term repayment capacity (foreign exchange reserves), the size of its financial liabilities indicates the growing probability of a crisis.  
+    \item A country’s main financial liabilities include:  
+    \begin{itemize}
+        \item the fiscal deficit of the government,  
+        \item short-term external debt,  
+        \item and the current account deficit.  
+    \end{itemize}
+    \item Such models provided a convincing explanation of the currency crises faced by developing nations during the 1970s and 1980s.  
+\end{itemize}
+
+\textbf{Intuition:} First-generation models blame crises on poor government management—too much borrowing, deficits, or imbalances. When liabilities get too big compared to reserves, markets anticipate trouble, and the fixed exchange rate collapses.
+
+\subsection*{\noindent\textbf{Second Generation Models}}
+\addcontentsline{toc}{subsection}{Second Generation Models}
+
+\begin{itemize}
+    \item In the 1990s, several countries faced currency crises — for example, Europe in the early 1990s and Mexico in 1994.  
+    \item A striking feature was that speculative attacks often \textit{seemed unrelated to economic fundamentals}.  
+    \item In other words, even when governments avoided \textbf{macroeconomic mismanagement}, crises still occurred — something first-generation models could not explain.  
+    \item Second-generation models were created to account for these episodes.  
+    \item In these models, \textbf{government policy-making is endogenous}, and the interaction between government actions and private-sector expectations determines whether a crisis takes place.  
+    \item Governments weigh the \textbf{costs of defending the exchange rate} against the potential benefits of a devaluation.  
+    \item This framework produces \textbf{multiple equilibria}: the costs of defense depend on what the private sector expects.  
+    \item As a result, crises can arise purely from \textbf{self-fulfilling panics}, independent of fundamentals.  
+\end{itemize}
+
+\textbf{Intuition:} Second-generation models show that expectations themselves can cause a crisis. Even if the economy is sound, if enough investors believe others will attack the currency, their collective behavior can force the government to abandon the peg — turning fear into reality.
+
+\vspace{.5cm}
+\noindent\underline{\textbf{Reading}} \\[2pt]
+\begin{itemize}
+    \item Obstfeld and Rogoff (1996), Chapter 8, Sections 8.1, 8.2, and 8.4.  
+    \item Sachs, Tornell, and Velasco (1996), \textit{“The Mexican Peso Crisis: Sudden Death or Death Foretold?”}, \textit{Journal of International Economics}, 41, pp. 265–283.  
+    \item Flood and Garber (1984), \textit{“Collapsing Exchange Rate Regimes: Some Linear Examples”}, \textit{Journal of International Economics}, 17, pp. 1–13.  
+    \item Calvo and Mendoza (1996), \textit{“Mexico’s Balance of Payments Crisis – A Chronicle of a Death Foretold”}, \textit{Journal of International Economics}, 41, pp. 235–264.  
+    \item Obstfeld (1996), \textit{“Models of Currency-Crises with Self-Fulfilling Features”}, \textit{European Economic Review}, 40, pp. 1037–1047.  
+    \item Saxena (2004), \textit{“The Changing Nature of Currency Crises”}, \textit{Journal of Economic Surveys}, 18, pp. 321–350.  
+\end{itemize}
+
+\section*{\noindent\textbf{5.2 The Cagan Model of Money and Prices}}
+\addcontentsline{toc}{section}{5.2 The Cagan Model of Money and Prices}
+
+\begin{itemize}
+    \item Let $M$ be the country’s money supply and $P$ its price level, defined as the cost of a representative basket of consumption goods in terms of money.  
+    \item A stochastic discrete-time version of Cagan’s model states that demand for real balances $M^d / P$ depends directly on expected future inflation. Higher expected inflation lowers money demand because of the higher opportunity cost of holding money.  
+    \item Using lowercase letters for the natural logarithms of uppercase variables, Cagan’s real money demand equation (3) can be expressed in log-linear form:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t^d - p_t &= -\eta E_t\{p_{t+1} - p_t\} \quad (4)
+\end{align}
+
+\begin{itemize}
+    \item Here, $m^d \equiv \log M^d$, $p \equiv \log P$, and $\eta > 0$ is the semi-elasticity of real balances with respect to expected inflation.  
+    \item $m_t^d$ represents the (log of) nominal money balances held at the end of period $t$.  
+    \item With this money demand function, we can analyze the link between money and the price level.  
+    \item Assume the supply of money $m$ is set exogenously. In equilibrium, demand equals supply, so:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t^d &= m_t
+\end{align}
+
+\textbf{Intuition:} This slide sets up Cagan’s model in log form. The main idea is that expected inflation discourages people from holding money. If money supply is fixed externally, equilibrium means demand for money equals that supply.
+
+\begin{itemize}
+    \item From equation (4), equilibrium implies:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t - p_t &= -\eta E_t \{ p_{t+1} - p_t \} && \text{\textbf{Equation (5)}} 
+\end{align}
+
+\begin{itemize}
+    \item This is the money equilibrium (log form), a first-order stochastic difference equation linking price dynamics to money supply.  
+    \item Now consider the non-stochastic case (\textbf{perfect foresight}). Then:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t - p_t &= -\eta (p_{t+1} - p_t) && \text{\textbf{Perfect foresight}} \\
+          &= -\eta p_{t+1} + \eta p_t && \text{\textbf{Distribute}} \\
+m_t - p_t - \eta p_t &= -\eta p_{t+1} && \text{\textbf{Rearrange}} \\
+m_t - (1+\eta) p_t &= -\eta p_{t+1} && \text{\textbf{Combine terms}} \\
+(1+\eta) p_t &= m_t + \eta p_{t+1} && \text{\textbf{Multiply by -1}} \\
+p_t &= \frac{1}{1+\eta} m_t + \frac{\eta}{1+\eta} p_{t+1} \quad (7)
+\end{align}
+
+\begin{itemize}
+    \item Equation (7) shows today’s price depends on money supply and the expected next-period price.  
+    \item Updating by one period:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_{t+1} &= \frac{1}{1+\eta} m_{t+1} + \frac{\eta}{1+\eta} p_{t+2} 
+\end{align}
+
+\textbf{Intuition:} Prices today are “anchored” by money supply but also pulled forward by expectations of tomorrow’s prices. Under perfect foresight, the future price path feeds back into today’s price.
+
+\begin{itemize}
+    \item From equation (7):  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= \frac{1}{1+\eta} m_t + \frac{\eta}{1+\eta} p_{t+1} && \text{\textbf{Eq. (7)}} 
+\end{align}
+
+\begin{itemize}
+    \item Substitute $p_{t+1}$ using the one-period-ahead version of (7):  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_{t+1} &= \frac{1}{1+\eta} m_{t+1} + \frac{\eta}{1+\eta} p_{t+2} && \text{\textbf{Eq. (7) forward}} 
+\end{align}
+
+\singlespacing
+\begin{align}
+p_t &= \frac{1}{1+\eta} m_t + \frac{\eta}{1+\eta} \left( \frac{1}{1+\eta} m_{t+1} + \frac{\eta}{1+\eta} p_{t+2} \right) && \text{\textbf{Substitute $p_{t+1}$}} \\
+    &= \frac{1}{1+\eta} m_t + \frac{\eta}{(1+\eta)^2} m_{t+1} + \left( \frac{\eta}{1+\eta} \right)^2 p_{t+2} && \text{\textbf{Distribute terms}} \\
+    &= \frac{1}{1+\eta} \left( m_t + \frac{\eta}{1+\eta} m_{t+1} \right) + \left( \frac{\eta}{1+\eta} \right)^2 p_{t+2} && \text{\textbf{Factorize}} 
+\end{align}
+
+\begin{itemize}
+    \item Repeating this substitution forward (\(p_{t+2}, p_{t+3}, \dots\)) we obtain:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= \frac{1}{1+\eta} \sum_{s=0}^{T-1} \left( \frac{\eta}{1+\eta} \right)^s m_{t+s} 
+      + \left( \frac{\eta}{1+\eta} \right)^T p_{t+T} \quad (8)
+\end{align}
+
+\begin{itemize}
+    \item To proceed, two assumptions are needed:  
+    \begin{enumerate}
+        \item \textbf{No speculative bubbles:}  
+        \[
+        \lim_{T \to \infty} \left( \frac{\eta}{1+\eta} \right)^T p_{t+T} = 0
+        \]  
+        which rules out explosive price paths.  
+        \item \textbf{Convergence condition:}  
+        \[
+        \left| \lim_{T \to \infty} \sum_{s=0}^{T-1} \left( \frac{\eta}{1+\eta} \right)^s m_{t+s} \right| < \infty
+        \]  
+        ensuring the infinite series is well-defined.  
+    \end{enumerate}
+\end{itemize}
+
+\textbf{Intuition:} By forward substitution, today’s price equals a weighted sum of today’s and future money supplies, plus a potential “bubble” term. To avoid prices exploding, we assume the bubble term vanishes and the weighted sum converges.
+
+\begin{itemize}
+    \item Given the no-bubble and convergence assumptions, letting $T \to \infty$, equation (8) becomes:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= \frac{1}{1+\eta} \sum_{s=0}^{\infty} \left( \frac{\eta}{1+\eta} \right)^s m_{t+s} \quad (9)
+\end{align}
+
+\begin{itemize}
+    \item Notice the coefficients on money supply form a geometric series. To see this clearly, expand the first terms:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\frac{1}{1+\eta} \Big[ 1 &+ \frac{\eta}{1+\eta} + \left(\frac{\eta}{1+\eta}\right)^2 + \left(\frac{\eta}{1+\eta}\right)^3 + \cdots \Big] 
+\end{align}
+
+\begin{itemize}
+    \item This has the same structure as a basic sum:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+1 + 2 + 3 + \dots + n &= \frac{n(n+1)}{2} && \text{\textbf{Finite sum identity}} 
+\end{align}
+
+\begin{itemize}
+    \item For a geometric sequence, instead we use:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+1 + k + k^2 + k^3 + \dots &= \frac{1}{1-k}, \quad |k| < 1 && \text{\textbf{Infinite geometric sum}} 
+\end{align}
+
+\begin{itemize}
+    \item Apply this with $k = \tfrac{\eta}{1+\eta}$:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\frac{1}{1+\eta} \left[ \frac{1}{1 - \frac{\eta}{1+\eta}} \right] 
+   &= \frac{1}{1+\eta} \cdot \frac{1+\eta}{1} && \text{\textbf{Simplify}} \\
+   &= 1
+\end{align}
+
+\begin{itemize}
+    \item Therefore, the coefficients on money supply in (9) sum to 1.  
+    \item In general, recall the standard formula:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\sum_{s=1}^{\infty} a k^{s-1} &= \frac{a}{1-k}, \quad |k| < 1
+\end{align}
+
+\begin{itemize}
+    \item This means that today’s price is a \textbf{weighted average of current and future expected money supplies}, with weights declining geometrically. Since weights add to 1, money is \textit{neutral} in the long run.  
+\end{itemize}
+
+\textbf{Intuition:} Equation (9) says prices reflect all future expected money supplies, but give more weight to the near future and less to the distant future. The geometric series ensures that the total weight equals 1, so money only affects prices and not real variables.
+
+\begin{itemize}
+    \item \textbf{Money neutrality} means that changing the money supply by the same proportion at all dates leads to an immediate equal proportional change in the price level.  
+    \item This neutrality property characterizes models without nominal rigidities and underpins \textit{Classical} and \textit{Monetarist} macroeconomics.  
+    \item Now examine our solution (equation (9)) under different money–supply processes.  
+\end{itemize}
+
+\subsection*{\noindent\textbf{1. Constant money supply ($m_t=\bar m$)}}
+\addcontentsline{toc}{subsection}{1. Constant money supply ($m_t=\bar m$)}
+
+\begin{itemize}
+    \item Suppose the money supply remains permanently at $\bar m$. Then inflation is zero: $p_{t+1}=p_t$.  
+    \item In this case, equation (6) implies a constant price level $\bar p=\bar m$, which also follows from equation (9):  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t - p_t &= -\eta(p_{t+1}-p_t) && \text{\textbf{Eq. (6)}} \\
+\bar m - p_t &= -\eta(0) = 0 && \text{\textbf{$m_t=\bar m$, $p_{t+1}=p_t$}} \\
+p_t &= \bar m && \text{\textbf{Rearrange}}
+\end{align}
+
+\singlespacing
+\begin{align}
+p_t &= \frac{1}{1+\eta}\sum_{s=0}^{\infty}\!\left(\frac{\eta}{1+\eta}\right)^{\!s}\bar m && \text{\textbf{Use eq. (9), $m_{t+s}=\bar m$}} \\
+    &= \frac{\bar m}{1+\eta}\Big[1+\tfrac{\eta}{1+\eta}+\big(\tfrac{\eta}{1+\eta}\big)^2+\cdots\Big] && \text{\textbf{Factor $\bar m$}} \\
+    &= \frac{\bar m}{1+\eta}\cdot \frac{1}{1-\frac{\eta}{1+\eta}} && \text{\textbf{Geometric sum}} \\
+    &= \frac{\bar m}{1+\eta}\cdot(1+\eta) = \bar m && \text{\textbf{Simplify}}
+\end{align}
+
+\textbf{Intuition:} With a fixed money supply there is no drift in prices—today’s price equals the constant money stock. Both the difference equation (6) and the weighted‐average formula (9) collapse to the same constant.
+
+\subsection*{\noindent\textbf{2. Constant money growth rate $\mu$}}
+\addcontentsline{toc}{subsection}{2. Constant money growth rate $\mu$}
+
+\begin{itemize}
+    \item Suppose the money supply follows the rule:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t &= \bar{m} + \mu s, \quad s \geq 0
+\end{align}
+
+\begin{itemize}
+    \item Substituting into equation (9), the price path is:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= \frac{1}{1+\eta} \sum_{s=0}^\infty \left(\frac{\eta}{1+\eta}\right)^s \left(\bar{m} + \mu s\right) && \text{\textbf{From eq. (9)}} \\
+    &= \frac{1}{1+\eta} \left[ \sum_{s=0}^\infty \left(\frac{\eta}{1+\eta}\right)^s \bar{m} 
+    + \sum_{s=0}^\infty \left(\frac{\eta}{1+\eta}\right)^s \mu s \right] && \text{\textbf{Separate terms}} \\
+    &= \bar{m} + \frac{\mu}{1+\eta} \sum_{s=1}^\infty \left(\frac{\eta}{1+\eta}\right)^s s && \text{\textbf{First sum simplifies to $\bar m$}}
+\end{align}
+
+\begin{itemize}
+    \item To evaluate the second sum, recall the identity:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\sum_{s=1}^\infty a k^{s-1} &= \frac{a}{(1-k)^2}, \quad |k|<1 && \text{\textbf{Derivative of geometric sum}}
+\end{align}
+
+\begin{itemize}
+    \item Apply with $a=\tfrac{\eta}{1+\eta}$ and $k=\tfrac{\eta}{1+\eta}$:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\sum_{s=1}^\infty \left(\frac{\eta}{1+\eta}\right)^s s 
+ &= \frac{\eta}{1+\eta} \sum_{s=1}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-1} s && \text{\textbf{Factor $\tfrac{\eta}{1+\eta}$}} \\
+ &= \frac{\eta}{1+\eta} \cdot \frac{1}{\left(1-\frac{\eta}{1+\eta}\right)^2} && \text{\textbf{Apply formula}} \\
+ &= \frac{\eta}{1+\eta} \cdot (1+\eta)^2 && \text{\textbf{Simplify denominator}} \\
+ &= \eta(1+\eta) 
+\end{align}
+
+\begin{itemize}
+    \item Substitute back into the price equation:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= \bar m + \frac{\mu}{1+\eta} \cdot \eta(1+\eta) && \text{\textbf{Insert sum result}} \\
+    &= \bar m + \mu \eta && \text{\textbf{Simplify}} 
+\end{align}
+
+\textbf{Intuition:} With money supply growing steadily, prices rise linearly over time: each period’s growth in money supply feeds proportionally into the price level. The factor $\eta$ scales how strongly expected inflation impacts money demand.
+
+\subsection*{\noindent\textbf{3. A future one-time monetary increase}}
+\addcontentsline{toc}{subsection}{3. A future one-time monetary increase}
+
+\begin{itemize}
+    \item Consider an unanticipated announcement at $t=0$ of a permanent increase in money supply starting at future date $T>0$.  
+    \item Formally:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t = 
+\begin{cases} 
+\bar{m}, & t < T \\
+m', & t \geq T
+\end{cases}
+\end{align}
+
+\begin{itemize}
+    \item Using the general solution (equation (9)), the price path is:  
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t = 
+\begin{cases} 
+\bar m, & t < 0 \\
+\bar m + \left(\tfrac{\eta}{1+\eta}\right)^{T-t}(m' - \bar m), & 0 \leq t < T \\
+m', & t \geq T
+\end{cases}
+\end{align}
+
+\noindent\underline{\textbf{Case 1: $t < 0$}} \\[4pt]
+
+\singlespacing
+\begin{align}
+p_t &= \frac{1}{1+\eta} \sum_{s=0}^\infty \left(\frac{\eta}{1+\eta}\right)^s \bar m && \text{\textbf{Eq. (9) with $m_t=\bar m$}} \\
+    &= \frac{\bar m}{1+\eta} \left[ 1 + \frac{\eta}{1+\eta} + \left(\frac{\eta}{1+\eta}\right)^2 + \cdots \right] && \text{\textbf{Factor $\bar m$}} \\
+    &= \frac{\bar m}{1+\eta} \cdot \frac{1}{1 - \frac{\eta}{1+\eta}} && \text{\textbf{Geometric sum}} \\
+    &= \bar m
+\end{align}
+
+\textbf{Intuition (Case 1: $t<0$):} Before the announcement, prices remain fixed at the old level $\bar m$ since no change is expected.  
+
+
+\noindent\underline{\textbf{Case 2: $t \geq T$}} \\[4pt]
+
+\singlespacing
+\begin{align}
+p_t &= \frac{1}{1+\eta} \sum_{s=0}^\infty \left(\frac{\eta}{1+\eta}\right)^s m' && \text{\textbf{Eq. (9) with $m_t=m'$}} \\
+    &= \frac{m'}{1+\eta} \cdot \frac{1}{1 - \frac{\eta}{1+\eta}} && \text{\textbf{Geometric sum}} \\
+    &= m'
+\end{align}
+
+\textbf{Intuition (Case 2: $t \geq T$):} Once the new money supply is in place, prices jump fully to the new constant level $m'$.
+
+\noindent\underline{\textbf{Case 3: $0 \leq t < T$}} \\[4pt]
+
+\singlespacing
+\begin{align}
+p_t &= \frac{1}{1+\eta} \sum_{s=0}^\infty \left(\frac{\eta}{1+\eta}\right)^s \bar m 
+    + \frac{1}{1+\eta} \sum_{s=T-t}^\infty \left(\frac{\eta}{1+\eta}\right)^s (m' - \bar m) && \text{\textbf{Split sums}} \\
+    &= \bar m + \frac{1}{1+\eta}\left(\frac{\eta}{1+\eta}\right)^{T-t} \sum_{s=0}^\infty \left(\frac{\eta}{1+\eta}\right)^s (m' - \bar m) && \text{\textbf{Shift index in 2nd sum}} \\
+    &= \bar m + \left(\frac{\eta}{1+\eta}\right)^{T-t} (m' - \bar m) && \text{\textbf{Geometric sum}}
+\end{align}
+
+\textbf{Intuition (Case 3: $0 \leq t < T$):} Between the announcement and the actual change, expectations drive a gradual adjustment. Prices move smoothly from $\bar m$ toward $m'$, depending on how close $T$ is.  
+
+\textbf{Intuition:}  
+- If the increase is far in the future, today’s price barely moves.  
+- As $t$ approaches $T$, expectations push prices up gradually.  
+- Once $T$ arrives, the price jumps fully to the new level $m'$.  
+This illustrates how expectations of future monetary policy affect current prices.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figu1.png}
+    \caption{A perfectly anticipated rise in the money supply}
+\end{figure}
+
+\textbf{Intuition (Case 1: $t<0$):} Before the announcement, people see no reason to change their behavior — prices stay flat at $\bar m$.  
+
+\textbf{Intuition (Case 2: $t \geq T$):} Once the new policy takes effect, everyone knows more money is circulating. The price level jumps to $m'$, reflecting the higher money stock.  
+
+\textbf{Intuition (Case 3: $0 \leq t < T$):} After the announcement but before the change, households and firms anticipate future inflation. They start adjusting prices upward even though the money hasn’t increased yet. The closer $T$ gets, the stronger this adjustment becomes.  
+
+\begin{itemize}
+    \item The announcement of a future monetary expansion raises today’s price level.  
+    \item With higher prices, real money balances fall, and the price level gradually converges to its new higher level.  
+    \item Inflation happens before the actual increase in the money supply.  
+    \item Reason: agents are forward-looking and anticipate future inflation, reducing their real money balances in advance.  
+    \item This behavior pushes today’s price level up, even before money supply rises.  
+    \item Prices therefore “jump” at the time of the policy announcement, not at its implementation.  
+\end{itemize}
+
+\subsection*{\noindent\textbf{The Stochastic Cagan Model}}
+\addcontentsline{toc}{subsection}{The Stochastic Cagan Model}
+
+\noindent
+When the future money supply is uncertain, the price level is determined by the \textit{expected} future values of money supply.  
+Formally, the solution is: 
+\[
+p_t = \frac{1}{1+\eta} \sum_{s=0}^\infty \left(\frac{\eta}{1+\eta}\right)^s E_t\{m_{t+s}\}.
+\]
+
+\noindent
+The difference with the perfect-foresight case is simple: instead of plugging in the known future money supplies, we now replace them with their expectations.  
+To derive this formally, recall from equation (5) the stochastic money demand:
+\[
+m_t - p_t = -\eta E_t(p_{t+1} - p_t).
+\]
+
+\singlespacing
+\begin{align}
+m_t - p_t &= -\eta E_t(p_{t+1} - p_t) && \text{\textbf{Stochastic money demand}} \\[6pt]
+p_t &= \tfrac{1}{1+\eta} m_t + \tfrac{\eta}{1+\eta} E_t p_{t+1} && \text{\textbf{Solve for $p_t$}} \\[6pt]
+E_t p_{t+1} &= \tfrac{1}{1+\eta} E_t m_{t+1} + \tfrac{\eta}{1+\eta} E_t p_{t+2} && \text{\textbf{Forward one period}} \\[6pt]
+p_t &= \tfrac{1}{1+\eta}E_t m_t + \tfrac{\eta}{(1+\eta)^2}E_t m_{t+1} + \big(\tfrac{\eta}{1+\eta}\big)^2 E_t p_{t+2} && \text{\textbf{Substitute \& expand}} \\[6pt]
+p_t &= \tfrac{1}{1+\eta}\sum_{s=0}^{T-1}\Big(\tfrac{\eta}{1+\eta}\Big)^s E_t m_{t+s} 
+     + \Big(\tfrac{\eta}{1+\eta}\Big)^T E_t p_{t+T} && \text{\textbf{Iterate $T$ steps}}
+\end{align}
+
+
+\noindent
+As $T \to \infty$, ruling out bubbles and requiring convergence gives us equation (10).
+
+\bigskip
+\textbf{Intuition:}  
+Prices today depend on the \textit{expected path} of future money supply. If agents believe money supply will expand in the future, they adjust prices upward even before it happens. Expectations about money creation are enough to influence today’s inflation, because people want to reduce their real balances in anticipation.
+
+\singlespacing
+\begin{align}
+E_t p_{t+1} &= \tfrac{1}{1+\eta} E_t m_{t+1} + \tfrac{\eta}{1+\eta} E_t p_{t+2} && \text{\textbf{Iterated expectations}} \\[6pt]
+p_t &= \tfrac{1}{1+\eta}\sum_{s=0}^{T-1}\Big(\tfrac{\eta}{1+\eta}\Big)^s E_t m_{t+s} 
+      + \Big(\tfrac{\eta}{1+\eta}\Big)^T E_t p_{t+T} && \text{\textbf{Substitution $T$ steps}} \\[6pt]
+\lim_{T\to\infty}\Big(\tfrac{\eta}{1+\eta}\Big)^T E_t p_{t+T} &= 0 && \text{\textbf{No bubbles}} \\[6pt]
+\sum_{s=0}^{\infty}\Big(\tfrac{\eta}{1+\eta}\Big)^s 
+ &= 1+\tfrac{\eta}{1+\eta}+\Big(\tfrac{\eta}{1+\eta}\Big)^2+\cdots && \text{\textbf{Expand series}} \\[6pt]
+ &= \tfrac{1}{1-\frac{\eta}{1+\eta}} = 1+\eta && \text{\textbf{Geometric sum}} \\[6pt]
+p_t &= \tfrac{1}{1+\eta}\sum_{s=0}^\infty \Big(\tfrac{\eta}{1+\eta}\Big)^s E_t m_{t+s} && \text{\textbf{Final form (eq. 10)}}
+\end{align}
+
+\begin{itemize}
+    \item To avoid speculative bubbles, we impose the condition:
+    \[
+        \lim_{T \to \infty} \Big(\tfrac{\eta}{1+\eta}\Big)^T E_t p_{t+T} = 0
+    \]
+    \item To ensure convergence of the solution, we also require:
+    \[
+        \Bigg|\lim_{T \to \infty} \sum_{s=0}^{T-1} 
+        \Big(\tfrac{\eta}{1+\eta}\Big)^s E_t m_{t+s}\Bigg| < \infty
+    \]
+    \item Under these assumptions, the solution yields equation (10).
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= \tfrac{1}{1+\eta}\sum_{s=0}^{T-1}\Big(\tfrac{\eta}{1+\eta}\Big)^s E_t m_{t+s} 
+      + \Big(\tfrac{\eta}{1+\eta}\Big)^T E_t p_{t+T} 
+      && \text{\textbf{Iterated form}} \\
+    &\xrightarrow[T\to\infty]{} \tfrac{1}{1+\eta}\sum_{s=0}^\infty
+      \Big(\tfrac{\eta}{1+\eta}\Big)^s E_t m_{t+s} 
+      && \text{\textbf{No bubbles, convergence}}
+\end{align}
+
+\textit{Intuition:}  
+Excluding bubbles means prices cannot explode just from expectations alone.  
+Convergence ensures the weighted effect of future money supply on today’s prices stays finite.  
+Together, this guarantees that prices reflect fundamentals (expected money supply), not speculative paths.
+
+
+\begin{itemize}
+    \item Suppose that the money supply follows:
+    \[
+        m_t = \rho m_{t-1} + \varepsilon_t,
+    \]
+    with \(0 \leq \rho \leq 1\) and \(\varepsilon_t\) a white-noise shock such that \(E_t\{\varepsilon_{t+s}\} = 0\).
+    \item Question: what is the solution for the price path in this case?
+    \item Since future shocks have zero expectation, equation (10) can be simplified.
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= \tfrac{1}{1+\eta}\sum_{s=0}^\infty 
+        \Big(\tfrac{\eta}{1+\eta}\Big)^s E_t m_{t+s} 
+        && \text{\textbf{Use eq. (10)}} \\
+    &= \tfrac{1}{1+\eta}\sum_{s=0}^\infty 
+        \Big(\tfrac{\eta}{1+\eta}\Big)^s \rho^s m_t 
+        && \text{\textbf{Because $E_t m_{t+s}=\rho^s m_t$}} \\
+    &= \tfrac{m_t}{1+\eta}\Big[1+\tfrac{\eta}{1+\eta}\rho+\big(\tfrac{\eta}{1+\eta}\rho\big)^2+\cdots\Big]
+        && \text{\textbf{Factor $m_t$}} \\
+    &= \tfrac{m_t}{1+\eta}\cdot \frac{1}{1-\frac{\eta}{1+\eta}\rho} 
+        && \text{\textbf{Geometric sum}} \\
+    &= \tfrac{1}{1+\eta(1-\rho)}\,m_t 
+        && \text{\textbf{Simplify}}
+\end{align}
+
+\begin{itemize}
+    \item The higher the persistence \(\rho\), the stronger the effect of current money on future money, so today’s price reacts more.  
+    \item If \(\rho=0\), money has no persistence → prices only reflect today’s money supply.  
+    \item If \(\rho=1\), money is a random walk → prices fully incorporate the long-run effect of shocks.  
+    \item In all cases, the price level is proportional to the current money stock, adjusted by the persistence factor.  
+\end{itemize}
+
+\begin{itemize}
+    \item If $\rho = 1$, then $p_t = m_t$. 
+    \begin{itemize}
+        \item The price level follows a random walk.  
+        \item All money shocks are permanent.  
+    \end{itemize}
+    \item If $\rho = 0$, then 
+    \[
+        p_t = \tfrac{1}{1+\eta} m_t = \tfrac{1}{1+\eta}\varepsilon_t
+    \] 
+    \begin{itemize}
+        \item All money shocks are temporary.  
+    \end{itemize}
+\end{itemize}
+
+
+\singlespacing
+\begin{align}
+p_t &= \tfrac{1}{1+\eta(1-\rho)} m_t && \text{\textbf{From AR(1) solution}} \\
+\rho &= 1 \;\;\Rightarrow\;\; p_t = m_t && \text{\textbf{Permanent shocks}} \\
+\rho &= 0 \;\;\Rightarrow\;\; p_t = \tfrac{1}{1+\eta} m_t 
+     = \tfrac{1}{1+\eta}\varepsilon_t && \text{\textbf{Temporary shocks}}
+\end{align}
+
+\textit{Intuition:}  
+If money supply is fully persistent ($\rho=1$), every shock has a lasting effect, so prices drift permanently with money.  
+If money is white noise ($\rho=0$), shocks vanish quickly, so their impact on prices is short-lived.
+
+\section*{\noindent\textbf{5.3 A Simple Monetary Model of Exchange Rates}}
+\addcontentsline{toc}{section}{5.3 A Simple Monetary Model of Exchange Rates}
+
+\begin{itemize}
+    \item We now extend the log-linear Cagan model to an open economy.  
+    \item This yields a simple monetary model for the nominal exchange rate.  
+    \item To match moderate inflation conditions, we use a log-linear version of money demand.  
+    \item In a small open economy with exogenous real output, money demand is:  
+    \[
+        m_t - p_t = -\eta i_{t+1} + \phi y_t \quad (11)
+    \]  
+    \item Here $i \equiv \log(1+i)$, $p$ is the log price level, and $y$ is the log of real output.  
+    \item A key assumption: purchasing power parity (PPP), meaning price levels across countries align when measured in a common numeraire.  
+\end{itemize}
+
+
+\singlespacing
+\begin{align}
+m_t - p_t &= -\eta i_{t+1} + \phi y_t && \text{\textbf{Eq. (11)}} \\
+p_t &= m_t + \eta i_{t+1} - \phi y_t && \text{\textbf{Rearrange: solve for $p_t$}}
+\end{align}
+
+
+\textit{Intuition:}  
+Prices in an open economy depend on three forces: money supply ($m_t$), interest rates ($i_{t+1}$, via opportunity cost of money), and output ($y_t$, capturing transactions demand). With PPP, this sets a foundation for linking domestic money to exchange rates.
+
+\begin{itemize}
+    \item Let $\varepsilon$ be the nominal exchange rate, defined as the price of 1 unit of foreign currency in domestic currency.  
+    \item Let $P^*$ denote the foreign-currency price of a consumption basket, with $P$ the domestic price.  
+    \item Purchasing power parity (PPP) implies:  
+    \[
+        P_t = \varepsilon_t P_t^* 
+    \]  
+    \item In logs:  
+    \[
+        p_t = e_t + p_t^* \quad (12)
+    \]  
+    \item Here $e = \log \varepsilon$.  
+    \item A second building block: uncovered interest parity (UIP).  
+    \item Let $i_{t+1}$ = domestic interest rate at time $t$, $i_{t+1}^*$ = foreign interest rate.  
+    \item Then UIP condition is:  
+    \[
+        1 + i_{t+1} = (1 + i_{t+1}^*) E_t\!\left(\frac{\varepsilon_{t+1}}{\varepsilon_t}\right).
+    \]  
+\end{itemize}
+
+
+\singlespacing
+\begin{align}
+P_t &= \varepsilon_t P_t^* && \text{\textbf{PPP in levels}} \\
+\log P_t &= \log \varepsilon_t + \log P_t^* && \text{\textbf{Take logs}} \\
+p_t &= e_t + p_t^* && \text{\textbf{Eq. (12)}}
+\end{align}
+
+\begin{align}
+1 + i_{t+1} &= (1 + i_{t+1}^*) E_t\!\left(\frac{\varepsilon_{t+1}}{\varepsilon_t}\right) && \text{\textbf{UIP condition}}
+\end{align}
+
+
+\textit{Intuition:}  
+PPP links domestic prices to world prices through the exchange rate. UIP says expected returns on domestic and foreign assets must be equal once adjusted for expected exchange rate changes. Together, they tie money, prices, and exchange rates.
+
+\begin{itemize}
+    \item In logs, uncovered interest parity (UIP) becomes:  
+    \[
+        i_{t+1} = i_{t+1}^* + E_t e_{t+1} - e_t \quad (13)
+    \]  
+    \item Substituting PPP (12) and UIP (13) into money demand (11):  
+    \[
+        m_t - p_t = -\eta i_{t+1} + \phi y_t
+    \]  
+    \item This yields:  
+    \[
+        (m_t - \phi y_t + \eta i_{t+1}^* - p_t^*) - e_t = -\eta(E_t e_{t+1} - e_t) \quad (14)
+    \]  
+    \item Equation (14) is analogous to the stochastic Cagan model but now for exchange rates.  
+    \item Hence, the solution for the exchange rate is:  
+    \[
+        e_t = \frac{1}{1+\eta}\sum_{s=t}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-t} E_t\{m_s - \phi y_s + \eta i_s^* - p_s^*\} \quad (15)
+    \]  
+\end{itemize}
+
+% --- Deep algebra ---
+\singlespacing
+\begin{align}
+i_{t+1} &= i_{t+1}^* + E_t e_{t+1} - e_t && \text{\textbf{Eq. (13)}} \\
+m_t - p_t &= -\eta i_{t+1} + \phi y_t && \text{\textbf{From (11)}} \\
+m_t - (e_t + p_t^*) &= -\eta(i_{t+1}^* + E_t e_{t+1} - e_t) + \phi y_t && \text{\textbf{Substitute PPP, UIP}} \\
+(m_t - \phi y_t + \eta i_{t+1}^* - p_t^*) - e_t &= -\eta(E_t e_{t+1} - e_t) && \text{\textbf{Rearrange → Eq. (14)}}
+\end{align}
+
+\begin{align}
+e_t &= \frac{1}{1+\eta}\sum_{s=t}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-t} 
+E_t(m_s - \phi y_s + \eta i_s^* - p_s^*) && \text{\textbf{Iterate forward → Eq. (15)}}
+\end{align}
+
+% --- Intuition ---
+\textit{Intuition:}  
+The exchange rate today reflects expectations about future fundamentals: money supply ($m_s$), output ($y_s$), foreign interest rates ($i_s^*$), and foreign prices ($p_s^*$). If markets expect loose money or low output, the domestic currency depreciates immediately.
+\begin{itemize}
+    \item In logs, uncovered interest parity (UIP) becomes:  
+    \[
+        i_{t+1} = i_{t+1}^* + E_t e_{t+1} - e_t \quad (13)
+    \]  
+    \item Substituting PPP (12) and UIP (13) into money demand (11):  
+    \[
+        m_t - p_t = -\eta i_{t+1} + \phi y_t
+    \]  
+    \item This yields:  
+    \[
+        (m_t - \phi y_t + \eta i_{t+1}^* - p_t^*) - e_t = -\eta(E_t e_{t+1} - e_t) \quad (14)
+    \]  
+    \item Equation (14) is analogous to the stochastic Cagan model but now for exchange rates.  
+    \item Hence, the solution for the exchange rate is:  
+    \[
+        e_t = \frac{1}{1+\eta}\sum_{s=t}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-t} E_t\{m_s - \phi y_s + \eta i_s^* - p_s^*\} \quad (15)
+    \]  
+\end{itemize}
+
+% --- Deep algebra ---
+\singlespacing
+\begin{align}
+i_{t+1} &= i_{t+1}^* + E_t e_{t+1} - e_t && \text{\textbf{Eq. (13)}} \\
+m_t - p_t &= -\eta i_{t+1} + \phi y_t && \text{\textbf{From (11)}} \\
+m_t - (e_t + p_t^*) &= -\eta(i_{t+1}^* + E_t e_{t+1} - e_t) + \phi y_t && \text{\textbf{Substitute PPP, UIP}} \\
+(m_t - \phi y_t + \eta i_{t+1}^* - p_t^*) - e_t &= -\eta(E_t e_{t+1} - e_t) && \text{\textbf{Rearrange → Eq. (14)}}
+\end{align}
+
+\begin{align}
+e_t &= \frac{1}{1+\eta}\sum_{s=t}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-t} 
+E_t(m_s - \phi y_s + \eta i_s^* - p_s^*) && \text{\textbf{Iterate forward → Eq. (15)}}
+\end{align}
+
+% --- Intuition ---
+\textit{Intuition:}  
+The exchange rate today reflects expectations about future fundamentals: money supply ($m_s$), output ($y_s$), foreign interest rates ($i_s^*$), and foreign prices ($p_s^*$). If markets expect loose money or low output, the domestic currency depreciates immediately.
+
+\begin{itemize}
+    \item In this monetary exchange rate model, raising the path of home money supply raises domestic prices and forces $e$ up through PPP. This means a depreciation of the home currency.  
+    \item Real domestic income, the foreign interest rate, and the foreign price level affect $e$ as shown in equation (15).  
+    \item Example: if home output increases, money demand rises (from 11). With higher demand, the domestic price level falls to balance real balances, pushing $e$ down through PPP. This is an appreciation of the home currency.  
+    \item With perfectly flexible prices, this model is not empirically strong.  
+    \item Still, it provides important and robust insights.  
+    \item Key point: \textit{the nominal exchange rate should be viewed as an asset price}. Like other assets, it depends on expectations of future fundamentals (as in equation 15).  
+    \item Next, we illustrate with an example.  
+\end{itemize}
+
+% --- Intuition ---
+\textit{Intuition:}  
+When money supply rises, the currency weakens (depreciates). When domestic output rises, the currency strengthens (appreciates). The exchange rate moves like an asset price: it reflects today the market’s expectations of future money, output, and foreign conditions.
+
+\begin{itemize}
+    \item Assume $y, p^*, i^*$ are constant with $\eta i^* - \phi y - p^* = 0$.  
+    \item Let the money supply follow:  
+    \[
+        m_t - m_{t-1} = \rho(m_{t-1} - m_{t-2}) + \varepsilon_t
+    \]  
+    \item with $0 \leq \rho \leq 1$, $\varepsilon_t$ white-noise, mean zero, uncorrelated.  
+    \item This means shocks hit the \textit{growth rate} of money, not the level.  
+    \item To solve, lead (15) one period, take expectations, subtract original equation:  
+    \[
+        E_t e_{t+1} - e_t = \frac{1}{1+\eta} \sum_{s=t}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-t} E_t\{m_{s+1} - m_s\}
+    \]  
+    \item Substituting the money supply process:  
+    \[
+        E_t e_{t+1} - e_t = \frac{1}{1+\eta} \sum_{s=t}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-t} \rho^{\,s-t+1}(m_t - m_{t-1})
+    \]  
+\end{itemize}
+
+% --- Deep algebra ---
+\singlespacing
+\begin{align}
+E_t e_{t+1} &= \frac{1}{1+\eta}\sum_{s=t}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-t} E_t m_{s+1} && \text{\textbf{Lead (15)}} \\
+E_t e_{t+1} - e_t &= \frac{1}{1+\eta}\sum_{s=t}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-t} E_t(m_{s+1}-m_s) && \text{\textbf{Subtract original}} \\
+&= \frac{1}{1+\eta}\sum_{s=t}^\infty \left(\frac{\eta}{1+\eta}\right)^{s-t} \rho^{\,s-t+1}(m_t - m_{t-1}) && \text{\textbf{Use $m$ process}}
+\end{align}
+
+% --- Intuition ---
+\textit{Intuition:}  
+The exchange rate reacts not to the money stock itself but to expected changes in money growth. If money grows faster than before, the currency depreciates immediately. If money growth stabilizes, expectations anchor and the currency stops moving.
+
+\begin{itemize}
+    \item From earlier step: 
+    \[
+    E_t e_{t+1} - e_t = \frac{\rho}{1+\eta - \eta\rho}(m_t - m_{t-1}).
+    \]
+    \item Substituting into (14) yields:
+    \[
+    e_t = m_t + \frac{\eta \rho}{1+\eta - \eta\rho}(m_t - m_{t-1}).
+    \]
+    \item Interpretation:
+    \begin{enumerate}
+        \item A positive money shock raises the exchange rate directly via $m_t$.  
+        \item If $\rho > 0$, expectations of future money growth push $e_t$ even higher.  
+    \end{enumerate}
+    \item Instability in money supply $\Rightarrow$ more volatility in exchange rates.
+\end{itemize}
+
+\singlespacing
+\begin{align}
+E_t e_{t+1} - e_t &= \frac{\rho}{1+\eta - \eta\rho}(m_t - m_{t-1}) && \text{\textbf{Result from process}} \\[6pt]
+e_t &= m_t + \frac{\eta\rho}{1+\eta - \eta\rho}(m_t - m_{t-1}) && \text{\textbf{Plug into (14)}}
+\end{align}
+
+\textbf{Intuition:} A surprise rise in money supply makes the currency depreciate today. If shocks are persistent ($\rho > 0$), markets also expect faster future money growth, amplifying depreciation.  
+
+\newpage
+\section*{\noindent\textbf{5.4 The Cagan Model in Continuous Time}}
+\addcontentsline{toc}{section}{5.4 The Cagan Model in Continuous Time}
+
+\begin{itemize}
+    \item So far, the Cagan model we studied was in \textbf{discrete time}.  
+    \item For exchange-rate crises, it is easier to use \textbf{continuous time}.  
+    \item In discrete time, money demand was:  
+    \[
+    m_t - p_t = -\eta (p_{t+1} - p_t). \tag{16}
+    \]
+    \item In continuous time, it becomes:  
+    \[
+    m_t - p_t = -\eta \dot p_t, \tag{16a}
+    \]
+    where $\dot p_t = \lim_{h\to 0} \frac{p_{t+h} - p_t}{h}$.  
+    \item Solving the differential equation gives:  
+    \[
+    p_t = \frac{1}{\eta} \int_t^{\infty} e^{-(s-t)/\eta} m_s \, ds + b_0 e^{t/\eta}. \tag{16b}
+    \]
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t - p_t &= -\eta \dot p_t && \text{\textbf{Eq. (16a)}} \\[6pt]
+\dot p_t + \tfrac{1}{\eta} p_t &= \tfrac{1}{\eta} m_t && \text{\textbf{Rearrange}} \\[6pt]
+p_t &= \tfrac{1}{\eta} \int_t^\infty e^{-(s-t)/\eta} m_s \, ds + b_0 e^{t/\eta} && \text{\textbf{Solve ODE, Eq. (16b)}}
+\end{align}
+
+\textit{Intuition:} In continuous time, the price level $p_t$ depends on the entire future path of money supply $m_s$ (via the integral). The exponential term $b_0 e^{t/\eta}$ would represent a \textbf{bubble}, which is usually ruled out to ensure stability.
+
+% --- Transcript (no section title on this slide) ---
+\begin{itemize}
+    \item General 1st–order linear ODE:
+    \[
+      \dot y + \nu y = z 
+      \;\Rightarrow\; y(t)=e^{-\nu t}\!\left[A+\int z\,e^{\nu t}\,dt\right].
+    \]
+    \item Here \(A\) is an arbitrary constant.
+    \item Rewrite Cagan (16a) as
+    \[
+      \dot p_t - \tfrac{1}{\eta}p_t = -\tfrac{1}{\eta} m_t .
+    \]
+    \item Solution:
+    \[
+      p_t = e^{t/\eta}\!\left[ A - \tfrac{1}{\eta}\int_0^t m_s e^{-s/\eta}\,ds \right]. \tag{16b}
+    \]
+    \item With initial price \(p_0=A\), sustainability requires the bracket in (16b) \(\to 0\) as \(t\to\infty\).
+\end{itemize}
+
+% --- Deep algebra (minimal words) ---
+\singlespacing
+\begin{align}
+\dot p_t - \tfrac{1}{\eta}p_t &= -\tfrac{1}{\eta} m_t && \text{\textbf{Eq. (16a)}} \\[4pt]
+e^{-t/\eta}\dot p_t - \tfrac{1}{\eta}e^{-t/\eta}p_t &= -\tfrac{1}{\eta} e^{-t/\eta} m_t && \text{\textbf{Integrating factor } $e^{-t/\eta}$} \\[4pt]
+\frac{d}{dt}\!\left(e^{-t/\eta}p_t\right) &= -\tfrac{1}{\eta} e^{-t/\eta} m_t && \text{\textbf{Product rule}} \\[4pt]
+e^{-t/\eta}p_t - p_0 &= -\tfrac{1}{\eta}\!\int_0^t m_s e^{-s/\eta}\,ds && \text{\textbf{Integrate $0\to t$}} \\[4pt]
+p_t &= e^{t/\eta}\!\left[p_0 - \tfrac{1}{\eta}\!\int_0^t m_s e^{-s/\eta}\,ds\right] = e^{t/\eta}\!\left[A - \tfrac{1}{\eta}\!\int_0^t m_s e^{-s/\eta}\,ds\right] && \text{\textbf{Set } $A=p_0$ \textbf{ → (16b)}}
+\end{align}
+
+% --- Intuition (brief, applied) ---
+\textit{Intuition:} Prices are a \textbf{fading-memory average} of money: recent money matters most \((e^{-s/\eta})\), old money barely moves \(p_t\).  
+Choosing the constant so the bracket vanishes prevents an \textbf{explosive “bubble” path}; otherwise prices would blow up even without new money.
+
+% --- Transcript (no section title on this slide) ---
+\begin{itemize}
+    \item From (16b), sustainability requires:
+    \[
+      p_0 - \tfrac{1}{\eta}\lim_{t\to\infty}\int_0^t m_s e^{-s/\eta}ds = 0
+    \]
+    \item So,
+    \[
+      p_0 = \tfrac{1}{\eta}\int_0^\infty m_s e^{-s/\eta}ds .
+    \]
+    \item Substituting into (16b):
+\end{itemize}
+
+% --- Deep algebra inline ---
+\singlespacing
+\begin{align}
+p_t &= e^{t/\eta}\!\left[\tfrac{1}{\eta}\int_0^\infty m_s e^{-s/\eta}ds - \tfrac{1}{\eta}\int_0^t m_s e^{-s/\eta}ds\right] 
+      && \text{\textbf{Insert $p_0$}} \\[6pt]
+    &= \tfrac{1}{\eta} e^{t/\eta}\!\int_t^\infty m_s e^{-s/\eta}ds 
+      && \text{\textbf{Cancel overlapping integrals}} \\[6pt]
+    &= \tfrac{1}{\eta}\int_t^\infty e^{-(s-t)/\eta} m_s ds 
+      && \text{\textbf{Shift exponent, clean form}}
+\end{align}
+
+\begin{itemize}
+    \item Thus, the unique solution is
+    \[
+      p_t = \tfrac{1}{\eta}\int_t^\infty e^{-(s-t)/\eta} m_s ds .
+    \]
+    \item General solution:
+    \[
+      p_t = \tfrac{1}{\eta}\int_t^\infty e^{-(s-t)/\eta} m_s ds + b_0 e^{t/\eta},
+    \]
+    with \(b_0\) the initial deviation:
+    \[
+      b_0 = p_0 - \tfrac{1}{\eta}\int_t^\infty e^{-(s-t)/\eta} m_s ds.
+    \]
+\end{itemize}
+
+% --- Intuition ---
+\textit{Intuition:} The price today is a \textbf{weighted average of all future money supplies}, with weights decaying over time \((e^{-(s-t)/\eta})\).  
+The bubble term \(b_0 e^{t/\eta}\) explodes unless ruled out — so only the integral part gives a stable price path.
+
+% --- Transcript (no section title here) ---
+\begin{itemize}
+    \item General solution with bubble term:
+    \[
+      p_t = \tfrac{1}{\eta}\int_t^\infty e^{-(s-t)/\eta} m_s ds + b_0 e^{t/\eta}.
+    \]
+    \item Continuous-time solution looks like the discrete-time one:
+\end{itemize}
+
+% --- Algebra step ---
+\singlespacing
+\begin{align}
+p_t &= \tfrac{1}{1+\eta}\sum_{s=t}^\infty\!\Big(\tfrac{\eta}{1+\eta}\Big)^{s-t} m_s 
+      + b_0 \Big(\tfrac{1+\eta}{\eta}\Big)^t && \text{\textbf{Compare to discrete-time form}}
+\end{align}
+
+\begin{itemize}
+    \item Ruling out bubbles $\,(b_0=0)$ leaves:
+    \[
+      p_t = \tfrac{1}{\eta}\int_t^\infty e^{-(s-t)/\eta} m_s ds.
+    \]
+    \item The integral shows $p_t$ is a discounted value of future money supplies with weights summing to 1.  
+    \item This is the same result as in discrete time:
+\end{itemize}
+
+% --- Algebra again ---
+\singlespacing
+\begin{align}
+p_t &= \tfrac{1}{1+\eta}\sum_{s=t}^\infty \Big(\tfrac{\eta}{1+\eta}\Big)^{s-t} m_s .
+\end{align}
+
+% --- Intuition ---
+\textit{Intuition:} The price level today is just the \textbf{present value of future money supplies}.  
+If bubbles are ruled out, only fundamentals matter, and money is neutral in the long run.
+
+\begin{itemize}
+    \item Suppose money supply grows at constant rate: $m_s = \mu s$ for $s \geq 0$.
+    \item Impose no bubbles ($b_0=0$) and substitute $m_s$:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= \frac{\mu}{\eta} e^{t/\eta} \int_t^\infty s e^{-s/\eta} ds && \text{\textbf{Substitute $m_s=\mu s$}} 
+\end{align}
+
+\begin{itemize}
+    \item Compute the integral by parts:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\int_t^\infty s e^{-s/\eta} ds 
+&= \Big[-\eta s e^{-s/\eta}\Big]_t^\infty + \eta \int_t^\infty e^{-s/\eta} ds 
+   && \text{\textbf{Integration by parts}} \\
+&= 0 - (-\eta t e^{-t/\eta}) + \eta\Big[ -\eta e^{-s/\eta} \Big]_t^\infty && \text{\textbf{Evaluate}} \\
+&= \eta t e^{-t/\eta} + \eta^2 e^{-t/\eta} && \text{\textbf{Simplify}} \\
+&= \eta(\eta+t)e^{-t/\eta}. && \text{\textbf{Factor}}
+\end{align}
+
+\begin{itemize}
+    \item Substitute back:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= \frac{\mu}{\eta} e^{t/\eta}\cdot \eta(\eta+t)e^{-t/\eta} \\
+    &= \mu(\eta+t). && \text{\textbf{Cancel terms}}
+\end{align}
+
+\begin{itemize}
+    \item So:
+    \[
+      p_t = m_t + \mu\eta, \quad \dot{p} = \mu.
+    \]
+\end{itemize}
+
+\textit{Intuition:} With constant money growth, the price level grows at the same constant rate $\mu$.  
+Prices simply follow money in the long run, with a permanent drift.
+
+\begin{itemize}
+    \item Alternatively, guess $\dot{p} = \mu$.
+    \item Substituting into (16a) gives:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t - p_t &= -\eta \dot{p}_t && \text{\textbf{Eq. (16a)}} \\
+m_t - p_t &= -\eta\mu && \text{\textbf{Guess $\dot{p}=\mu$}} \\
+\Rightarrow p_t &= m_t + \eta\mu. && \text{\textbf{Solve for $p_t$}}
+\end{align}
+
+\begin{itemize}
+    \item If no-bubbles is not imposed, solution includes an explosive term:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+p_t &= m_t + \eta\mu + b_0 e^{t/\eta}, \\
+b_0 &= p_0 - (m_0 + \eta\mu). && \text{\textbf{Initial deviation}}
+\end{align}
+
+\textit{Intuition:}  
+- With $\dot{p}=\mu$, inflation equals money growth.  
+- The $b_0 e^{t/\eta}$ term is a speculative bubble: prices deviate and explode unless ruled out.  
+- Imposing no bubbles pins down the fundamental solution $p_t = m_t + \eta\mu$.  
+
+\section*{\noindent\textbf{5.5 Speculative Attacks on Fixed-Exchange Rate Regimes: A First-Generation Model}}
+\addcontentsline{toc}{section}{5.5 Speculative Attacks on Fixed-Exchange Rate Regimes: A First-Generation Model}
+
+\begin{itemize}
+    \item After the collapse of Bretton Woods (early 1970s), many countries tried to defend fixed exchange rates for years.
+    \item Eventually, all such regimes collapsed due to speculative attacks that drained reserves and pressured governments.
+    \item \textbf{Examples:}
+    \begin{enumerate}
+        \item UK 1992: lost over \$7 billion in hours trying to defend the pound in the ERM; forced to exit.
+        \item Mexico 1994: spent over \$50 billion to defend the peso-dollar peg; still collapsed later that year.
+    \end{enumerate}
+    \item Speculative attacks are not new (UK in 1931, 1949), but modern global capital markets make them harder to resist.
+    \item Next: analyze timing and causes of speculative attacks using a continuous-time Cagan model.
+\end{itemize}
+
+\textit{Intuition:}  
+- Fixed exchange rates collapse when investors believe they cannot be defended.  
+- Governments spend reserves, but once credibility is lost, speculation overwhelms defenses.  
+- Famous cases (UK, Mexico) illustrate how quickly reserves can vanish.  
+
+\begin{itemize}
+    \item Speculative attacks can occur even when all agents are rational.
+    \item Under certain conditions, they are not only possible, but inevitable.
+    \item The model assumes perfect foresight: reckless fiscal policy makes fixed exchange rates unsustainable.
+    \item Small open economy, where PPP and UIP both hold.
+    \item Monetary equilibrium (continuous-time Cagan):
+    \[
+        m_t - e_t = -\eta \dot{e}_t
+    \]
+    \item With PPP (and foreign prices constant):
+    \[
+        p_t = e_t
+    \]
+    \item Fixed exchange rate $\bar{e}$ $\implies$ money supply $\bar{m} = \bar{e}$.
+    \item Government has two branches:
+    \begin{itemize}
+        \item Fiscal: runs exogenously determined deficit.
+        \item Central bank: issues currency via open market operations in domestic and foreign bonds.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Intuition:}  
+Fixed exchange rates can only last if fiscal and monetary policies are consistent. When fiscal deficits are financed by the central bank, reserves fall, making attacks inevitable. Rational speculators anticipate this, accelerating collapse.
+
+\begin{itemize}
+    \item Central bank must monetize part of the fiscal deficit by buying government bonds.
+    \item But it also has to defend the exchange rate in the FX market.
+    \item Priority to monetize debt $\implies$ conflict of objectives $\to$ fixed rate will eventually collapse.
+    \item Key issue: \textit{when and how} the collapse occurs.
+    \item At time $t$, assets of central bank:
+    \[
+        B_{H,t} \quad \text{(domestic bonds)}, \quad B_{F,t} \quad \text{(foreign bonds = reserves)}.
+    \]
+    \item Reserves $B_{F,t}$ cannot fall below zero.
+    \item Liabilities: currency in circulation $M_t$.
+    \item With fixed exchange rate $\bar{e}$, balance sheet identity:
+    \[
+        M_t = B_{H,t} + \bar{e}B_{F,t}. \tag{17}
+    \]
+    \item Eq. (17): every unit of money issued must be backed by either domestic bonds or foreign reserves.
+\end{itemize}
+
+\noindent\textbf{Intuition:}  
+When the central bank issues money, it must hold assets to back it. If fiscal deficits force it to hold more domestic debt, reserves fall. Once reserves hit zero, the peg collapses — making a speculative attack inevitable.
+
+\subsection*{\noindent\textbf{Domestic Credit Policy}}
+\addcontentsline{toc}{subsection}{Domestic Credit Policy}
+
+\begin{itemize}
+    \item Assume central bank must expand holdings of domestic government debt at constant rate $\mu$.
+    \item Formally:
+    \[
+        \frac{\dot{B}_H}{B_H} = \dot{b}_H = \mu \tag{18}
+    \]
+    \item where $b_H \equiv \log B_H$.
+    \item Eq. (18): central bank monetizes the fiscal deficit passively.
+    \item If government prints money to finance spending, the peg $\bar{e}$ is kept fixed only if:
+    \[
+        \bar{e} = \dot{m}
+    \]
+    \item Central bank must use foreign reserves to absorb excess currency that public does not want to hold at $\bar{e}$.
+    \item $\Rightarrow$ As domestic debt expands, foreign reserves contract to maintain fixed exchange rate.
+\end{itemize}
+
+\noindent\textbf{Intuition:}  
+The central bank is forced to buy government debt (monetize deficits). To keep the exchange rate fixed, it must sell foreign reserves whenever money supply grows too fast. Thus, fiscal deficits automatically eat away at reserves, making the peg fragile.
+
+\begin{itemize}
+    \item From equation (17), $\dot{M} = 0$ implies:
+    \[
+        \bar{e}\,\dot{B}_F = -\dot{B}_H
+    \]
+    \item $\Rightarrow$ Central bank purchases of domestic debt are matched by equal-value losses of foreign reserves.
+    \item This path is unsustainable: eventually reserves hit zero $\Rightarrow$ central bank cannot both finance debt \& defend the peg.
+    \item Since debt monetization always takes precedence, it is the fixed exchange rate that collapses.
+\end{itemize}
+
+\noindent\textbf{Intuition:}  
+Every bond the central bank buys to finance deficits drains reserves one-for-one. Reserves are finite, so sooner or later the peg must break. Fiscal dominance ensures that the exchange rate is sacrificed first.
+
+\subsection*{\noindent\textbf{Speculative Attacks}}
+\addcontentsline{toc}{subsection}{Speculative Attacks}
+
+\begin{itemize}
+    \item Question: How does the inevitable transition from fixed to floating occur?
+    \item Key result: The exchange rate must collapse \textbf{before} reserves are fully exhausted.
+    \item Reason: Otherwise, a perfectly anticipated discrete jump in $e_t$ would occur $\Rightarrow$ infinite arbitrage profits.
+    \item Once reserves $B_F$ hit zero, money supply grows at rate $\mu$ (from eq. (18)), since only domestic bonds remain.
+    \item Then, expected depreciation and nominal interest rate (via UIP) jump upward discontinuously.
+    \item Money demand equation: 
+    \[
+        m_t - e_t = -\eta \dot{e}_t
+    \]
+    \item $\Rightarrow$ Real money demand must fall $\Rightarrow$ real money balances must adjust.
+    \item Two possible cases:
+    \begin{enumerate}
+        \item Case 1: $M_t$ fixed, $P_t$ (and $e_t$) jump upward when reserves $\to 0$.
+        \item Case 2: $P_t$ and $e_t$ stay fixed, but $M_t$ jumps downward (discrete fall in reserves from attack).
+    \end{enumerate}
+\end{itemize}
+
+\noindent\textbf{Intuition:}  
+Speculators won’t wait until reserves vanish. If they did, exchange rates would jump instantly, creating infinite profit opportunities. Instead, they attack earlier: reserves drop suddenly (Case 2) or exchange rate jumps (Case 1). Either way, credibility breaks before full exhaustion.
+
+\begin{itemize}
+    \item Case 1 ruled out: with rational expectations, no-arbitrage $\Rightarrow$ exchange rate cannot jump at reserve exhaustion. 
+    \item Reason: if $e_t$ jumped, holders of domestic currency would anticipate a discrete depreciation and suffer a sure capital loss.
+    \item With foresight, agents sell currency earlier, even short it, making unlimited profit at fixed rate.
+    \item Therefore, the fall in real balances must come via a fall in \textit{nominal} balances (money supply shrinks).
+    \item $\Rightarrow$ Central bank forced to sell all remaining foreign reserves in one sudden transaction.
+    \item Transition: collapse occurs via a speculative attack — agents dump domestic currency for foreign reserves abruptly.
+\end{itemize}
+
+\noindent\textbf{Intuition:}  
+Because rational agents anticipate depreciation, they attack before reserves reach zero. The central bank is cornered: it loses reserves in a single blow, and the peg collapses suddenly into a floating regime.
+
+\subsection*{\noindent\textbf{Timing the Attack}}
+\addcontentsline{toc}{subsection}{Timing the Attack}
+
+\begin{itemize}
+    \item We now formalize the discussion by introducing the concept of a \textit{shadow exchange rate}.
+    \item Definition: the shadow exchange rate is the rate that would prevail under floating, i.e. after reserves are exhausted.
+    \item It is derived from the money demand equation with money supply growing at rate $\mu$.
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t - e_t &= -\eta \dot e_t && \text{\textbf{Money demand in continuous time}} \\
+\Rightarrow e_t &= m_t + \eta \mu && \text{\textbf{Solution with $\dot m_t = \mu$}} \\
+\Rightarrow \hat e_t &= b_{H,t} + \eta \mu && \text{\textbf{Shadow exchange rate (19)}}
+\end{align}
+
+\begin{itemize}
+    \item After the attack, reserves are exhausted $\Rightarrow m_t = b_{H,t}$.
+    \item Figure 1 (below) shows the actual fixed exchange rate $\bar e$ and the shadow rate $\hat e_t$.
+    \item The collapse must occur at date $T$ where $\hat e_T = \bar e$.
+    \item Only at this exact moment can the peg be abandoned without a predictable discrete jump in $e_t$.
+\end{itemize}
+
+\noindent\textbf{Intuition:}  
+The shadow rate is what the currency would be worth under floating. As the government issues debt, $\hat e_t$ rises. Once it meets the fixed rate $\bar e$, speculators attack immediately. This ensures the collapse happens at a precise time $T$, avoiding arbitrage opportunities.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{figu2.png}
+    \caption{Shadow Exchange Rate, Money Supply, and Foreign Reserves}
+    \label{fig:figu2}
+\end{figure}
+
+\noindent\textbf{Intuition:}
+\begin{itemize}
+    \item The \textit{first panel} shows the log of the exchange rate. The fixed rate $\bar e$ is held constant, while the shadow floating rate $\hat e_t$ rises over time. The collapse occurs exactly at $T$, when the two meet.
+    \item The \textit{second panel} depicts the log of money supply. At $T$, the regime change implies a discrete adjustment, after which the money supply grows steadily.
+    \item The \textit{third panel} shows the log of foreign reserves. They fall gradually as the central bank defends the peg, but collapse abruptly at $T$ when reserves are suddenly exhausted due to the speculative attack.
+    \item Overall: the attack happens \textbf{before reserves hit zero}, precisely when continuing the peg would create arbitrage opportunities. This is the hallmark of a first-generation speculative attack model.
+\end{itemize}
+
+\begin{itemize}
+    \item The fixed exchange rate cannot collapse \textbf{after} time $T$. If it did, the rate would have to depreciate (jump up) to reach the shadow exchange rate.
+    \item The attack also cannot take place \textbf{before} $T$, since that would require the fixed rate to appreciate (jump down), which is not credible.
+    \item Therefore, the speculative attack must occur \textbf{exactly at $T$}, when the shadow exchange rate and the fixed rate intersect.
+    \item Speculators move out of domestic currency before losses occur. With perfect foresight, they sell domestic currency at the fixed rate, anticipating depreciation.
+    \item The figure also illustrates the discrete fall in reserves at $T$: reserves decline gradually up to $T$, then collapse instantly when the attack occurs.
+    \item Over time, as domestic government debt rises and foreign reserves fall, reserves represent an ever-decreasing share of central bank assets.
+\end{itemize}
+
+\noindent\textbf{Intuition:}
+\begin{itemize}
+    \item The attack happens \textbf{at the unique point $T$} — not before (would require appreciation), not after (would require a predictable discrete depreciation).  
+    \item Rational speculators anticipate this and exchange currency at $T$, causing an abrupt reserve collapse.  
+    \item This is why speculative attacks in first-generation models appear as sudden, sharp crises rather than gradual adjustments.  
+\end{itemize}
+
+\begin{itemize}
+    \item De (18), la deuda doméstica evoluciona como:
+    \begin{align}
+        b_{H,t} &= b_{H,0} + \mu t
+    \end{align}
+    donde $t=0$ es la fecha inicial.
+    
+    \item Combinamos con la ecuación del tipo de cambio sombra (19) e imponemos $\tilde{e}_T = \bar{e}$:
+    \begin{align}
+        \bar{e} &= b_{H,0} + \mu T + \eta \mu
+    \end{align}
+    
+    \item Resolviendo para $T$:
+    \begin{align}
+        T &= \frac{\bar{e} - b_{H,0} - \eta \mu}{\mu}
+    \end{align}
+    
+    \item Para todo $t < T$, el tipo de cambio fijo es consistente con:
+    \begin{align}
+        \bar{e} &= \log \left(B_{H,t} + \bar{e} B_{F,t}\right)
+    \end{align}
+    
+    \item Entonces, podemos expresar $T$ como:
+    \begin{align}
+        T &= \frac{\log \left(B_{H,t} + \bar{e}B_{F,t}\right) - b_{H,0} - \eta \mu}{\mu} \tag{20}
+    \end{align}
+    
+    \item Implicaciones:
+    \begin{itemize}
+        \item Si $B_{F,0}$ (reservas iniciales) es mayor, el régimen fijo dura más tiempo.
+        \item Si el lado derecho de (20) es negativo, el ataque especulativo ocurre \textbf{de inmediato en $t=0$}.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Intuición:}
+\begin{itemize}
+    \item El tiempo $T$ equilibra dos fuerzas:  
+    (i) la acumulación de deuda ($\mu$), y (ii) el tamaño finito de reservas internacionales ($B_{F,0}$).  
+    \item Más reservas $\Rightarrow$ ataque más tardío.  
+    \item Crecimiento de deuda más rápido $\Rightarrow$ ataque más temprano.  
+    \item Si las reservas son demasiado pequeñas desde el inicio, los agentes anticipan la insostenibilidad y atacan de inmediato.
+\end{itemize}
+
+\noindent\textbf{Speculative Bubbles and the Shadow Exchange Rate}
+
+\begin{itemize}
+    \item The shadow exchange rate was derived from the bubble-free solution of the Cagan model.
+    \item What happens if we do not rule out speculative bubbles?
+    \item Then the shadow exchange rate becomes:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\tilde e_t &= b_{H,t} + \eta\mu && \text{\textbf{Bubble–free solution (Eq. 19)}} \\
+\tilde e_t &= b_{H,t} + \eta\mu + b_T e^{(t-\eta)/\eta} && \text{\textbf{Add bubble term $b_T$}}
+\end{align}
+
+\begin{itemize}
+    \item Here $b_T$ is an arbitrary constant that captures speculative bubbles.
+    \item Following the same steps as before to solve for the timing of an attack:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\tilde e_T &= \bar e && \text{\textbf{Attack when shadow rate hits fixed rate}} \\
+b_{H,T} + \eta\mu + b_T &= \bar e && \text{\textbf{Plug in bubble version}} \\
+b_{H,0} + \mu T + \eta\mu + b_T &= \bar e && \text{\textbf{Since $b_{H,T} = b_{H,0} + \mu T$}} \\
+T &= \frac{\bar e - b_{H,0} - \eta\mu - b_T}{\mu} && \text{\textbf{Solve for $T$}}
+\end{align}
+
+\begin{itemize}
+    \item If $b_T > 0$, the attack occurs \textit{earlier} than in the bubble-free case.  
+    \item If $b_T$ is large enough, an attack can occur \textit{immediately}, even when $\mu = 0$.  
+    \item Intuition: speculative bubbles can destabilize even a viable fixed exchange rate regime.
+\end{itemize}
+
+\subsection*{1st Generation Model of Speculative Attacks}
+\addcontentsline{toc}{subsection}{1st Generation Model of Speculative Attacks}
+
+\begin{itemize}
+    \item Money demand function
+    \item UIP and PPP hold
+    \item Fiscal policy: $\dot{b}_H = \mu$ (debt grows at constant rate)
+    \item Fixed exchange rate: $\overline{M}^s = \bar{e}$
+    \item Central bank sells reserves to defend peg
+    \item $\uparrow$ Domestic debt, $\downarrow$ Reserves
+    \item Unsustainable: reserves eventually run out
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\dot{b}_H &= \mu && \text{\textbf{Debt grows at constant rate}} \\[6pt]
+M^s &= \overline{e} && \text{\textbf{Exchange rate peg condition}} \\[6pt]
+\Delta b_H &\uparrow \quad \Rightarrow \quad \Delta R^* \downarrow && \text{\textbf{Debt rises, reserves fall}} \\[6pt]
+\lim_{t \to \infty} R^* &= 0 && \text{\textbf{Eventually reserves are exhausted}}
+\end{align}
+
+\textbf{Intuition:} Government borrows steadily, central bank defends the peg by selling reserves. Over time reserves vanish, making the fixed exchange rate collapse inevitable.
+
+\begin{itemize}
+    \item Shadow exchange rate: $\tilde{e}_t = m_t + \eta \mu = b_{H,t} + \eta \mu$
+    \item Represents floating rate if attack already occurred
+    \item Increases over time: higher debt $\uparrow b_{H,t}$ $\Rightarrow$ more monetization $\uparrow m_t$
+    \item Exchange rate loses value (depreciation)
+    \item Speculative attack at time $T$: $\tilde{e}_t = \bar{e}$
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\tilde{e}_t &= m_t + \eta \mu && \text{\textbf{Definition of shadow rate}} \\[6pt]
+            &= b_{H,t} + \eta \mu && \text{\textbf{Debt and monetization link}} \\[6pt]
+\frac{d \tilde{e}_t}{dt} &> 0 && \text{\textbf{Shadow rate rises with debt}} \\[6pt]
+\tilde{e}_T &= \bar{e} && \text{\textbf{Attack occurs at $T$ when rates equal}}
+\end{align}
+
+\textbf{Intuition:} As debt grows, the exchange rate would depreciate under a float. Once markets see the shadow rate reach the peg, they attack, forcing devaluation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figu3}
+    \caption{Speculative attack occurs when $\tilde{e}_t = \bar{e}$ at time $T$.}
+\end{figure}
+
+\begin{itemize}
+    \item If $\tilde{e}_t > \bar{e}$, exchange rate must jump up (depreciate) $\Rightarrow$ loss for speculators
+    \item Incentive: attack occurs one day before
+    \item If $\tilde{e}_t < \bar{e}$, exchange rate must jump down (appreciate) $\Rightarrow$ not profitable
+    \item If $\tilde{e}_t = \bar{e}$, no jump in level, only rate of change adjusts
+    \item From money demand equation:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\downarrow (m_t - e_t) &= -(\eta \dot{e}_t \uparrow) && \text{\textbf{Fall in money demand equals rise in depreciation}}
+\end{align}
+
+\begin{itemize}
+    \item At time $T$, fall in money supply and reserves matches fall in money demand
+\end{itemize}
+
+\textbf{Intuition:} Speculators wait until the peg is exactly hit. Then the central bank’s reserves fall in line with money demand, and the currency collapses without arbitrage opportunities.
+
+\begin{itemize}
+    \item First-generation model: insolvency as cause of collapse $\Rightarrow$ empirically weak
+    \item 1990s: many countries forced off fixed rates despite having means to defend them
+    \item Governments could have supported pegs if fully committed
+    \item Example: monetary base vs. reserves, Sept 1994
+    \item Many attacked countries had reserves covering 80--90\% of their monetary bases
+    \item Some had reserve-to-base ratios $> 100\%$
+    \item Puzzle: if resources existed, why did they not succeed?
+    \item Leads to second-generation crisis models
+\end{itemize}
+
+\textbf{Intuition:} Crises were not only about running out of reserves. Even with resources, governments abandoned pegs due to credibility and political trade-offs, motivating new models.
+
+\subsection*{Foreign Exchange Reserves and Monetary Base, September 1994}
+\addcontentsline{toc}{subsection}{Foreign Exchange Reserves and Monetary Base, September 1994}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccc}
+\hline
+Country & Monetary Base (\% of GDP) & Reserves (\% of GDP) & Reserves/Base (\%) \\
+\hline
+France   & 4.6  & 4.6  & 100 \\
+Germany  & 9.9  & 6.2  & 63  \\
+Ireland  & 9.1  & 16.1 & 177 \\
+Italy    & 11.9 & 5.6  & 48  \\
+Mexico   & 3.9  & 4.7  & 120 \\
+Holand   & 10.0 & 13.6 & 136 \\
+Norway   & 6.3  & 18.7 & 297 \\
+Portugal & 25.0 & 28.0 & 112 \\
+Spain    & 12.6 & 9.6  & 76  \\
+Sweden   & 13.0 & 12.1 & 93  \\
+UK       & 3.7  & 4.3  & 116 \\
+\hline
+\end{tabular}
+\caption{Monetary base and foreign reserves across selected countries, September 1994.}
+\end{table}
+
+\textbf{Intuition:}  
+The table shows that many countries under speculative attack in the 1990s still had large foreign reserves relative to their monetary base. In several cases reserves exceeded 100\% of the base, meaning they could have defended the peg. The fact that crises happened anyway suggests that factors beyond pure insolvency (like credibility, expectations, or political costs) explain the collapse of fixed exchange rates, motivating second-generation models.
+
+\section*{5.6 Multilateral Arrangements: Deep Algebra to Exchange-Rate Equation}
+\addcontentsline{toc}{section}{5.6 Multilateral Arrangements: Deep Algebra to Exchange-Rate Equation}
+
+\begin{itemize}
+    \item Cagan money demand (home and foreign), then subtract.
+    \item Apply PPP: $p_t-p_t^* = e_t$.
+    \item Apply UIP: $i_{t+1}-i_{t+1}^* = E_t e_{t+1}-e_t$.
+    \item Reach: $e_t = m_t-m_t^*-\phi(y_t-y_t^*)+\eta(E_t e_{t+1}-e_t)$.
+\end{itemize}
+
+\singlespacing
+\begin{align}
+m_t - p_t &= -\eta i_{t+1} + \phi y_t && \text{\textbf{Home money market}}\\
+m_t^* - p_t^* &= -\eta i_{t+1}^* + \phi y_t^* && \text{\textbf{Foreign money market}}\\[4pt]
+(m_t-p_t) - (m_t^*-p_t^*) &= -\eta\,(i_{t+1}-i_{t+1}^*) + \phi\,(y_t-y_t^*) && \text{\textbf{Subtract foreign from home}}\\
+p_t - p_t^* &= m_t - m_t^* - \phi (y_t - y_t^*) + \eta (i_{t+1}-i_{t+1}^*) && \text{\textbf{Rearrange}}\\
+e_t &= m_t - m_t^* - \phi (y_t - y_t^*) + \eta (i_{t+1}-i_{t+1}^*) && \text{\textbf{PPP: } $p_t-p_t^*=e_t$}\\
+e_t &= m_t - m_t^* - \phi (y_t - y_t^*) + \eta (E_t e_{t+1}-e_t) && \text{\textbf{UIP: } $i_{t+1}-i_{t+1}^*=E_t e_{t+1}-e_t$}\\[6pt]
+(1+\eta)e_t &= m_t - m_t^* - \phi (y_t - y_t^*) + \eta E_t e_{t+1} && \text{\textbf{Collect $e_t$ terms}}\\
+e_t &= \frac{1}{1+\eta}\!\left[m_t - m_t^* - \phi (y_t - y_t^*)\right] + \frac{\eta}{1+\eta} E_t e_{t+1} && \text{\textbf{Forward-looking form}}
+\end{align}
+
+\textbf{Intuition:} More home money or expected future depreciation raises today’s $e_t$ (home currency weaker). Stronger home output lowers $e_t$ (currency stronger). Coordination that stabilizes these gaps makes a peg easier to defend.
+
+\begin{itemize}
+    \item In two-country setting, fixing $e_t$ $\Rightarrow$ fixing relative money supply $(m_t - m_t^*)$
+    \item With cooperation, joint reserves cannot be exhausted
+    \item Historical examples:
+        \begin{itemize}
+            \item European Monetary System (EMS, 1979)
+            \item Bretton Woods system (1946--1971)
+        \end{itemize}
+    \item Conceptual issue: with $N$ currencies, only $N-1$ independent rates
+    \item $\Rightarrow$ $N-1$ countries intervene, one country sets policy independently
+    \item EMS: Germany was the $N$th country, focusing on low inflation
+    \item Bretton Woods: USA was the $N$th country, pegging gold price
+\end{itemize}
+
+\textbf{Intuition:} In multilateral systems, one country effectively anchors the system (Germany in EMS, USA in Bretton Woods), while others bear the cost of adjustment. Cooperation spreads the burden but creates asymmetry.
+
+\section*{5.7 Speculative Attacks on Fixed Exchange Rate Regimes: A Second-Generation Model}
+\addcontentsline{toc}{section}{5.7 Speculative Attacks on Fixed Exchange Rate Regimes: A Second-Generation Model}
+
+\begin{itemize}
+    \item Based on Sachs et al. (1996), explaining the Mexican crisis of 1994
+    \item Speculative attacks and crises arise from \textbf{self-fulfilling panics}
+    \item First-generation: government/monetary authority acts mechanically
+    \item Second-generation: government objectives explicitly modeled
+    \item Key implication: fixed exchange rate commitment may not guarantee credibility 
+    \item Governments with incentives to inflate remain vulnerable
+    \item Possible outcomes: multiple equilibria and self-fulfilling currency crises
+\end{itemize}
+
+\textbf{Intuition:} Crises can occur even when reserves are sufficient, because expectations and credibility matter. If investors believe the peg will fail, their actions can force its collapse.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figu4}
+    \caption{Government and private sector interaction in second-generation model.}
+\end{figure}
+
+\begin{itemize}
+    \item PPP holds: $P_t = e_t P_t^*$
+    \item Normalize $P_t^* = 1 \;\Rightarrow\; P_t = e_t$
+    \item Inflation: $1 + \pi_t = \dfrac{P_{t+1}}{P_t} = \dfrac{e_{t+1}}{e_t}$
+    \item Inflation $\pi_t$ and currency devaluation are equivalent
+    \item Fixed peg requires $\pi_t = 0$
+    \item If $1 + \pi_t = \dfrac{e_{t+1}}{e_t} > 1$, peg breaks $\Rightarrow$ inflation + devaluation
+\end{itemize}
+
+\singlespacing
+\begin{align}
+P_t &= e_t P_t^* && \text{\textbf{PPP condition}}\\
+P_t^* &= 1 \;\Rightarrow\; P_t = e_t && \text{\textbf{Normalization}}\\
+1 + \pi_t &= \frac{P_{t+1}}{P_t} = \frac{e_{t+1}}{e_t} && \text{\textbf{Inflation equals depreciation}}\\
+\pi_t &= 0 \;\;\; \text{if peg holds} && \text{\textbf{Stable exchange rate}}\\
+\pi_t > 0 \;\;\; \Leftrightarrow \;\;\; \frac{e_{t+1}}{e_t} > 1 && \text{\textbf{Peg breaks: inflation + devaluation}}
+\end{align}
+
+\textbf{Intuition:} Under PPP, inflation and devaluation are the same. A peg means no inflation. If government creates money, the exchange rate rises ($e_{t+1} > e_t$), breaking the peg.
+
+\begin{itemize}
+    \item Two agents in small open economy: government and private sector
+    \item Foreign price $P^* = 1 \;\Rightarrow\;$ foreign inflation = 0
+    \item PPP $\Rightarrow$ inflation = exchange rate depreciation
+    \item Government dislikes inflation $\pi_t$ and taxes $x_t$
+    \item Government minimizes loss function:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+L &= \tfrac{1}{2} \big(\alpha \pi_t^2 + x_t^2 \big), \quad \alpha > 0 && \text{\textbf{Quadratic preferences}}
+\end{align}
+
+\begin{itemize}
+    \item Subject to government budget constraint:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+r b_t &= x_t + \theta (\pi_t - \pi_t^e), \quad \theta > 0 && \text{\textbf{Budget link between debt, taxes, and inflation}}
+\end{align}
+
+\begin{itemize}
+    \item $r$: world interest rate (exogenous) \\
+    \item $b_t$: inherited public debt \\
+    \item $\pi_t^e$: private sector’s expectation of inflation (devaluation)
+\end{itemize}
+
+\textbf{Intuition:} The government faces a trade-off: reducing debt via inflation or via distortionary taxes. Private expectations of inflation affect the budget, so credibility problems can trigger crises.
+
+\begin{itemize}
+    \item $\theta(\pi_t - \pi_t^e)$ = inflation tax revenue
+    \item $\uparrow \pi_t^e \Rightarrow \downarrow$ revenue (people reduce money holdings)
+    \item $\uparrow \pi_t \Rightarrow \uparrow$ revenue (higher actual inflation raises tax base)
+    \item Government chooses $(\pi_t, x_t)$ taking $\pi_t^e$ as given
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\Gamma &= \tfrac{1}{2}(\alpha \pi_t^2 + x_t^2) + \mu \big[r b_t - x_t - \theta(\pi_t - \pi_t^e)\big] && \text{\textbf{Lagrangian}} \\[6pt]
+\frac{\partial \Gamma}{\partial \pi_t} &= \alpha \pi_t - \mu \theta = 0 && \text{\textbf{FOC w.r.t. inflation}} \\[6pt]
+\frac{\partial \Gamma}{\partial x_t} &= x_t - \mu = 0 && \text{\textbf{FOC w.r.t. taxes}} \\[6pt]
+\frac{\partial \Gamma}{\partial \mu} &= r b_t - x_t - \theta (\pi_t - \pi_t^e) = 0 && \text{\textbf{Budget constraint holds}}
+\end{align}
+
+\textbf{Intuition:} The government trades off inflation vs. taxes to meet debt obligations. Expectations of inflation reduce the tax base, so credibility shapes actual policy outcomes.
+
+\begin{itemize}
+    \item Use FOCs to solve for $x_t$ and $\pi_t$
+    \item Define $\lambda \equiv \frac{\alpha}{\alpha+\theta^2} \in (0,1)$
+\end{itemize}
+
+\singlespacing
+\begin{align}
+x_t &= \frac{\alpha}{\theta}\pi_t && \text{\textbf{From FOC (23)--(24)}} \\[6pt]
+    &= \frac{\lambda}{1-\lambda}\,\theta \pi_t && \text{\textbf{Rewrite using $\lambda$}} \\[6pt]
+\theta \pi_t &= (1-\lambda)(rb_t + \theta \pi_t^e) && \text{\textbf{Substitute into constraint (25)}} \\[6pt]
+x_t &= \lambda(rb_t + \theta \pi_t^e) && \text{\textbf{Optimal tax rule}} \\[6pt]
+\pi_t &= \frac{1-\lambda}{\theta}(rb_t + \theta \pi_t^e) && \text{\textbf{Optimal inflation rule}}
+\end{align}
+
+\begin{itemize}
+    \item Substitute optimal values into loss function:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+L &= \tfrac{1}{2}(\alpha \pi_t^2 + x_t^2) && \text{\textbf{Loss function}} \\[6pt]
+L^d(b_t,\pi_t^e) &= \tfrac{1}{2}\Bigg[\frac{\alpha(1-\lambda)^2}{\theta^2} + \lambda^2\Bigg](rb_t + \theta \pi_t^e)^2 && \text{\textbf{Substitute $\pi_t$, $x_t$}} \\[6pt]
+ &= \frac{\lambda}{2}\Bigg[\frac{\alpha(1-\lambda)^2}{\lambda \theta^2} + \lambda \Bigg](rb_t + \theta \pi_t^e)^2 && \text{\textbf{Factor $\lambda/2$}} \\[6pt]
+ &= \frac{\lambda}{2}(rb_t + \theta \pi_t^e)^2 && \text{\textbf{Simplify final expression}}
+\end{align}
+
+\textbf{Intuition:} Optimal policy balances taxes and inflation. Both depend on inherited debt and expected inflation. Higher expectations raise actual inflation, showing self-fulfilling crises.
+
+\begin{itemize}
+    \item Loss from devaluation (discretion case):
+\end{itemize}
+
+\singlespacing
+\begin{align}
+L^d(b_t,\pi_t^e) &= \tfrac{\lambda}{2}(rb_t + \theta \pi_t^e)^2 \quad\quad (28)
+\end{align}
+
+\begin{itemize}
+    \item If government pre-commits to no devaluation ($\pi_t=0$):
+\end{itemize}
+
+\singlespacing
+\begin{align}
+x_t &= (rb_t + \theta \pi_t^e) && \text{\textbf{Optimal taxes}} \\[6pt]
+L^f(b_t,\pi_t^e) &= \tfrac{1}{2}(rb_t + \theta \pi_t^e)^2 \quad\quad (29) && \text{\textbf{Fixed exchange rate loss}}
+\end{align}
+
+\begin{itemize}
+    \item Since $\lambda < 1 \;\Rightarrow\; L^d < L^f$.
+    \item $\Rightarrow$ Government tempted to deviate: surprise devaluation yields lower loss.
+    \item But deviation carries fixed cost $c > 0$ (loss of credibility, reputation, political costs).
+    \item These costs are exogenous, not tied to macro variables.
+\end{itemize}
+
+\textbf{Intuition:} Committing to a peg is costly. In pure economic terms, the government prefers to devalue (lower loss), but credibility and political costs $c$ may sustain the peg. This tension explains multiple equilibria and self-fulfilling crises.
+
+\begin{itemize}
+    \item Government devalues if:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+L^d + c < L^f && \text{\textbf{Deviation payoff condition}} \\[6pt]
+rb_t + \theta \pi_t^e &> k, \quad k \equiv (2c)^{\tfrac{1}{2}}(1-\lambda)^{-\tfrac{1}{2}} > 0 && \text{\textbf{Threshold for devaluation}} \quad (30)
+\end{align}
+
+\begin{itemize}
+    \item Devaluation equilibrium arises if:
+        \begin{itemize}
+            \item Inherited debt $rb_t$ is too large, or
+            \item Expectations $\pi_t^e$ are sufficiently high
+        \end{itemize}
+    \item Private sector forms expectations rationally, knowing the government’s temptation (eq. 30).
+    \item Leads to three key questions:
+        \begin{enumerate}
+            \item When will the government not devalue regardless of $\pi_t^e$?
+            \item When will the government devalue regardless of $\pi_t^e$?
+            \item When will the government not devalue if $\pi_t^e=0$, but devalue if $\pi_t^e$ is high?
+        \end{enumerate}
+\end{itemize}
+
+\textbf{Intuition:} The decision to devalue depends on debt levels and expectations. If debt is low, peg is safe. If debt is high, peg collapses. In between, expectations can trigger self-fulfilling crises.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figu5}
+    \caption{Credibility spectrum: government devaluation decisions under different debt levels.}
+\end{figure}
+
+\begin{itemize}
+    \item Case 1 (Full Credibility): if $rb_t < \lambda k$, government never devalues (regardless of $\pi_t^e$).
+    \item Case 2 (No Credibility): if $rb_t > k$, government always devalues (regardless of $\pi_t^e$).
+    \item Case 3 (Partial Credibility): if $\lambda k < rb_t < k$, outcome depends on expectations:
+        \begin{itemize}
+            \item If $\pi_t^e = 0$, no devaluation.
+            \item If $\pi_t^e > 0$, devaluation occurs.
+        \end{itemize}
+\end{itemize}
+
+\textbf{Intuition:} The intermediate zone ($\lambda k < rb_t < k$) generates multiple equilibria. If agents expect no devaluation, the peg holds. If they expect devaluation, the peg collapses --- a self-fulfilling crisis.
+
+\subsection*{Case 1: Stock of Debt is Low ($rb_t \leq k$)}
+\addcontentsline{toc}{subsection}{Case 1: Stock of Debt is Low ($rb_t \leq k$)}
+
+\begin{itemize}
+    \item Recall devaluation condition:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+rb_t + \theta \pi_t^e > k \quad\quad (30)
+\end{align}
+
+\begin{itemize}
+    \item If $\pi_t^e = 0$, then (30) is never satisfied $\Rightarrow$ government never devalues.
+    \item If $\pi_t^e > 0$, with perfect foresight $\pi_t^e = \pi_t$. Optimal inflation:
+\end{itemize}
+
+\singlespacing
+\begin{align}
+\pi_t &= \frac{1-\lambda}{\theta}(rb_t + \theta \pi_t^e) && \text{\textbf{Optimal inflation rule}} \\[6pt]
+\theta \pi_t &= \theta \pi_t^e = \frac{1-\lambda}{\lambda} rb_t && \text{\textbf{Consistency condition}}
+\end{align}
+
+\begin{itemize}
+    \item Substituting into (30):
+\end{itemize}
+
+\singlespacing
+\begin{align}
+rb_t + \theta \pi_t^e &> k \\[6pt]
+rb_t + \frac{1-\lambda}{\lambda} rb_t &> k \\[6pt]
+rb_t \cdot \frac{1}{\lambda} &> k \\[6pt]
+rb_t &> \lambda k
+\end{align}
+
+\begin{itemize}
+    \item If $rb_t \leq \lambda k$, (30) is never satisfied $\Rightarrow$ no devaluation regardless of $\pi_t^e$.
+    \item Peg has \textbf{full credibility}.
+\end{itemize}
+
+\textbf{Intuition:} With low debt, the government cannot gain from devaluation. Expectations of inflation do not matter, so the fixed exchange rate is fully credible.
+
+\begin{itemize}
+    \item If $rb_t \leq \lambda k$ then (30) is never satisfied. 
+    \item With low levels of debt, no devaluation takes place regardless of $\pi_t^e \geq 0$. 
+    \item Hence, in this case, the fixed-exchange rate regime has \textbf{full credibility}.
+\end{itemize}
+
+\textbf{Case 2: Stock of debt is high $rb_t \geq k$}
+\begin{itemize}
+    \item Condition (30) always satisfied regardless of $\pi_t^e \geq 0$.
+    \item Devaluation is inevitable.
+    \item Fixed exchange rate regime has \textbf{no credibility}.
+\end{itemize}
+
+\textbf{Case 3: Stock of debt is intermediate $\lambda k < rb_t < k$}
+\begin{itemize}
+    \item Two possible rational equilibria exist.
+    \item If $\pi_t^e = 0$, then (30) not satisfied $\Rightarrow$ no devaluation.
+    \item If $\pi_t^e > 0$, then (30) satisfied $\Rightarrow$ devaluation occurs.
+    \item Expectations determine the outcome $\Rightarrow$ \textbf{self-fulfilling crisis}.
+\end{itemize}
+
+\textbf{Intuition:}  
+- Case 2: Debt is so high that peg always collapses.  
+- Case 3: Peg survival depends on expectations. If people expect devaluation, it happens; if not, peg holds.
+
+\subsection*{Intuition for Multiple Equilibria}
+\addcontentsline{toc}{subsection}{Intuition for Multiple Equilibria}
+
+\begin{itemize}
+    \item Government temptation to devalue ($\pi_t > 0$) increases with debt $rb_t$ and expectations $\theta \pi_t^e$.
+    \item If $\pi_t^e > 0$, revenue falls, making devaluation $\pi_t > 0$ more likely $\Rightarrow$ \textbf{self-fulfilling prophecy}.
+    \item This mechanism requires intermediate debt levels for expectations to matter.
+    \item With high debt: devaluation is inevitable.  
+    \item With low debt: devaluation never happens.  
+    \item Expectations only matter in the middle range $\lambda k < rb_t < k$.
+\end{itemize}
+
+\textbf{Intuition:} Multiple equilibria arise because expectations can validate themselves when debt is moderate. At extremes (very high or very low debt), fundamentals dominate and expectations are irrelevant.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccc}
+\hline
+ & $c=0.02$ & $c=0.05$ & $c=0.10$ \\
+\hline
+$k$   & 0.28 & 0.44 & 0.64 \\
+$\lambda k$ & 0.14 & 0.22 & 0.32 \\
+\hline
+\end{tabular}
+\caption{Thresholds for multiple equilibria under different $c$ values.}
+\end{table}
+
+\begin{itemize}
+    \item Question: Are multiple equilibria realistic for reasonable parameters?
+    \item Set $\lambda = 0.5$, vary $c$ from 0.02 to 0.1.
+    \item With $c=0.02$, debt $rb_t$ must lie between 0.14\% and 0.28\% of GDP (consistent with Mexico).
+    \item Higher $c$ or higher $\lambda$ $\Rightarrow$ stronger dislike of devaluation, thresholds increase.
+    \item Implied debt values consistent with Mexico before the 1994 crisis.
+\end{itemize}
+
+\textbf{Intuition:} The model generates plausible multiple equilibria for realistic debt levels. Moderate debt can trigger crises through expectations, matching observed episodes like Mexico 1994.
+
+\end{document}
